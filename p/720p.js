@@ -181,7 +181,7 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.length - 32).replace(/1080/, '720') + '.mp4';
+          url = 'https:' + url.slice(0, url.length - 32).replace(/1080/, '720') + '.mp4';
         } catch (e) {}
 
         return url;
