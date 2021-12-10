@@ -93,7 +93,7 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + replace(/1080/, '720') + '.mp4';
+          url = 'https:' + url.slice(0, url.length - 32).replace(/1080/, '720') + '.mp4';
         } catch (e) {}
 
         return url;
@@ -539,8 +539,8 @@
           var videos = str.match("file': '(.*?)'");
 
           if (videos) {
-            var link = videos[0].match("720p](.*?)mp4");
-            if (!link) link = videos[0].match("480p](.*?)mp4");
+            var link = videos[0].match("480p](.*?)mp4");
+            if (!link) link = videos[0].match("720p](.*?)mp4");
             if (!link) link = videos[0].match("360p](.*?)mp4");
             if (!link) link = videos[0].match("240p](.*?)mp4");
 
