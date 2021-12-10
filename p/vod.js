@@ -210,7 +210,7 @@
 
         if (file) {
           if (file.split('/').pop().replace('.mp4', '') !== max_quality) {
-            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4';
+            file = file.slice(0, url.length - 32).replace(/1080/, '720') + '.mp4';
           }
         } else if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
 
