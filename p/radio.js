@@ -143,7 +143,7 @@
       Lampa.Component.add('Rad', Rad);
       var catalogs = [{
         title: 'Radio Record',
-        url: 'http://gitnnm.github.io/p/radio.txt/'
+        url: 'http://gitnnm.github.io/p/radio.txt'
       }];
       Lampa.Listener.follow('app', function (e) {
         if (e.type == 'ready') {var ico = '<svg class="svg svg--nosizes" viewBox="0 0 180 180"> <circle r="50" cx="50" cy="50" fill="white"/> <circle r="50" cx="130" cy="50" fill="gray"/> <circle r="50" cx="50" cy="130" fill="gray"/><circle r="50" cx="130" cy="130" fill="white"/><g fill="none" stroke="none"><path d="M-1,5 H180 M5,-1 V180" stroke-width="10"/><path d="M-1,2 H180 M2,-1 V180" stroke-width="5" stroke-dasharray="1 9"/> <rect width="100%" height="100%" stroke-width="2"/> </g><circle r="5" cx="0" cy="0" fill="teal"/> </svg>';
