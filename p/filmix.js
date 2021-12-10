@@ -357,7 +357,7 @@
                 btn.on('hover:enter', function() {
                     Lampa.Activity.push({
                         url: '',
-                        title: 'Filmix',
+                        title: 'Просмотр с источника Filmix',
                         component: 'FILMIX',
                         search: e.data.movie.title,
                         search_one: e.data.movie.title,
