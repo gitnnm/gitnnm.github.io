@@ -6,12 +6,12 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>ITV.TRU.IO .: BAZON</title>
-<script src="/ajax/jquery-3.3.1.min.js" type="text/javascript"></script>
-<script src="/ajax/popper.min.js" type="text/javascript"></script>
-<script src="/ajax/bootstrap.min.js" type="text/javascript"></script>
-<link rel="stylesheet" href="/ajax/bootstrap.min.css" />
-<link rel="stylesheet" href="/ajax/all.css">
-<link rel="stylesheet" href="/ajax/animate.min.css" />
+<script src="https://gitnnm.github.io/online//ajax/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="https://gitnnm.github.io/online//ajax/popper.min.js" type="text/javascript"></script>
+<script src="https://gitnnm.github.io/online//ajax/bootstrap.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://gitnnm.github.io/online//ajax/bootstrap.min.css" />
+<link rel="stylesheet" href="https://gitnnm.github.io/online//ajax/all.css">
+<link rel="stylesheet" href="https://gitnnm.github.io/online//ajax/animate.min.css" />
 <style>
         .list-group-item{
             cursor: pointer;
@@ -64,7 +64,7 @@
 </div>
 <script type="text/javascript">
           $(function () {
-            $.get("/lastbazon",function (response) {
+            $.get("https://gitnnm.github.io/online/lastbazon.html",function (response) {
                 $(".film-list").html("");
                 $(".film-list").append('<span class="badge badge-light"><i><b><h4>Последние обновления:</h4></b></i></span>');
                 var data = JSON.parse(response);
@@ -84,7 +84,7 @@
                 if(film===""){
                     get(); return;
                 }
-                req = $.get('/bazonapi?name='+film,function (response) {
+                req = $.get('https://gitnnm.github.io/online/bazonapi.html?name='+film,function (response) {
                     $(".film-list").html("");
                     var data = JSON.parse(response);
                     data.forEach(function (item) {
