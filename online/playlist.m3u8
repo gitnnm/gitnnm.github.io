@@ -1,0 +1,1537 @@
+#EXTM3U
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Доктор
+http://zabava-htlive.cdn.ngenix.net/hls/CH_24DOC/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Техно 24
+http://zabava-htlive.cdn.ngenix.net/hls/CH_24TEHNO/variant.m3u8
+#EXTINF:-1 group-title="Общие|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",360° Подмосковье HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PODMOSKOVIEHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ MUSIC
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AONE/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",A1 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C01_HDAMEDIA/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",A2
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AMEDIA2/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",A2 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_A2PROLYBOV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Amedia Hit
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AMEDIAHITSD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Amedia Hit HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AMEDIAHITHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Amedia Premium
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AMEDIAPREMIUMSD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Amedia Premium HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_HDAMEDIAPREMIUM/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Animal Planet
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ANIMALPLANET/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Animal Planet HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_ANIMALPLANETHD/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",BBC World News
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BBCWORLDNEWS/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Baby TV
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BABYTV/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Boomerang
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BOOMERANG/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Brazzers TV Europe
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRAZZERSTV/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bridge TV
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRIDGETV/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",DTX HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DTXHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Da Vinci learning
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DAVINCILEARNING/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Deutsche Welle
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DEUTSCHEWELLE/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Discovery Channel
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DISCOVERYCHANNEL/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Discovery Channel HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_DISCOVERYCHANNELHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Discovery Science HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_DISCOVERYSCIENCEHD/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Euronews
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EURONEWS/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Europa Plus TV
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EUROPAPLUSTV/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport 1
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport 1 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_EUROSPORTHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport Gold
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT_G/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport Gold HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT_GHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport 4k
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT4K_HLS/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Extreme Sports
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EXTREMESPORTS/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",FOX
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FOX/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",FOX HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_FOXHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Food Network HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_FOODHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Fox Life
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FOXLIFE/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Fox Life HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_FOXLIFEHD/variant.m3u8
+#EXTINF:-1 group-title="Новостные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",France 24 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FRANCE24HD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Gulli
+http://zabava-htlive.cdn.ngenix.net/hls/CH_GULLI/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",History HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_HDHISTORY/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ID Xtra
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DISCOVERYINVESTIGATION/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Моя планета HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_IQHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",JimJam
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JIMJAM/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MCM TOP
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MCMTOP/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV Dance
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MTVDANCE/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV Hits
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MTVHITS/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV Live HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_MTVLIVEHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV Rocks
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MTVROCKS/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV Russia
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MTV/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Mezzo
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MEZZO/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Mezzo Live HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_MEZZOLIVEHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Music Box
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MUSICBOXTV/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",NHK World TV
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NHK/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nat Geo Wild
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NATGEOWILD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nat Geo Wild HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_NATGEOWILDHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",National Geographic
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NATGEO/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",National Geographic HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_NGCHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nick Jr.
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NICKJUNIOR/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nickelodeon
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NICKELODEON/variant.m3u8
+#EXTINF:-1 group-title="Детские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nickelodeon HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C01_NICKELODEONHD/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",O la la
+http://zabava-htlive.cdn.ngenix.net/hls/CH_OLALA/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Paramount Channel
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PARAMOUNTCHANNEL/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Paramount Channel HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_PARAMOUNTCHANNELHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Paramount Comedy HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_PARAMOUNTCOMEDYHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bridge TV Русский хит
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSONGTV/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Russia Today
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RT/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Russia Today HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_RTTVHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",SET
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SET/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Shop24
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_SHOP24/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Shopping Live
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHOPPINGLIFE/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Sony Sci Fi
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SONYSCIFI/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Sony Turbo
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SONYTURBO/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TLC
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TLC/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TLC HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_TLCHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV XXI
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TVXXI/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ViP Comedy HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_TV1000COMEDYHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ViP Megahit HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_TV1000MEGAHITHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ViP Premiere HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_TV1000PREMIUMHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TiJi
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TIJI/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Travel+ Adventure HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_TRAVELCHANNELHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",VH1 Classic
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VH1CLASSIC/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",VH1 European
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VH1EUROPEAN/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",VIP Serial HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C06_VIASATGOLFHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat Nature HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VIASATNATUREHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat Nature/History HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_VIASATNATUREHISTORYHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat Sport
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VIASATSPORT/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat Sport HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C06_VIASATSPORTHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Zooпарк
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZOOPARK/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",myZen.tv HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_MYZENTVHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Авто плюс
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AUTOPLUS/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Беларусь 24
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BELARUS24/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Бобер
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BOBER/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Вместе РФ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SOVETFEDERATSII/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Уникум
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DETSKIJ/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Детский мир
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DETSKIJMIR/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дом кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DOMKINO/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дом кино премиум HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DOMKINOPREMIUMHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Домашний
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DOMASHNIY/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Драйв
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DRIVE/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Звезда
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZVEZDA/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Здоровое ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZDOROVOETV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Иллюзион+
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ULLUSIONPLUS/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",История
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ISTORIYA/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",КХЛ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KHL/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",КХЛ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_KHLHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Карусель
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KARUSEL/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Кино ТВ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINOTVHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Комедия ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_COMEDYTV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Комедия
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KOMEDIA/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ля минор
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AMOLL/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мама
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MATIDITYA/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч!
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTV/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Боец
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BOETZ/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Страна
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTVPLUSPORT/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Футбол 1 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FUTBALL1HD/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Футбол 2 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FUTBALL2HD/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Футбол 3 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FUTBALL3HD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мир
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIR/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мир 24
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIR24/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Моя планета
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MYPLANET/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Муз ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MUZTV/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мульт
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MULT/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ+ Кино плюс
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTVPLUSKINO/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мужское кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTVPLUSKINOSOYUZ/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ+ Наше кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTVPLUSNASHEKINO/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ+ Наше новое кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTVPLUSNOVOEKINO/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Настоящее страшное ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NSTV/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Наука
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NAUKA20/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч премьер HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C06_NASHFOOTBALLHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ностальгия
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NOSTALGIYA/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ОТР
+http://zabava-htlive.cdn.ngenix.net/hls/CH_OTR/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Оружие
+http://zabava-htlive.cdn.ngenix.net/hls/CH_WEAPON/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Охота и рыбалка
+http://zabava-htlive.cdn.ngenix.net/hls/CH_OHOTAIRYBALKS/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Диалоги о рыбалке HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DIALORYBHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Парк развлечений
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PARKRAZVLECHENIJ/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Первый канал HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_1TV/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Первый канал
+http://zabava-htlive.cdn.ngenix.net/hls/CH_1TVSD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Первый образовательный
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PERVYJOBRAZOVATELNYJ/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Че
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PERETZ/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Просвещение
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PROSVESCHENIE/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятница!
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PYATNIZZA/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятый канал
+http://zabava-htlive.cdn.ngenix.net/hls/CH_5TV/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",РБК
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRC/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Радость моя
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RADOSTMOYA/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Рен ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RENTV/variant.m3u8
+#EXTINF:-1 group-title="ОБщие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ретро
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RETROTV/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 1
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIA1/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 24
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIA24/variant.m3u8
+#EXTINF:-1 group-title="Общие|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 1 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C05_RUSSIA1HD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия К
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIAK/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русская ночь
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANNIGHT/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русский бестселлер
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANBESTSELLER/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русский детектив
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_RUSSIANDETECTIVE/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русский иллюзион
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANILLUSION/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русский экстрим
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANEXTREAM/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STS/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС Love
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STSLOVE/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Сарафан
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C01_SARAFAN/variant.m3u8
+#EXTINF:-1 group-title="Религиозные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Союз
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SOYUZ/variant.m3u8
+#EXTINF:-1 group-title="Религиозные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Спас
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SPAS/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Арена HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C04_SPORT1HD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мультимузыка
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STRANA/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Страшное HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C01_STRASHNOEHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВ 3
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV3/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВЦ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TVC/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNTHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",БелРос
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TRO/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Усадьба
+http://zabava-htlive.cdn.ngenix.net/hls/CH_USADBA/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Феникс+ Кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_GENIKSPLUSKINO/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шансон ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANSONTV/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ю
+http://zabava-htlive.cdn.ngenix.net/hls/CH_U/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bollywood HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BOLLYWOODHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Fuel TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FUELHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",iConcerts HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ICONCERTSHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ID Xtra HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_IDXTRAHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Museum HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MUSEUMHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",RTG HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RTGHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Russia Today Документальный HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RTDHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",SET HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C02_SETHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Авто 24 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AVTO24HD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Еда Премиум HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EDAHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пес и Ко
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PESIKO/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHTVHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Матч! Игра HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MATCHIGRAHD/variant.m3u8
+#EXTINF:-1 group-title="Общие|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мир HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIRHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Охотник и Рыболов HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_OHOTNIKIRYBOLOVHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",World Fashion Channel HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_WFCHD/variant.m3u8
+#EXTINF:-1 group-title="Общие|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTV_HD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Наше ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NASHETV/variant.m3u8
+#EXTINF:-1 group-title="Разные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ювелирочка
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JUVELIRTV/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Домашний (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DOMASHNY_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Домашний (+4)
+http://rt-sib-bul-htlive-lb.cdn.ngenix.net/hls/CH_R04_DOMASHNY/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Домашний (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DOMASHNY_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Звезда (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZVEZDA_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Звезда (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZVEZDA_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Карусель (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KARUSEL_2/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Карусель (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KARUSEL_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",МИР (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIR_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",МИР (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIR_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTV_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",НТВ (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NTV_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятница (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FRIDAY_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятница (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FRIDAY_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятый канал (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_5TV_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятый канал (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_5TV_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",РЕН ТВ (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RENTV_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",РЕН ТВ (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RENTV_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 1 (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIA1_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 1 (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIA1_4/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия 1 (+6)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIA1_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия К (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIAK_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Россия К (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIAK_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STS_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STS_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВ 3 (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV3_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВ 3 (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV3_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВ Центр (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TVC_2/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВЦ (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TVC_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ю (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_U_7/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV1000 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV1000HD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV1000 Action HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV1000ACTIONHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV1000 Русское кино HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV1000RUSSKOEKINOHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat History HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VIASATHISTORYHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Viasat Explore HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VIASATEXPLOREHD/variant.m3u8
+#EXTINF:-1 group-title="Детские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Тлум HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TLUMHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",КВН ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KVN/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Рен ТВ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RENTVHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Music Box RU HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIAN_MUSICBOXHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ4
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT4/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ4 (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT4_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ4 (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT4_4/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ4 (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT4_7/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Че (+4)
+http://rt-sib-kem-htlive-lb.cdn.ngenix.net/hls/CH_R02_PERETZ/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Че (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PERETZ_7/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Карусель (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KARUSEL_4/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Пятница (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PYATNIZZA_4/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Звезда (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZVEZDA_4/variant.m3u8
+#EXTINF:-1 group-title="Новостные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",CNN International
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CNN_INTERNATIONAL/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Русский роман HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSKIYROMANHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Живая Планета
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JIVAYAPLANETA/variant.m3u8
+#EXTINF:-1 group-title="Детские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Cartoon Network HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CARTOON_NETWORKSHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТВЦ (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TVC_4/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ТНТ (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNT_4/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",H2 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_H2HD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",ЛДПР ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_LDPR/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Анекдот ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ANEKDOTTV/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",MTV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MTVHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Spike HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SPIKEHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Морской HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MORSKOYHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",RU TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUTVHD/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шалун HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHALUNTVHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",О!
+http://zabava-htlive.cdn.ngenix.net/hls/CH_O/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",В гостях у сказки
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VGOSTYAHUSKAZKI/variant.m3u8
+#EXTINF:-1 group-title="Армения" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",SHANT PREMIUM HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANTPREMIUMHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Clubbing TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CLUBBINGHD/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Девятка ТВ (Киров)
+http://rt-vlg-kirov-htlive-lb.cdn.ngenix.net/hls/CH_R02_OTT_VLG_KIROV_9TV/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Губерния (Самара)
+http://rt-vlg-samara-htlive-lb.cdn.ngenix.net/hls/CH_R02_OTT_VLG_SAMARA_GUBERNIA/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",М1 (Самара)
+http://rt-vlg-samara-htlive-lb.cdn.ngenix.net/hls/CH_R03_OTT_VLG_SAMARA_M1/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Волга (Н.Новгород)
+http://rt-vlg-nn-htlive-lb.cdn.ngenix.net/hls/CH_R03_OTT_VLG_NN_VOLGA/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Саратов 24
+http://rt-vlg-saratov-htlive-lb.cdn.ngenix.net/hls/CH_R01_OTT_VLG_SARATOV_SARATOV24/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",2x2
+http://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",2x2 (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_2X2_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",2x2 (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_2X2_4/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",2x2 (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_2X2_7/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Disney Channel
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DISNEY/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Disney Channel (+4)
+http://rt-sib-bul-htlive-lb.cdn.ngenix.net/hls/CH_R02_DISNEYCHANNEL/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Disney Channel (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DISNEY_7/variant.m3u8
+#EXTINF:-1 group-title="Новостные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Известия HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_C03_IZVESTIYAHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Большая Азия HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BIGASIAHD/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Babes TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BABESTVHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Красная линия
+http://zabava-htlive.cdn.ngenix.net/hls/CH_REDLINE/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС Love (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STSLOVE_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС Love (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STSLOVE_7/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Любимое кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_LUBIMOE/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Футбол HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FUTBALLHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дикий
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DIKIY/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",СТС Kids
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STSKIDSHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Star Cinema HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STARCINEMAHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Star Family HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STARFAMILYHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bolt HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BOLTHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Загородная жизнь HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZAGORODNAYAZHIZNHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Первый Вегетарианский HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_PERVYJVEGETARIANSKIJHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Travel Channel HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TRAVELCHANNELHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bridge TV Dance
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRIDGETVDANCE/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bridge TV Classic
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRIDGETVCLASSIC/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Bridge TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_BRIDGEHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Калейдоскоп ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KALEJDOSKOPTV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Кинохит HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINOHITHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Киносемья HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINOFAMILYHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Кинопремьера HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINOPREMIEREHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Киносвидание HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINODATEHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Тномер
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TNOMER/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Супер
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SUPER/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Супер (+2)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SUPER_2/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Супер (+4)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SUPER_4/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Супер (+7)
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SUPER_7/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дикая охота HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DIKAYAOHOTAHD/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дикая рыбалка HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DIKAYARYBALKAHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ani
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ANI/variant.m3u8
+#EXTINF:-1 group-title="Мужские|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Моторспорт ТВ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MOTOSPORTTVHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Точка отрыва
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TOCHKAOTRYVA/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nano HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NANOHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",О2ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_O2TVHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Восток ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VOSTOKTV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дорама
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DORAMA/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Жар птица
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JARPTIZA/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Жара HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JARAHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Nano HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_NANOHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Тайна
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TAINA/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Театр HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_THEATERHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",FAN HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_FANHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Победа HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_POBEDAHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Galaxy TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TAINYGALAKTIKIHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",UFC ТВ HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_UFCHD_HLS/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",О!Кино
+http://zabava-htlive.cdn.ngenix.net/hls/CH_OKINO/variant.m3u8
+#EXTINF:-1 group-title="Новостные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",360° Новости HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_360NEWSHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Russian Extreme Ultra
+http://zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANEXTREMEULTRA_HLS/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ultra HD Cinema
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ULTRAHDCINEMA_HLS/variant.m3u8
+#EXTINF:-1 group-title="Мужские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мужской
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MUZHSKOY/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Центральное телевидение
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CENTRALTV/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Кухня ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KUHNYA/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Точка ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TOCHKATV/variant.m3u8
+#EXTINF:-1 group-title="Музыка|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",1HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_1HDMUSICTV/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Живи!
+http://zabava-htlive.cdn.ngenix.net/hls/CH_JIVI/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Zee TV
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZEETV/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Всё ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VSETVHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",M-1 Global
+http://zabava-htlive.cdn.ngenix.net/hls/CH_M1GLOBAL/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Еда
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EDA/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",SHOT TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHOTTVHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мир сериала
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIRSERIALA/variant.m3u8
+#EXTINF:-1 group-title="Иностранные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",English Club HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ENGLISHCLUBHD/variant.m3u8
+#EXTINF:-1 group-title="Иностранные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV5 Monde HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TV5MONDEHD/variant.m3u8
+#EXTINF:-1 group-title="Армения" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шант News HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANTNEWSHD/variant.m3u8
+#EXTINF:-1 group-title="Магазин" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Shop&Show
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHOPANDSHOW/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",AIVA
+http://zabava-htlive.cdn.ngenix.net/hls/CH_AIVAHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мультимания
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MULTIMANIA/variant.m3u8
+#EXTINF:-1 group-title="Армения" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шант Serial HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANTSERIALHD/variant.m3u8
+#EXTINF:-1 group-title="Армения" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шант Music HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANTMUSICHD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ключ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KEY/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Сиеста HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SIESTAHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Love Nature 4K
+http://zabava-htlive.cdn.ngenix.net/hls/CH_LOVENATURE4K_HLS/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Время
+http://zabava-htlive.cdn.ngenix.net/hls/CH_VREMYADIB/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Телекафе
+http://zabava-htlive.cdn.ngenix.net/hls/CH_TELEKAFE/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Поехали! HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_POEHALIHD/variant.m3u8
+#EXTINF:-1 group-title="Музыка" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Музыка Первого
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MUZYKAPERVOGO/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Малыш ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MALYSHTV/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Первый российский национальный канал HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_1RNKHD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Киноужас HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KINOUZHASHD/variant.m3u8
+#EXTINF:-1 group-title="Армения" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Шант Premium HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_SHANTPREMIUMHD/variant.m3u8
+#EXTINF:-1 group-title="Для взрослых" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Exxxotica HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_EXXXOTICAHD/variant.m3u8
+#EXTINF:-1 group-title="Региональные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Kazakh TV HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_KAZAHHD/variant.m3u8
+#EXTINF:-1 group-title="Региональные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",CGTN Russian
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CGTNRUS/variant.m3u8
+#EXTINF:-1 group-title="English" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",CGTN
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CGTNENG/variant.m3u8
+#EXTINF:-1 group-title="Китай" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",CCTV 4
+http://zabava-htlive.cdn.ngenix.net/hls/CH_CCTV4/variant.m3u8
+#EXTINF:-1 group-title="Иностранные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Хабар 24 HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_HABARHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Живая природа HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ZHIVAYAPRIRODAHD/variant.m3u8
+#EXTINF:-1 group-title="Развлекательные|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Глазами туриста HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_GLAZAMITURISTAHD/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Мир баскетбола
+http://zabava-htlive.cdn.ngenix.net/hls/CH_MIRBASKETBOLA/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Старт HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_STARTHD/variant.m3u8
+#EXTINF:-1 group-title="Общие" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Дума ТВ
+http://zabava-htlive.cdn.ngenix.net/hls/CH_DUMATV/variant.m3u8
+#EXTINF:-1 group-title="Фильмы" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Hollywood
+http://zabava-htlive.cdn.ngenix.net/hls/CH_HOLLYWOOD/variant.m3u8
+#EXTINF:-1 group-title="Фильмы|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Hollywood HD
+http://zabava-htlive.cdn.ngenix.net/hls/CH_HOLLYWOODHD/variant.m3u8
+#EXTINF:-1 group-title="Детские" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Ani
+http://zabava-htlive.cdn.ngenix.net/hls/CH_ANI/variant.m3u8
+#EXTINF:-1 group-title="Спорт" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport 2
+https://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT2/variant.m3u8
+#EXTINF:-1 group-title="Спорт|HD" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",Eurosport 2 HD
+https://zabava-htlive.cdn.ngenix.net/hls/CH_EUROSPORT2HD/variant.m3u8
+#EXTINF:-1 group-title="Познавательные" catchup="append" catchup-days="3" catchup-source="?offset=-${offset}&utcstart=${timestamp}",TV BRICS
+https://zabava-htlive.cdn.ngenix.net/hls/CH_BRICSTV/variant.m3u8
+#EXTINF:-1,СТРАХ HD
+https://strah.video/id/1
+#EXTINF:-1,ФАНТАСТИКА HD
+https://strah.video/id/2
+#EXTINF:-1,BEST Films HD
+https://strah.video/id/3
+#EXTINF:-1,ЕРАЛАШ HD
+https://strah.video/id/4
+#EXTINF:-1,СССР ФИЛЬМЫ
+https://strah.video/id/5
+#EXTINF:-1,КРОХА ТВ
+https://strah.video/id/6
+#EXTINF:-1,ВЕСЕЛАЯ КАРУСЕЛЬ HD
+https://strah.video/id/7
+#EXTINF:-1,LOST HD
+https://strah.video/id/8
+#EXTINF:-1,ОХ-АХ HD (18+)
+https://strah.video/id/9
+#EXTINF:-1,НАЗАД В 90-е
+https://strah.video/id/10
+#EXTINF:-1,BACKUS TV
+https://strah.video/id/11
+#EXTINF:-1,ПЕРЕЦ Int
+https://strah.video/id/12
+#EXTINF:-1,СТРАШНОЕ HD
+https://strah.video/id/13
+#EXTINF:-1,Кинозал! Совкино
+https://strah.video/id/15
+#EXTINF:-1,PZN HD
+https://strah.video/id/16
+#EXTINF:-1,STR TV
+https://strah.video/id/18
+#EXTINF:-1,Первый космический HD
+https://strah.video/id/19
+#EXTINF:-1,Кинозал! ХИТ HD
+https://strah.video/id/20
+#EXTINF:-1,Кинозал! VHS HD
+https://strah.video/id/21
+#EXTINF:-1,The X-Files
+https://strah.video/id/22
+#EXTINF:-1,Sky2000 Cinema HD
+https://strah.video/id/23
+#EXTINF:-1,Sky2000 Russian HD
+https://strah.video/id/25
+#EXTINF:-1,WWE Russian
+https://strah.video/id/26
+#EXTINF:-1 group-title="Новые каналы",1 Крымский
+http://hls.peers.tv/streaming/1_krymskiy/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",12 канал (Омск)
+http://hls.peers.tv/streaming/ortrk12/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",1HD
+http://hls.peers.tv/streaming/firstmuz/16/hd/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",360 Подмосковье (Москва)
+http://hls.peers.tv/streaming/360tv/126/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",365 Дней
+http://hls.peers.tv/streaming/365_days/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",43 Канал (Туапсе)
+http://hls.peers.tv/streaming/43_kanal/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",49 канал (Новосибирск)
+http://hls.peers.tv/streaming/49kanal/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Общие",8 канал
+http://hls.peers.tv/streaming/8_kanal/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",8 канал (Красноярск)
+http://hls.peers.tv/streaming/ya1pm/16/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",86 Канал (Сургут)
+http://hls.peers.tv/streaming/86/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",9 волна
+http://hls.peers.tv/streaming/devyataya_volna/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",A1
+http://hls.peers.tv/streaming/amedia1/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",A2
+http://hls.peers.tv/streaming/amedia_2/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",AIVA
+http://hls.peers.tv/streaming/aiva_tv/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="HD",Amedia HIT HD
+http://hls.peers.tv/streaming/amedia_hit/16/variable.m3u8
+#EXTINF:-1 group-title="HD",Animal Family HD
+http://hls.peers.tv/streaming/animal_family_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Animal Planet
+http://hls.peers.tv/streaming/animalplanet/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Animal Planet HD
+http://hls.peers.tv/streaming/animal_planet_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Atameken Business Channel
+http://hls.peers.tv/streaming/atameken/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Для взрослых",Blue Hustler
+http://hls.peers.tv/streaming/blue_hustler_18/16/variable.m3u8
+#EXTINF:-1 group-title="Для взрослых",Brazzers TV Europe
+http://hls.peers.tv/streaming/brazzers_tv_europe_18/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",Bridge TV
+http://hls.peers.tv/streaming/bridge/126/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Bridge TV Classic
+http://hls.peers.tv/streaming/bridge_tv_classic/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Bridge TV Deluxe
+http://hls.peers.tv/streaming/bridge_hd/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Bridge TV hits
+http://hls.peers.tv/streaming/dange_tv/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Bridge TV Русский хит
+http://hls.peers.tv/streaming/rusong_tv/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Cartoon Network
+http://hls.peers.tv/streaming/cartoonnetwork/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",CCTV-4
+http://hls.peers.tv/streaming/cctv_4/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",CGTN
+http://hls.peers.tv/streaming/cgtn/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",CGTN Русский
+http://hls.peers.tv/streaming/cgtn_russkiy/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",CINEMA
+http://hls.peers.tv/streaming/ipark/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Da Vinci learning
+http://hls.peers.tv/streaming/da_vinci/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Discovery Channel
+http://hls.peers.tv/streaming/discovery/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Discovery HD
+http://hls.peers.tv/streaming/discovery_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Discovery Science
+http://hls.peers.tv/streaming/discoveryscience/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Disney Channel
+http://hls.peers.tv/streaming/disney/126/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",DOCUBOX
+http://hls.peers.tv/streaming/docubox/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",DTX
+http://hls.peers.tv/streaming/discoveryworld/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Для взрослых",Erox HD
+http://hls.peers.tv/streaming/erox_18/16/variable.m3u8
+#EXTINF:-1 group-title="Новостные",EuroNews
+http://hls.peers.tv/streaming/euronews/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Europa Plus TV
+http://hls.peers.tv/streaming/europaplustv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Eurosport 1
+http://hls.peers.tv/streaming/eurosport/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Eurosport 1 HD
+http://hls.peers.tv/streaming/eurosport_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Eurosport 2
+http://hls.peers.tv/streaming/eurosport2/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Eurosport 2 HD
+http://hls.peers.tv/streaming/eurosport_2_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Extreme sports
+http://hls.peers.tv/streaming/extreme_sports/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Fan HD
+http://hls.peers.tv/streaming/fan_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",Fashion TV
+http://hls.peers.tv/streaming/fashion/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Fashion TV HD
+http://hls.peers.tv/streaming/fashion_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",FILMBOX
+http://hls.peers.tv/streaming/filmbox/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Filmbox Arthouse
+http://hls.peers.tv/streaming/filmbox_arthouse/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Fireplace
+http://hls.peers.tv/streaming/fireplace/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Fishy Fishy
+http://hls.peers.tv/streaming/fishy_fishy/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",FOX
+http://hls.peers.tv/streaming/fox/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",FOX Life
+http://hls.peers.tv/streaming/foxlife/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Fox life HD
+http://hls.peers.tv/streaming/foxlife_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Galaxy TV
+http://hls.peers.tv/streaming/galaxy_tv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="HD",Ginger HD
+http://hls.peers.tv/streaming/ginger_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",GlobalStar TV
+http://hls.peers.tv/streaming/globalstartv/126/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",ID Investigation Discovery
+http://hls.peers.tv/streaming/investigationdiscovery/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Интер+
+http://hls.peers.tv/streaming/interplus/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Детские",JimJam
+http://hls.peers.tv/streaming/jim_jam/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Luxury
+http://hls.peers.tv/streaming/luxury_world/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Mezzo Live HD
+http://hls.peers.tv/streaming/mezzo_live_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",MTV Dance
+http://hls.peers.tv/streaming/mtv_dance/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",MTV HD
+http://hls.peers.tv/streaming/mtv_hd/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",MTV Hits
+http://hls.peers.tv/streaming/mtv_hits/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",MTV Live HD
+http://hls.peers.tv/streaming/mtv_live_hd/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",MTV Russia
+http://hls.peers.tv/streaming/mtv_russia/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Music Box TV
+http://hls.peers.tv/streaming/musboxtv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="HD",Myzen HD
+http://hls.peers.tv/streaming/myzen_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",NANO
+http://hls.peers.tv/streaming/nano_tv/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Nat Geo Wild
+http://hls.peers.tv/streaming/nat_geo_wild/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",National Geographic
+http://hls.peers.tv/streaming/natgeo/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",National Geographic HD
+http://hls.peers.tv/streaming/national_geographic_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Nick Jr.
+http://hls.peers.tv/streaming/nick_jr/16/variable.m3u8
+#EXTINF:-1 group-title="Детские",Nickelodeon
+http://hls.peers.tv/streaming/nickelodeon/126/variable.m3u8
+#EXTINF:-1 group-title="Детские",Nickelodeon
+http://hls.peers.tv/streaming/nickelodeon/16/variable.m3u8
+#EXTINF:-1 group-title="HD",Nickelodeon HD
+http://hls.peers.tv/streaming/nickelodeon_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Nickelodeon HD
+http://hls.peers.tv/streaming/nickelodeon_hd/16/h1080/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",RU TV
+http://hls.peers.tv/streaming/rutv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Russia Today
+http://hls.peers.tv/streaming/russiatoday/126/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Russia Today Doc
+http://hls.peers.tv/streaming/russia_today_doc/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Russia Today Doc HD
+http://hls.peers.tv/streaming/russia_today_doc_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Russia Today HD
+http://hls.peers.tv/streaming/russia_today_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",RUSSIAN MUSICBOX
+http://hls.peers.tv/streaming/musboxru/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",RTG
+http://hls.peers.tv/streaming/rustravel/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",RTG HD
+http://hls.peers.tv/streaming/rtghd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Shop & Show
+http://hls.peers.tv/streaming/shop_show/16/variable.m3u8
+#EXTINF:-1 group-title="Магазин",Shop 24
+http://hls.peers.tv/streaming/shop24/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Магазин",Shopping Live
+http://hls.peers.tv/streaming/shopping_live/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",SOCHI LIVE
+http://hls.peers.tv/streaming/sochilive/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",SONGTV Armenia
+http://hls.peers.tv/streaming/mtvam/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",SONGTV Russia
+http://hls.peers.tv/streaming/songtv_russia/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Sony Channel
+http://hls.peers.tv/streaming/set/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Sony Channel HD
+http://hls.peers.tv/streaming/set_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Sony Sci-Fi
+http://hls.peers.tv/streaming/sonyscifi/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Tiji
+http://hls.peers.tv/streaming/tiji/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",TLC
+http://hls.peers.tv/streaming/tlc/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",TLC HD
+http://hls.peers.tv/streaming/tlc_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Travel+ Adventure
+http://hls.peers.tv/streaming/travad/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Travel+ Adventure HD
+http://hls.peers.tv/streaming/travel_adventure_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",TV XXI
+http://hls.peers.tv/streaming/tv21/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",TV1000
+http://hls.peers.tv/streaming/tv1000/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",TV1000 Action
+http://hls.peers.tv/streaming/tv1000_action/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",TV1000 Русское кино
+http://hls.peers.tv/streaming/tv_1000_rus_kino/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",VH1 Classic
+http://hls.peers.tv/streaming/vh1/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Viasat Explore
+http://hls.peers.tv/streaming/viasat_explorer/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",Viasat History
+http://hls.peers.tv/streaming/viasat_history/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",Viasat Nature
+http://hls.peers.tv/streaming/viasat_nature/16/variable.m3u8
+#EXTINF:-1 group-title="HD",Viasat Sport HD
+http://hls.peers.tv/streaming/viasat_sport_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",ViP Comedy
+http://hls.peers.tv/streaming/tv1000_comedy_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",ViP Megahit
+http://hls.peers.tv/streaming/tv1000_megahit_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",ViP Premiere
+http://hls.peers.tv/streaming/tv1000_premium_hd/16/h1080/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ViP Serial
+http://hls.peers.tv/streaming/viasat_golf_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Waves
+http://hls.peers.tv/streaming/waves/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",ZEE TV
+http://hls.peers.tv/streaming/zee-tv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",ZooПарк
+http://hls.peers.tv/streaming/zoopark/126/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Авто 24
+http://hls.peers.tv/streaming/avto_24/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Авто плюс
+http://hls.peers.tv/streaming/auto_plus/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",АИСТ
+http://hls.peers.tv/streaming/aist/16/vh1/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Алмазный край
+http://hls.peers.tv/streaming/almazny_kray/16/gvh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Ариг Ус
+http://hls.peers.tv/streaming/arig_us/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Арктика 24
+http://hls.peers.tv/streaming/arktika_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Архыз 24 (Черкесск)
+http://hls.peers.tv/streaming/arhyz24/126/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Астрахань 24 (Астрахань)
+http://hls.peers.tv/streaming/astrahan_24_hd/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Барс плюс (Иваново)
+http://hls.peers.tv/streaming/barsplus/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Башкортостан 24
+http://hls.peers.tv/streaming/bashkortostan_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новостные",Беларусь 24
+http://hls.peers.tv/streaming/belarus_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Бобёр
+http://hls.peers.tv/streaming/bobyor/16/variable.m3u8
+#EXTINF:-1 group-title="Спорт",Бокс ТВ
+http://hls.peers.tv/streaming/boks_tv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Большая Азия
+http://hls.peers.tv/streaming/bolshaya_aziya/16/h1080/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Брянская Губерния
+http://hls.peers.tv/streaming/bryanskaya_guberniya/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",БСТ (Челябинск)
+http://hls.peers.tv/streaming/bst/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Ветта 24 (Пермь)
+http://hls.peers.tv/streaming/vetta_24/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Витрина ТВ
+http://hls.peers.tv/streaming/vitrina_tv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Вместе РФ
+http://hls.peers.tv/streaming/vmeste_rf/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Восток 24
+http://hls.peers.tv/streaming/vostok_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Восток ТВ
+http://hls.peers.tv/streaming/tmb_ru/16/gvh1w/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Время
+http://hls.peers.tv/streaming/time/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Вся Уфа
+http://hls.peers.tv/streaming/vsya_ufa/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Детский
+http://hls.peers.tv/streaming/forkids/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Детский мир
+http://hls.peers.tv/streaming/detskij_mir/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Диалоги о рыбалке
+http://hls.peers.tv/streaming/dialogi_o_rybalke/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новостные",Дождь
+http://hls.peers.tv/streaming/rain/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Дождь HD
+http://hls.peers.tv/streaming/rain_hd/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",Доктор
+http://hls.peers.tv/streaming/24doc/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Дом Кино
+http://hls.peers.tv/streaming/dom_kino/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Дом кино премиум
+http://hls.peers.tv/streaming/dom_kino_premium/16/gvh1w/playlist.m3u8
+#EXTINF:-1 group-title="HD",Дом кино премиум HD
+http://hls.peers.tv/streaming/dom_kino_premium/16/variable.m3u8
+#EXTINF:-1 group-title="Общие",Домашний
+http://hls.peers.tv/streaming/domashny/126/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",ДОН 24
+http://hls.peers.tv/streaming/don_24/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Драйв
+http://hls.peers.tv/streaming/drive/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",Евпатория ТВ
+http://hls.peers.tv/streaming/evpatorija/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Евроновости
+http://hls.peers.tv/streaming/euronews/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ЕГЭ
+http://hls.peers.tv/streaming/ege/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",Енисей
+http://hls.peers.tv/streaming/enisey/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Живая планета
+http://hls.peers.tv/streaming/zhivaya_planeta/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Живи!
+http://hls.peers.tv/streaming/jv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Загородная жизнь
+http://hls.peers.tv/streaming/zagorod_zh/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Звезда
+http://hls.peers.tv/streaming/zvezda/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",Звезда
+http://hls.peers.tv/streaming/zvezda/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Здоровье
+http://hls.peers.tv/streaming/tonus_tv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Zoo TV
+http://hls.peers.tv/streaming/zoo_tv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новостные",Известия
+http://hls.peers.tv/streaming/izvestiya/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Иллюзион+
+http://hls.peers.tv/streaming/illyuzion/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Индийское кино
+http://hls.peers.tv/streaming/indiatv/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Инфо 24
+http://hls.peers.tv/streaming/shadr_info/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",ИНФО 24 HD (Шадринск)
+http://hls.peers.tv/streaming/shadr_info/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",История
+http://hls.peers.tv/streaming/istoriya/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Июнь
+http://hls.peers.tv/streaming/iyun/16/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Калейдоскоп ТВ
+http://hls.peers.tv/streaming/kaleydoskop/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Карусель
+http://hls.peers.tv/streaming/karusel/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Катунь 24
+http://hls.peers.tv/streaming/katun_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",KINO 24
+http://hls.peers.tv/streaming/kino24/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Кино ТВ HD
+http://hls.peers.tv/streaming/kino_tv_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Кинокомедия
+http://hls.peers.tv/streaming/comedytv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Киномикс
+http://hls.peers.tv/streaming/ntv_kino_plyus/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="HD",Кинопремьера HD
+http://hls.peers.tv/streaming/premera/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Киносвидание
+http://hls.peers.tv/streaming/kinoklub/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",Киносемья
+http://hls.peers.tv/streaming/hd_kino/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Кинохит
+http://hls.peers.tv/streaming/kinohit/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",Классика Кино
+http://hls.peers.tv/streaming/klassikakino/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Контрольная закупка
+http://hls.peers.tv/streaming/kontrolnaya_zakupka/126/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Красная линия
+http://hls.peers.tv/streaming/red_line/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",КРИК-ТВ
+http://hls.peers.tv/streaming/krik_tv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",Крым 24
+http://hls.peers.tv/streaming/krym_24/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",Кубань 24 ОРБИТА
+http://hls.peers.tv/streaming/kuban24/126/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Курай
+http://hls.peers.tv/streaming/kuray/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Кухня ТВ
+http://hls.peers.tv/streaming/kitchentv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",КХЛ
+http://hls.peers.tv/streaming/khl/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",КХЛ HD
+http://hls.peers.tv/streaming/kxl_hd/16/h1080/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ЛДПР.ТВ
+http://hls.peers.tv/streaming/ldpr_tv/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Липецкое время
+http://hls.peers.tv/streaming/lipetskoye_vremya/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Любимое кино
+http://hls.peers.tv/streaming/favmovie/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Ля Минор
+http://hls.peers.tv/streaming/la_minor/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Мама
+http://hls.peers.tv/streaming/motherchi/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Детский",Мамонтенок
+http://hls.peers.tv/streaming/mmntk/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",МатурТВ
+http://hls.peers.tv/streaming/matur/126/variable.m3u8
+#EXTINF:-1 group-title="Спорт",Матч!
+http://hls.peers.tv/streaming/sport/16/variable.m3u8
+#EXTINF:-1 group-title="HD",Матч! HD
+http://hls.peers.tv/streaming/match_tv_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Матч! Арена
+http://hls.peers.tv/streaming/sport1/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Матч! Арена HD
+http://hls.peers.tv/streaming/sport_1_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Матч! Боец
+http://hls.peers.tv/streaming/boets/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Матч! Игра
+http://hls.peers.tv/streaming/sport_2/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Матч! Наш спорт
+http://hls.peers.tv/streaming/match_nash_sport/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",МАТЧ! Премьер
+http://hls.peers.tv/streaming/nash_futbol/16/variable.m3u8
+#EXTINF:-1 group-title="HD",МАТЧ! Премьер HD
+http://hls.peers.tv/streaming/nashfootballhd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Матч! Футбол 1 HD
+http://hls.peers.tv/streaming/match_football1_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Матч! Футбол 2 HD
+http://hls.peers.tv/streaming/match_football2_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Матч! Футбол 3 HD
+http://hls.peers.tv/streaming/match_football3_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Миллет (Симферополь)
+http://hls.peers.tv/streaming/millet/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Министерство Идей
+http://hls.peers.tv/streaming/minofideas/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Мир
+http://hls.peers.tv/streaming/mir/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Мир
+http://hls.peers.tv/streaming/mir/126/variable.m3u8
+#EXTINF:-1 group-title="Новостные",Мир 24
+http://hls.peers.tv/streaming/mir24/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Мир 24 HD
+http://hls.peers.tv/streaming/mir24hd/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Мир HD
+http://hls.peers.tv/streaming/mir_hd/16/variable.m3u8
+#EXTINF:-1 group-title="Региональные",Мир Белогорья
+http://hls.peers.tv/streaming/mir_belogorya/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Мир сериала
+http://hls.peers.tv/streaming/mir_seriala/126/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Москва-24
+http://hls.peers.tv/streaming/moskva_24/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Московский образовательный
+http://hls.peers.tv/streaming/dogm/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Моя планета
+http://hls.peers.tv/streaming/my_planet/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Мужское Кино
+http://hls.peers.tv/streaming/interesnoe_tv/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",Муз ТВ
+http://hls.peers.tv/streaming/muz_tvnew/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Муз ТВ
+http://hls.peers.tv/streaming/muz_tvnew/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Мультимания
+http://hls.peers.tv/streaming/multimania/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Надежда
+http://hls.peers.tv/streaming/hopetv/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Настоящее страшное ТВ
+http://hls.peers.tv/streaming/nstv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Наука
+http://hls.peers.tv/streaming/nauka_20/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НАШ ДОМ
+http://hls.peers.tv/streaming/nash_dom/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Наша Тема
+http://hls.peers.tv/streaming/nasha_tema/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",Наша Тема HD
+http://hls.peers.tv/streaming/nasha_tema/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Наше новое кино
+http://hls.peers.tv/streaming/nashe_novoe_kino/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Наше ТВ
+http://hls.peers.tv/streaming/nashe_tv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НВК САХА
+http://hls.peers.tv/streaming/nvk_saha/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Ника ТВ
+http://hls.peers.tv/streaming/nika/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Ника ТВ (Калуга)
+http://hls.peers.tv/streaming/nika/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ННТВ
+http://hls.peers.tv/streaming/nntv/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Новое телевидение
+http://hls.peers.tv/streaming/novoe_televidenie/318/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Новосибирские новости (Новосибирск)
+http://hls.peers.tv/streaming/nsknews/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Ностальгия
+http://hls.peers.tv/streaming/nostalgy/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Общие",НТВ
+http://hls.peers.tv/streaming/ntv/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",НТВ
+http://hls.peers.tv/streaming/ntv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НТВ-Право
+http://hls.peers.tv/streaming/ntv_pravo/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НТВ-Сериал
+http://hls.peers.tv/streaming/ntv_serial/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НТВ-Хит
+http://hls.peers.tv/streaming/ntv_hit/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НТН24
+http://hls.peers.tv/streaming/region_tv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",НТС
+http://hls.peers.tv/streaming/nts/126/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Детские",О!
+http://hls.peers.tv/streaming/o/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Оружие
+http://hls.peers.tv/streaming/oruzhie/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ОТВ (Челябинск)
+http://hls.peers.tv/streaming/otv_chlb/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ОТВ24
+http://hls.peers.tv/streaming/otv24_ekb/126/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Открытый Мир
+http://hls.peers.tv/streaming/open_mir/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Общие",ОТР
+http://hls.peers.tv/streaming/otvrus/126/variable.m3u8
+#EXTINF:-1 group-title="Региональные",ОТС
+http://hls.peers.tv/streaming/ots/16/h1080/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",ОТС
+http://hls.peers.tv/streaming/ots/16/variable.m3u8
+#EXTINF:-1 group-title="HD",ОТС HD
+http://hls.peers.tv/streaming/ots/16/variable.m3u8
+#EXTINF:-1 group-title="Мужские",Охота и рыбалка
+http://hls.peers.tv/streaming/hafi/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Охотник и рыболов
+http://hls.peers.tv/streaming/ohotnik_i_rybolov/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Охотник и рыболов HD
+http://hls.peers.tv/streaming/ohotnik_i_rybolov_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Первый канал
+http://hls.peers.tv/streaming/1kanal/126/variable.m3u8
+#EXTINF:-1 group-title="HD",Первый канал HD
+http://hls.peers.tv/streaming/1kanal_hd/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",Первый вегетарианский
+http://hls.peers.tv/streaming/pervyy_vegetarianskiy/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Первый Театральный Канал
+http://hls.peers.tv/streaming/1teatr/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Пингвин
+http://hls.peers.tv/streaming/pingvin_lolo/126/vh1/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Победа
+http://hls.peers.tv/streaming/pobeda/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ПРО БИЗНЕС
+http://hls.peers.tv/streaming/pro_biznes/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Продвижение
+http://hls.peers.tv/streaming/prodvizhenie/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",Пятница!
+http://hls.peers.tv/streaming/friday/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Пятый
+http://hls.peers.tv/streaming/5kanal/126/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Пятый
+http://hls.peers.tv/streaming/5kanal/16/variable.m3u8
+#EXTINF:-1 group-title="Детские",Радость моя
+http://hls.peers.tv/streaming/radost_moj/16/variable.m3u8
+#EXTINF:-1 group-title="Новостные",РБК
+http://hls.peers.tv/streaming/rbk/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",РЕН-ТВ
+http://hls.peers.tv/streaming/rentv/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",РЕН-ТВ
+http://hls.peers.tv/streaming/rentv/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",Ретро
+http://hls.peers.tv/streaming/retro/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Россия 1
+http://hls.peers.tv/streaming/rossija/16/variable.m3u8
+#EXTINF:-1 group-title="Общие",Россия 1
+http://hls.peers.tv/streaming/rossija/126/variable.m3u8
+#EXTINF:-1 group-title="HD",Россия 1 HD
+http://hls.peers.tv/streaming/russiahd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новостные",Россия 24
+http://hls.peers.tv/streaming/vesti/16/variable.m3u8
+#EXTINF:-1 group-title="Новостные",Россия 24
+http://hls.peers.tv/streaming/vesti/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",Россия К
+http://hls.peers.tv/streaming/kultura/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",Россия К
+http://hls.peers.tv/streaming/kultura/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",Русский Бестселлер
+http://hls.peers.tv/streaming/russia_best/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",Русский детектив
+http://hls.peers.tv/streaming/russkiy_detektiv/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Русский Север
+http://hls.peers.tv/streaming/russkiy_sever/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Мужские",Русский экстрим
+http://hls.peers.tv/streaming/ru_extrem/126/vh1/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Рыжий
+http://hls.peers.tv/streaming/red/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",С1
+http://hls.peers.tv/streaming/s1/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",Сарафан ТВ
+http://hls.peers.tv/streaming/sarafan/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Сделано в Кузбассе (Кемерово)
+http://hls.peers.tv/streaming/sdelano_v_kuzbasse_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Сказки Зайки
+http://hls.peers.tv/streaming/skazkizayki/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",СКАТ 24
+http://hls.peers.tv/streaming/skat_24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",СмайликТВ
+http://hls.peers.tv/streaming/smayliktv/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Детские",Советские мультфильмы
+http://hls.peers.tv/streaming/sovetskiemult/16/variable.m3u8
+#EXTINF:-1 group-title="Фильмы",Советское кино
+http://hls.peers.tv/streaming/sovetskoekino/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Сочи 24
+http://hls.peers.tv/streaming/sochi24/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Религиозные",Союз
+http://hls.peers.tv/streaming/soyuz/16/variable.m3u8
+#EXTINF:-1 group-title="Религиозные",СПАС
+http://hls.peers.tv/streaming/spas/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Старт
+http://hls.peers.tv/streaming/start/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",СТРК
+http://hls.peers.tv/streaming/strk/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",СТРК HD (Сочи)
+http://hls.peers.tv/streaming/strk/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Детские",СТС Kids
+http://hls.peers.tv/streaming/sts_kids/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",СТС love
+http://hls.peers.tv/streaming/sts_love/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",СТС МИР
+http://hls.peers.tv/streaming/sts/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы",ТВ 3
+http://hls.peers.tv/streaming/tv3/16/variable.m3u8
+#EXTINF:-1 group-title="Региональные",ТВК
+http://hls.peers.tv/streaming/tvk_6/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Твой дом
+http://hls.peers.tv/streaming/tvoy_dom/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Общие",ТВЦ
+http://hls.peers.tv/streaming/tvc/126/variable.m3u8
+#EXTINF:-1 group-title="Общие",ТВЦ
+http://hls.peers.tv/streaming/tvc/16/variable.m3u8
+#EXTINF:-1 group-title="Развлекательные",Театр
+http://hls.peers.tv/streaming/teatr/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Телекафе
+http://hls.peers.tv/streaming/telekafe/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Телепутешествия
+http://hls.peers.tv/streaming/teleputeshestviya/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="HD",Телепутешествия HD
+http://hls.peers.tv/streaming/teleputeshestvija_hd/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Техно 24
+http://hls.peers.tv/streaming/24techno/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Тивиком
+http://hls.peers.tv/streaming/tivikom/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="HD",ТК Центр Красноярск HD
+http://hls.peers.tv/streaming/ckry/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ТМ-КВАНТ (Междуреченск)
+http://hls.peers.tv/streaming/tmkvant/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Региональные",ТНВ
+http://hls.peers.tv/streaming/tnv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ТНВ-Татарстан (Казань)
+http://hls.peers.tv/streaming/tnv_tatarstan/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",ТНТ
+http://hls.peers.tv/streaming/tnt/16/variable.m3u8
+#EXTINF:-1 group-title="Музыка",ТНТ Music
+http://hls.peers.tv/streaming/tnt_music/126/variable.m3u8
+#EXTINF:-1 group-title="Музыка",ТНТ Music
+http://hls.peers.tv/streaming/tnt_music/16/variable.m3u8
+#EXTINF:-1 group-title="Развлекательные",ТНТ4
+http://hls.peers.tv/streaming/tnt4/16/variable.m3u8
+#EXTINF:-1 group-title="Развлекательные",Точка ТВ
+http://hls.peers.tv/streaming/tochka_tv/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Три ангела
+http://hls.peers.tv/streaming/tri_angela/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Туапсе 24 (Туапсе)
+http://hls.peers.tv/streaming/tuapse24/126/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Тюменское время (Тюмень)
+http://hls.peers.tv/streaming/tyumen/16/variable.m3u8
+#EXTINF:-1 group-title="Познавательные",Усадьба
+http://hls.peers.tv/streaming/usadba/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные",Успех
+http://hls.peers.tv/streaming/uspex/16/gvh1/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Футбол
+http://hls.peers.tv/streaming/futbol/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Спорт",Футбол
+http://hls.peers.tv/streaming/futbol/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Центр Красноярск (Красноярск)
+http://hls.peers.tv/streaming/ckry/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Центральное телевидение
+http://hls.peers.tv/streaming/tvc_ctv/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",Че!
+http://hls.peers.tv/streaming/perec/126/variable.m3u8
+#EXTINF:-1 group-title="Развлекательные",Че!
+http://hls.peers.tv/streaming/perec/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Музыка",Шансон ТВ
+http://hls.peers.tv/streaming/shanson/16/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="HD",Эврика HD
+http://hls.peers.tv/streaming/hd_eureka/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Эфир-Казань
+http://hls.peers.tv/streaming/efir-kazan/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Общие",Эхо TV
+http://hls.peers.tv/streaming/echotv/126/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Развлекательные",Ю
+http://hls.peers.tv/streaming/utv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Магазин",Ювелирочка
+http://hls.peers.tv/streaming/yuvelirochka/16/variable.m3u8
+#EXTINF:-1 group-title="Новые каналы",Юрган
+http://hls.peers.tv/streaming/yurgan/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",ЮТВ
+http://hls.peers.tv/streaming/utv/16/vh1w/playlist.m3u8
+#EXTINF:-1 group-title="Новые каналы",Якутия 24
+http://hls.peers.tv/streaming/yakutiya24/16/copy/playlist.m3u8
+#EXTINF:-1,5 Канал HD
+http://api-tv.ipnet.ua/api/v1/manifest/2118742539.m3u8
+#EXTINF:-1,UA: Донбас
+http://api-tv.ipnet.ua/api/v1/manifest/1311274061.m3u8
+#EXTINF:-1,ЕКО-ТВ
+http://api-tv.ipnet.ua/api/v1/manifest/1311963170.m3u8
+#EXTINF:-1,UA: Культура
+http://api-tv.ipnet.ua/api/v1/manifest/1311962540.m3u8
+#EXTINF:-1,Малятко ТВ
+http://api-tv.ipnet.ua/api/v1/manifest/1311963260.m3u8
+#EXTINF:-1,НАШ
+http://api-tv.ipnet.ua/api/v1/manifest/1293296550.m3u8
+#EXTINF:-1,Прямий HD
+http://api-tv.ipnet.ua/api/v1/manifest/1293294600.m3u8
+#EXTINF:-1,Київ
+http://api-tv.ipnet.ua/api/v1/manifest/1293296300.m3u8
+#EXTINF:-1,Київ. Відкритий урок
+http://api-tv.ipnet.ua/api/v1/manifest/2118742549.m3u8
+#EXTINF:-1,O-TV
+http://api-tv.ipnet.ua/api/v1/manifest/1293297500.m3u8
+#EXTINF:-1,Новини 24
+http://api-tv.ipnet.ua/api/v1/manifest/1293298050.m3u8
+#EXTINF:-1,Рада
+http://api-tv.ipnet.ua/api/v1/manifest/1312714970.m3u8
+#EXTINF:-1,4 канал
+http://api-tv.ipnet.ua/api/v1/manifest/2118742331.m3u8
+#EXTINF:-1,UA TV
+http://api-tv.ipnet.ua/api/v1/manifest/2118742330.m3u8
+#EXTINF:-1,UA: КРИМ
+http://api-tv.ipnet.ua/api/v1/manifest/2118742409.m3u8
+#EXTINF:-1,Погляд Київщина
+http://api-tv.ipnet.ua/api/v1/manifest/2118742550.m3u8
+#EXTINF:-1,Сонце
+http://api-tv.ipnet.ua/api/v1/manifest/709640461.m3u8
+#EXTINF:-1,Черноморская ТРК
+http://api-tv.ipnet.ua/api/v1/manifest/2007331741.m3u8
+#EXTINF:-1,ATR
+http://api-tv.ipnet.ua/api/v1/manifest/2007308341.m3u8
+#EXTINF:-1,Еспресо
+http://api-tv.ipnet.ua/api/v1/manifest/2007567821.m3u8
+#EXTINF:-1,Громадське ТБ HD
+http://api-tv.ipnet.ua/api/v1/manifest/139947023.m3u8
+#EXTINF:-1,112 Украина
+http://api-tv.ipnet.ua/api/v1/manifest/1442908080.m3u8
+#EXTINF:-1,Киевская Русь
+http://api-tv.ipnet.ua/api/v1/manifest/1298864660.m3u8
+#EXTINF:-1,UA: ПЕРШИЙ
+http://api-tv.ipnet.ua/api/v1/manifest/871803891.m3u8
+#EXTINF:-1,UA: ОДЕСА
+http://api-tv.ipnet.ua/api/v1/manifest/2118742468.m3u8
+#EXTINF:-1,Галичина
+http://api-tv.ipnet.ua/api/v1/manifest/2118742464.m3u8
+#EXTINF:-1,Перший західний
+http://api-tv.ipnet.ua/api/v1/manifest/2118742459.m3u8
+#EXTINF:-1,RAI
+http://api-tv.ipnet.ua/api/v1/manifest/2118742460.m3u8
+#EXTINF:-1,UA: Закарпаття
+http://api-tv.ipnet.ua/api/v1/manifest/2118742462.m3u8
