@@ -434,7 +434,7 @@
         btn.on('hover:enter', function () {
           Lampa.Activity.push({
             url: '',
-            title: 'VIDEOCDN 720p',
+            title: 'Просмотр с VIDEOCDN в качестве 720p',
             component: '720',
             search: e.data.movie.title,
             search_one: e.data.movie.title,
