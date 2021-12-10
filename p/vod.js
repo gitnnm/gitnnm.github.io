@@ -93,7 +93,7 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4';
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + replace(/1080/, '720') + '.mp4';
         } catch (e) {}
 
         return url;
@@ -539,11 +539,7 @@
           var videos = str.match("file': '(.*?)'");
 
           if (videos) {
-            var link = videos[0].match("2160p](.*?)mp4");
-            if (!link) link = videos[0].match("1440p](.*?)mp4");
-            if (!link) link = videos[0].match("1080p Ultra](.*?)mp4");
-            if (!link) link = videos[0].match("1080p](.*?)mp4");
-            if (!link) link = videos[0].match("720p](.*?)mp4");
+            var link = videos[0].match("720p](.*?)mp4");
             if (!link) link = videos[0].match("480p](.*?)mp4");
             if (!link) link = videos[0].match("360p](.*?)mp4");
             if (!link) link = videos[0].match("240p](.*?)mp4");
@@ -621,7 +617,7 @@
           extract.episode.forEach(function (episode) {
             items.push({
               title: 'S' + extract.season[choice.season].id + ' / ' + episode.name,
-              quality: '720p ~ 1080p',
+              quality: '720p',
               season: extract.season[choice.season].id,
               episode: parseInt(episode.id),
               info: ' / ' + extract.voice[choice.voice].name
@@ -631,7 +627,7 @@
           extract.voice.forEach(function (voice) {
             items.push({
               title: voice.name.length > 3 ? voice.name : select_title,
-              quality: '720p ~ 1080p',
+              quality: '720p',
               voice: voice,
               info: ''
             });
