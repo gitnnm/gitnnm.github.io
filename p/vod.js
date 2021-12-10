@@ -539,7 +539,7 @@
           var videos = str.match("file': '(.*?)'");
 
           if (videos) {
-            var link = videos[0].match("720p](.*?)mp4");
+            var link = videos[0].match("1080p](.*?)mp4");
             if (!link) link = videos[0].match("720p](.*?)mp4");
 
             if (link) {
