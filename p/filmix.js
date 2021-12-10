@@ -17,7 +17,7 @@
         var ozvuk;
         var filmixq
         var filmname;
-        var link1080p;
+        var link720p;
         var result_film;
         var last_filter;
       scroll.minus();
@@ -59,8 +59,8 @@
                     var quality = results_films.match("Смотреть в качестве(.*?)]"); //Качество
                     filmixq = quality[1]; //Качество
                     var videos = results_films.match("http://(.*?).mp4");
-                    var video_1080p = videos[0];
-                    link1080p = video_1080p;
+                    var video_720p = videos[0];
+                    link720p = video_720p;
 
                     _this.build();
 
@@ -250,7 +250,7 @@
             }
 
             max_quality = parseInt(max_quality);
-            file = link1080p;
+            file = link720p;
             return file;
         };
         this.append = function(items) {
