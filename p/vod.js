@@ -93,7 +93,8 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4';
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + replace(/1080/, '720') + '.mp4';
+            
         } catch (e) {}
 
         return url;
