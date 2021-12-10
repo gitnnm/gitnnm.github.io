@@ -113,7 +113,7 @@
             var s = movie.season_count;
 
             while (s--) {
-              filter_items.season.push('РЎРµР·РѕРЅ ' + (movie.season_count - s));
+              filter_items.season.push('Сезон ' + (movie.season_count - s));
             }
 
             choice.season = typeof select_season == 'undefined' ? filter_items.season.length - 1 : select_season;
