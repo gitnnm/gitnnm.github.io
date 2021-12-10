@@ -539,10 +539,8 @@
           var videos = str.match("file': '(.*?)'");
 
           if (videos) {
-            var link = videos[0].match("480p](.*?)mp4");
+            var link = videos[0].match("720p](.*?)mp4");
             if (!link) link = videos[0].match("720p](.*?)mp4");
-            if (!link) link = videos[0].match("360p](.*?)mp4");
-            if (!link) link = videos[0].match("240p](.*?)mp4");
 
             if (link) {
               element.stream = link[1] + 'mp4';
