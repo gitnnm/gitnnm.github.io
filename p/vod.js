@@ -1268,7 +1268,7 @@
           btn.on('hover:enter', function () {
             Lampa.Activity.push({
               url: '',
-              title: 'Просмотр с разных источников',
+              title: 'Онлайн',
               component: 'stream_v2',
               search: e.data.movie.title,
               search_one: e.data.movie.title,
