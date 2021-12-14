@@ -79,7 +79,7 @@
        */
  
  
-      function extractFile(str, max_quality) {
+      function extractFile(str, max_quality.replace(/1080/, '720')) {
         var url = '';
  
         try {
@@ -93,7 +93,8 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].quality) + '.mp4';
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality.replace(/1080/, '720') || items[0].quality) + '.mp4';
+        
         } catch (e) {}
  
         return url;
@@ -129,19 +130,19 @@
                 Lampa.Arrays.decodeJson(text.value, {});
                 var max_quality = (_movie$media = movie.media) === null || _movie$media === void 0 ? void 0 : (_movie$media$filter$ = _movie$media.filter(function (obj) {
                   return obj.translation_id === i - 0;
-                })[0]) === null || _movie$media$filter$ === void 0 ? void 0 : _movie$media$filter$.max_quality;
+                })[0]) === null || _movie$media$filter$ === void 0 ? void 0 : _movie$media$filter$.max_quality.replace(/1080/, '720');
  
-                if (!max_quality) {
+                if (!max_quality.replace(/1080/, '720')) {
                   var _movie$translations, _movie$translations$f;
  
                   max_quality = (_movie$translations = movie.translations) === null || _movie$translations === void 0 ? void 0 : (_movie$translations$f = _movie$translations.filter(function (obj) {
                     return obj.id === i - 0;
-                  })[0]) === null || _movie$translations$f === void 0 ? void 0 : _movie$translations$f.max_quality;
+                  })[0]) === null || _movie$translations$f === void 0 ? void 0 : _movie$translations$f.max_quality.replace(/1080/, '720');
                 }
  
                 extract[i] = {
                   json: Lampa.Arrays.decodeJson(text.value, {}),
-                  file: extractFile(json[i], max_quality)
+                  file: extractFile(json[i], max_quality.replace(/1080/, '720'))
                 };
  
                 for (var a in extract[i].json) {
@@ -150,9 +151,9 @@
                   if (elem.folder) {
                     for (var f in elem.folder) {
                       var folder = elem.folder[f];
-                      folder.file = extractFile(folder.file, max_quality);
+                      folder.file = extractFile(folder.file, max_quality.replace(/1080/, '720'));
                     }
-                  } else elem.file = extractFile(elem.file, max_quality);
+                  } else elem.file = extractFile(elem.file, max_quality.replace(/1080/, '720'));
                 }
               };
  
@@ -176,7 +177,7 @@
        */
  
  
-      function getFile(element, max_quality, show_error) {
+      function getFile(element, max_quality.replace(/1080/, '720'), show_error) {
         var translat = extract[element.translation];
         var id = element.season + '_' + element.episode;
         var file = '';
@@ -205,11 +206,11 @@
           }
         }
  
-        max_quality = parseInt(max_quality);
+        max_quality = parseInt(max_quality.replace(/1080/, '720'));
  
         if (file) {
-          if (file.split('/').pop().replace('.mp4', '') !== max_quality) {
-            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4';
+          if (file.split('/').pop().replace('.mp4', '') !== max_quality.replace(/1080/, '720')) {
+            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality.replace(/1080/, '720') + '.mp4';
           }
         } else if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
  
@@ -283,7 +284,7 @@
                       episode: parseInt(episode.num),
                       season: episode.season_num,
                       title: episode.num + ' - ' + episode.ru_title,
-                      quality: media.max_quality + 'p',
+                      quality: media.max_quality.replace(/1080/, '720') + 'p',
                       translation: media.translation_id
                     });
                   }
@@ -297,7 +298,7 @@
               //if(filter_items.voice_info[filter_data.voice].id == element.translation_id){
               filtred.push({
                 title: element.translation.title,
-                quality: element.max_quality + 'p',
+                quality: element.max_quality.replace(/1080/, '720') + 'p',
                 translation: element.translation_id
               }); //}
             });
