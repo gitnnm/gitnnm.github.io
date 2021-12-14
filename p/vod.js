@@ -93,7 +93,7 @@
             return b.quality - a.quality;
           });
           url = items[0].file;
-          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality.replace(/1080/, '720') || items[0].quality) + '.mp4';
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (items[0].quality) + '.mp4';
         
         } catch (e) {}
  
@@ -210,7 +210,7 @@
  
         if (file) {
           if (file.split('/').pop().replace('.mp4', '') !== max_quality) {
-            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality.replace(/1080/, '720') + '.mp4';
+            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4';
           }
         } else if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
  
