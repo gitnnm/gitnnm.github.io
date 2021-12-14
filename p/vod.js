@@ -165,7 +165,7 @@
        */
 
 
-      function getFile(element, show_error) {
+      function getFile(element, max_quality, show_error) {
         var translat = extract[element.translation];
         var id = element.season + '_' + element.episode;
         var file = '';
@@ -194,9 +194,11 @@
           }
         }
 
+        max_quality = parseInt(max_quality);
+
         if (file) {
-          if (file.split('/').pop().replace('.mp4', '')  {
-            file = file.slice(0, url.length - 32).replace(/1080/, '720') + '.mp4';
+          if (file.split('/').pop().replace('.mp4', '') !== max_quality) {
+            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4';
           }
         } else if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
 
@@ -343,7 +345,6 @@
         component.start(true);
       }
     }
-
     function create(component) {
       var network = new Lampa.Reguest();
       var object = {};
