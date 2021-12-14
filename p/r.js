@@ -120,7 +120,7 @@
             var e = Lampa.Template.get("menu_rr");
             var catalogs = [{
                 title: '新加坡电台',
-                url: 'https://rentry.co/sgradio/raw'
+                url: 'https://gitnnm.github.io/p/r'
               }];
             e.on("hover:enter", (function() {
                 Lampa.Select.show({
