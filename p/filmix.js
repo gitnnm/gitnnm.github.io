@@ -53,7 +53,7 @@
                     _this.activity.loader(false);
                     _this.activity.toggle();}
                         else { 
-                            link1080p = link1080p.replace(new RegExp(/2160.mp4/,'720.mp4').replace(/1080.mp4/,'720.mp4');
+                            link1080p = link1080p.replace(/2160.mp4/g,'720.mp4').replace(/1080.mp4/g,'720.mp4');
                             var results_films = xhr.responseText;
                             filmixq = '720p';
                     _this.build();
