@@ -55,7 +55,7 @@
                         else { 
                             link1080p = link1080p;
                             var results_films = xhr.responseText;
-                            filmixq = '720p';
+                            filmixq = '1080p';
                     _this.build();
                     _this.activity.loader(false);
                     _this.activity.toggle();}
