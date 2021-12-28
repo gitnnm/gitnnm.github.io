@@ -48,7 +48,7 @@
              };
             xhr1.onload = function() {
                         if (xhr1.responseText == 200) {
-                            link1080p = link1080p.replace(/2160.mp4/,'720.mp4').replace(/1080mp4/,'720.mp4') 
+                            link1080p = link1080p.replace(/2160.mp4/,'720.mp4').replace(/1080.mp4/,'720.mp4') 
                     _this.build();
                     _this.activity.loader(false);
                     _this.activity.toggle();}
