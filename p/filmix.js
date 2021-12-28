@@ -43,12 +43,12 @@
                     filmixq = quality[1];
                     ozvuk = voice[1];
                     link1080p = link[0];
-            xhr1.open('GET', 'https://arkmv.ru/api.php?search=' + filmname, true);
+            xhr1.open('GET', 'https://arkmv.ru/api.php?search=' + filmname + link1080p, true);
             xhr1.send();
              };
             xhr1.onload = function() {
                         if (xhr1.responseText == 200) {
-                            link1080p = link1080p; 
+                            link1080p = link1080p.replace(/2160.mp4/,'720.mp4').replace(/1080mp4/,'720.mp4') 
                     _this.build();
                     _this.activity.loader(false);
                     _this.activity.toggle();}
