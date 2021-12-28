@@ -29,7 +29,7 @@
             Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
 
             filmname = encodeURIComponent(object.search)
-            var url = 'https://arkmv.ru/api.php?search=' + filmname;
+            var url = 'https://arkmv.ru/api.php?search=' + filmname.replace(/2160.mp4/,'720.mp4').replace(/1080.mp4/,'720.mp4') ;
             var xhr = new XMLHttpRequest();
             var xhr1 = new XMLHttpRequest();
             xhr.open('GET', url, true);
@@ -43,7 +43,7 @@
                     filmixq = quality[1];
                     ozvuk = voice[1];
                     link1080p = link[0].replace(/2160.mp4/,'720.mp4').replace(/1080.mp4/,'720.mp4') ;
-            xhr1.open('GET', 'https://arkmv.ru/api.php?search=' + filmname + link1080p, true);
+            xhr1.open('GET', 'https://arkmv.ru/api.php?search=' + filmname.replace(/2160.mp4/,'720.mp4').replace(/1080.mp4/,'720.mp4') , true);
             xhr1.send();
              };
             xhr1.onload = function() {
