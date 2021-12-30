@@ -3,110 +3,229 @@
 
     function videocdn(component) {
       var network = new Lampa.Reguest();
-      var scroll = new Lampa.Scroll({
-        mask: true,
-        over: true
-      });
-      var files = new Lampa.Files(object);
-      var filter = new Lampa.Filter(object);
-      var results = [];
-      var filtred = [];
+      var object = {};
       var extract = {};
-      var token = 'Z8Ti5OsZycchHvCwL3nEI7FdwO7vI6mR';
-      var last;
-      var last_filter;
-      var filter_items = {
-        season: [],
-        voice: [],
-        voice_info: []
+      var results = [];
+      var filter_items = {};
+      var choice = {
+        season: 0,
+        voice: 0
       };
-      var filter_translate = {
-        season: 'Сезон',
-        voice: 'Перевод'
+      /**
+       * Начать поиск
+       * @param {Object} _object 
+       */
+
+      this.search = function (_object, found) {
+        object = _object;
+        results = found;
+        success(found);
+        component.loading(false);
       };
-      scroll.minus();
-      scroll.body().addClass('torrent-list');
+      /**
+       * Сброс фильтра
+       */
 
-      this.create = function () {
-        var _this = this;
 
-        this.activity.loader(true);
-        Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
-        var url = 'http://videocdn.tv/api/' + (object.movie.number_of_seasons ? 'tv-series' : 'movies');
-        url = Lampa.Utils.addUrlComponent(url, 'api_token=' + token);
-        url = Lampa.Utils.addUrlComponent(url, 'query=' + encodeURIComponent(object.search));
-        if (object.movie.release_date && object.movie.release_date !== '0000') url = Lampa.Utils.addUrlComponent(url, 'year=' + (object.movie.release_date + '').slice(0, 4));
-        network.silent(url, function (json) {
-          if (json.data && json.data.length) {
-            results = json.data;
-
-            _this.build();
-
-            _this.activity.loader(false);
-
-            _this.activity.toggle();
-          } else _this.empty('Ой, мы не нашли (' + object.search + ')');
-        }, function (a, c) {
-          _this.empty('Ответ: ' + network.errorDecode(a, c));
-        });
-
-        filter.onSearch = function (value) {
-          Lampa.Activity.replace({
-            search: value,
-            clarification: true
-          });
-        };
-
-        filter.onBack = function () {
-          _this.start();
-        };
-
-        filter.render().find('.selector').on('hover:focus', function (e) {
-          last_filter = e.target;
-        });
-        filter.render().find('.filter--sort').remove();
-        return this.render();
-      };
-
-      this.empty = function (descr) {
-        var empty = new Lampa.Empty({
-          descr: descr
-        });
-        files.append(empty.render(filter.empty()));
-        this.start = empty.start;
-        this.activity.loader(false);
-        this.activity.toggle();
-      };
-
-      this.buildFilterd = function (select_season) {
-        var select = [];
-
-        var add = function add(type, title) {
-          var need = Lampa.Storage.get('online_filter', '{}');
-          var items = filter_items[type];
-          var subitems = [];
-          var value = need[type];
-          items.forEach(function (name, i) {
-            subitems.push({
-              title: name,
-              selected: value == i,
-              index: i
-            });
-          });
-          select.push({
-            title: title,
-            subtitle: items[value],
-            items: subitems,
-            stype: type
-          });
-        };
-
-        filter_items.voice = [];
-        filter_items.season = [];
-        filter_items.voice_info = [];
-        var choice = {
+      this.reset = function () {
+        component.reset();
+        choice = {
           season: 0,
           voice: 0
+        };
+        filter();
+        append(filtred());
+      };
+      /**
+       * Применить фильтр
+       * @param {*} type 
+       * @param {*} a 
+       * @param {*} b 
+       */
+
+
+      this.filter = function (type, a, b) {
+        choice[a.stype] = b.index;
+        component.reset();
+        filter();
+        append(filtred());
+      };
+      /**
+       * Уничтожить
+       */
+
+
+      this.destroy = function () {
+        network.clear();
+        results = null;
+      };
+      /**
+       * Успешно, есть данные
+       * @param {Object} json 
+       */
+
+
+      function success(json) {
+        results = json;
+        extractData(json);
+        filter();
+        append(filtred());
+      }
+      /**
+       * Получить потоки
+       * @param {String} str 
+       * @param {Int} max_quality 
+       * @returns string
+       */
+
+
+      function extractFile(str, max_quality) {
+        var url = '';
+
+        try {
+          var items = str.split(',').map(function (item) {
+            return {
+              quality: parseInt(item.match(/\[(\d+)p\]/)[1]),
+              file: item.replace(/\[\d+p\]/, '').split(' or ')[0]
+            };
+          });
+          items.sort(function (a, b) {
+            return b.quality - a.quality;
+          });
+          url = items[0].replace(/1080/,'720').file;
+          url = 'http:' + url.slice(0, url.lastIndexOf('/')) + '/' + (max_quality || items[0].replace(/1080/,'720').quality) + '.mp4';
+	 // url = url.replace(/cloud.cdnland.in/, 'arkmv.ru:2086');
+        } catch (e) {}
+
+        return url;
+      }
+      /**
+       * Получить информацию о фильме
+       * @param {Arrays} results 
+       */
+
+
+      function extractData(results) {
+        network.timeout(5000);
+        var movie = results.slice(0, 1)[0];
+        extract = {};
+
+        if (movie) {
+          var src = movie.iframe_src;
+          network["native"]('http:' + src, function (raw) {
+            var math = raw.replace(/\n/g, '').match(/id="files" value="(.*?)"/);
+
+            if (math) {
+              var json = Lampa.Arrays.decodeJson(math[1].replace(/&quot;/g, '"'), {});
+              var text = document.createElement("textarea");
+
+              var _loop = function _loop(i) {
+                var _movie$media, _movie$media$filter$;
+
+                if (0 === i - 0) {
+                  return "continue";
+                }
+
+                text.innerHTML = json[i];
+                Lampa.Arrays.decodeJson(text.value, {});
+                var max_quality = (_movie$media = movie.media) === null || _movie$media === void 0 ? void 0 : (_movie$media$filter$ = _movie$media.filter(function (obj) {
+                  return obj.translation_id === i - 0;
+                })[0]) === null || _movie$media$filter$ === void 0 ? void 0 : _movie$media$filter$.max_quality;
+
+                if (!max_quality) {
+                  var _movie$translations, _movie$translations$f;
+
+                  max_quality = (_movie$translations = movie.translations) === null || _movie$translations === void 0 ? void 0 : (_movie$translations$f = _movie$translations.filter(function (obj) {
+                    return obj.id === i - 0;
+                  })[0]) === null || _movie$translations$f === void 0 ? void 0 : _movie$translations$f.max_quality;
+                }
+
+                extract[i] = {
+                  json: Lampa.Arrays.decodeJson(text.value, {}),
+                  file: extractFile(json[i], max_quality)
+                };
+
+                for (var a in extract[i].json) {
+                  var elem = extract[i].json[a];
+
+                  if (elem.folder) {
+                    for (var f in elem.folder) {
+                      var folder = elem.folder[f];
+                      folder.file = extractFile(folder.file, max_quality);
+                    }
+                  } else elem.file = extractFile(elem.file, max_quality);
+                }
+              };
+
+              for (var i in json) {
+                var _ret = _loop(i);
+
+                if (_ret === "continue") continue;
+              }
+            }
+          }, false, false, {
+            dataType: 'text'
+          });
+        }
+      }
+      /**
+       * Найти поток
+       * @param {Object} element 
+       * @param {Int} max_quality 
+       * @param {Boolean} show_error 
+       * @returns string
+       */
+
+
+      function getFile(element, max_quality, show_error) {
+        var translat = extract[element.translation];
+        var id = element.season + '_' + element.episode;
+        var file = '';
+
+        if (translat) {
+          if (element.season) {
+            for (var i in translat.json) {
+              var elem = translat.json[i];
+
+              if (elem.folder) {
+                for (var f in elem.folder) {
+                  var folder = elem.folder[f];
+
+                  if (folder.id == id) {
+                    file = folder.file;
+                    break;
+                  }
+                }
+              } else if (elem.id == id) {
+                file = elem.file;
+                break;
+              }
+            }
+          } else {
+            file = translat.file;
+          }
+        }
+
+        max_quality = parseInt(max_quality);
+
+        if (file) {
+          if (file.split('/').pop().replace('.mp4', '') !== max_quality) {
+            file = file.slice(0, file.lastIndexOf('/')) + '/' + max_quality + '.mp4';
+          }
+        } else if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
+
+        return file;
+      }
+      /**
+       * Построить фильтр
+       */
+
+
+      function filter() {
+        filter_items = {
+          season: [],
+          voice: [],
+          voice_info: []
         };
         results.slice(0, 1).forEach(function (movie) {
           if (movie.season_count) {
@@ -115,8 +234,6 @@
             while (s--) {
               filter_items.season.push('Сезон ' + (movie.season_count - s));
             }
-
-            choice.season = typeof select_season == 'undefined' ? filter_items.season.length - 1 : select_season;
           }
 
           if (filter_items.season.length) {
@@ -132,136 +249,29 @@
                 });
               }
             });
-          } else {
-            movie.translations.forEach(function (element) {
-              filter_items.voice.push(element.smart_title);
-              filter_items.voice_info.push({
-                id: element.id
-              });
-            });
           }
-        });
-        Lampa.Storage.set('online_filter', object.movie.number_of_seasons ? choice : {});
-        select.push({
-          title: 'Сбросить фильтр',
-          reset: true
-        });
-
-        if (object.movie.number_of_seasons) {
-          add('voice', 'Перевод');
-          add('season', 'Сезон');
-        }
-
-        filter.set('filter', select);
-        this.selectedFilter();
-      };
-
-      this.selectedFilter = function () {
-        var need = Lampa.Storage.get('online_filter', '{}'),
-            select = [];
-
-        for (var i in need) {
-          select.push(filter_translate[i] + ': ' + filter_items[i][need[i]]);
-        }
-
-        filter.chosen('filter', select);
-      };
-
-      this.extractFile = function (str) {
-        var url = '';
-
-        try {
-          var items = str.split(',').map(function (item) {
-            return {
-              quality: parseInt(item.match(/\[(\d+)p\]/)[1]),
-              file: item.replace(/\[\d+p\]/, '').split(' or ')[0]
-            };
-          });
-          items.sort(function (a, b) {
-            return b.quality - a.quality;
-          });
-          url = items[0].file;
-          url = 'http:' + url.slice(0, url.length - 32).replace(/1080/,'720') + '.mp4';
-        } catch (e) {}
-
-        return url;
-      };
-
-      this.extractData = function () {
-        var _this2 = this;
-
-        network.timeout(5000);
-        var movie = results.slice(0, 1)[0];
-        extract = {};
-
-        if (movie) {
-          var src = movie.iframe_src;
-          network["native"]('http:' + src, function (raw) {
-            var math = raw.replace(/\n/g, '').match(/id="files" value="(.*?)"/);
-
-            if (math) {
-              var json = Lampa.Arrays.decodeJson(math[1].replace(/&quot;/g, '"'), {});
-              var text = document.createElement("textarea");
-
-              for (var i in json) {
-                text.innerHTML = json[i];
-                Lampa.Arrays.decodeJson(text.value, {});
-                extract[i] = {
-                  json: Lampa.Arrays.decodeJson(text.value, {}),
-                  file: _this2.extractFile(json[i])
-                };
-
-                for (var a in extract[i].json) {
-                  var elem = extract[i].json[a];
-
-                  if (elem.folder) {
-                    for (var f in elem.folder) {
-                      var folder = elem.folder[f];
-                      folder.file = _this2.extractFile(folder.file);
-                    }
-                  } else elem.file = _this2.extractFile(elem.file);
-                }
-              }
-            }
-          }, false, false, {
-            dataType: 'text'
-          });
-        }
-      };
-
-      this.build = function () {
-        var _this3 = this;
-
-        this.buildFilterd();
-        this.filtred();
-        this.extractData();
-
-        filter.onSelect = function (type, a, b) {
-          if (type == 'filter') {
-            if (a.reset) {
-              _this3.buildFilterd();
-            } else {
-              if (a.stype == 'season') {
-                _this3.buildFilterd(b.index);
-              } else {
-                var filter_data = Lampa.Storage.get('online_filter', '{}');
-                filter_data[a.stype] = b.index;
-                a.subtitle = b.title;
-                Lampa.Storage.set('online_filter', filter_data);
-              }
-            }
+          /*
+          else{
+              movie.translations.forEach(element=>{
+                  filter_items.voice.push(element.smart_title)
+                  filter_items.voice_info.push({
+                      id: element.id
+                  })
+              })
           }
+          */
 
-          _this3.applyFilter();
+        });
+        component.filter(filter_items, choice);
+      }
+      /**
+       * Отфильтровать файлы
+       * @returns array
+       */
 
-          _this3.start();
-        };
 
-        this.showResults();
-      };
-
-      this.filtred = function () {
-        filtred = [];
+      function filtred() {
+        var filtred = [];
         var filter_data = Lampa.Storage.get('online_filter', '{}');
 
         if (object.movie.number_of_seasons) {
@@ -285,96 +295,64 @@
         } else {
           results.slice(0, 1).forEach(function (movie) {
             movie.media.forEach(function (element) {
+              //if(filter_items.voice_info[filter_data.voice].id == element.translation_id){
               filtred.push({
                 title: element.translation.title,
                 quality: element.max_quality + 'p',
                 translation: element.translation_id
-              });
+              }); //}
             });
           });
         }
-      };
 
-      this.applyFilter = function () {
-        this.filtred();
-        this.selectedFilter();
-        this.reset();
-        this.showResults();
-        last = scroll.render().find('.torrent-item:eq(0)')[0];
-      };
+        return filtred;
+      }
+      /**
+       * Добавить видео
+       * @param {Array} items 
+       */
 
-      this.showResults = function (data) {
-        filter.render().addClass('torrent-filter');
-        scroll.append(filter.render());
-        this.append(filtred);
-        files.append(scroll.render());
-      };
 
-      this.reset = function () {
-        last = false;
-        filter.render().detach();
-        scroll.clear();
-      };
-
-      this.getFile = function (element, show_error) {
-        var translat = extract[element.translation];
-        var id = element.season + '_' + element.episode;
-
-        if (translat) {
-          if (element.season) {
-            for (var i in translat.json) {
-              var elem = translat.json[i];
-
-              if (elem.folder) {
-                for (var f in elem.folder) {
-                  var folder = elem.folder[f];
-                  if (folder.id == id) return folder.file;
-                }
-              } else if (elem.id == id) {
-                return elem.file;
-              }
-            }
-          } else return translat.file;
-        }
-
-        if (show_error) Lampa.Noty.show('Не удалось извлечь ссылку');
-      };
-
-      this.append = function (items) {
-        var _this4 = this;
-
+      function append(items) {
+        component.reset();
         items.forEach(function (element) {
+          if (element.season) element.title = 'S' + element.season + ' / Серия ' + element.title;
+          element.info = element.season ? ' / ' + filter_items.voice[choice.voice] : '';
           var hash = Lampa.Utils.hash(element.season ? [element.season, element.episode, object.movie.original_title].join('') : object.movie.original_title);
           var view = Lampa.Timeline.view(hash);
-          var item = Lampa.Template.get('720', element);
+          var item = Lampa.Template.get('stream_v2', element);
+          item.addClass('video--stream');
+          element.timeline = view;
           item.append(Lampa.Timeline.render(view));
-          item.on('hover:focus', function (e) {
-            last = e.target;
-            scroll.update($(e.target), true);
-          }).on('hover:enter', function () {
-            var file = _this4.getFile(element, true);
+          item.on('hover:enter', function () {
+            if (object.movie.id) Lampa.Favorite.add('history', object.movie, 100);
+            var file = getFile(element, element.quality, true);
 
             if (file) {
-              _this4.start();
-
-              Lampa.Player.play({
+              var playlist = [];
+              var first = {
                 url: file,
                 timeline: view,
                 title: element.season ? element.title : object.movie.title + ' / ' + element.title
-              });
-              var playlist = [];
-              items.forEach(function (elem) {
-                playlist.push({
-                  title: elem.title,
-                  url: _this4.getFile(elem)
+              };
+              Lampa.Player.play(first);
+
+              if (element.season) {
+                items.forEach(function (elem) {
+                  playlist.push({
+                    title: elem.title,
+                    url: getFile(elem, elem.quality),
+                    timeline: elem.timeline
+                  });
                 });
-              });
+              } else {
+                playlist.push(first);
+              }
+
               Lampa.Player.playlist(playlist);
-            } else {
-              Lampa.Noty.show('Не удалось извлечь ссылку');
             }
           });
-          scroll.append(item);
+          component.append(item);
         });
         component.start(true);
       }
