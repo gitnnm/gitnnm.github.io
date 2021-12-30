@@ -406,9 +406,6 @@
           },
           back: this.back
         });
-        component.start(true);
-      }
-    }
 
     function create(component) {
       var network = new Lampa.Reguest();
