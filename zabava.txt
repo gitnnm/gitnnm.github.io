@@ -17,3 +17,6 @@ http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_NASHASIBIR4K/bw6000000/pl
 #EXTINF:0,Всё ТВ HD
 #EXTVLCOPT:http-user-agent=WINK/1.28.2 (AndroidTV/9) HlsWinkPlayer
 http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_VSETVHD/bw3000000/playlist.m3u8?sid=M7SRV01
+#EXTINF:-1 group-title="Познавательные",Discovery
+#EXTVLCOPT:http-user-agent=DuneHD/1.0.3
+http://hls.peers.tv/streaming/discovery/16/variable.m3u8
