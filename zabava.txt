@@ -1,0 +1,13 @@
+#EXTM3U 
+#EXTINF:0,Russian Extreme HD
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_RUSSIANEXTREMEULTRA/bw6000000/playlist.m3u8
+#EXTINF:0,Ultra HD Cinema
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_ULTRAHDCINEMA/bw6000000/playlist.m3u8
+#EXTINF:0,Love Nature HD
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_LOVENATURE4K/bw6000000/playlist.m3u8
+#EXTINF:0,Глазами Туриста HD
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_GLAZAMITURISTA4K/bw6000000/playlist.m3u8
+#EXTINF:0,Наша Сибирь HD
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_NASHASIBIR4K/bw6000000/playlist.m3u8
+#EXTINF:0,Всё ТВ HD
+http://a1311337409-zabava-htlive.cdn.ngenix.net/hls/CH_VSETVHD/bw3000000/playlist.m3u8?sid=M7SRV01
