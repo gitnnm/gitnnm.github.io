@@ -3,362 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPG Программа телепередач</title>
+    <title>Сайт в разработке</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        header {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        h1 {
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-        
-        .tv-icon {
-            font-size: 1.2em;
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards, bounce 2s infinite alternate ease-in-out;
         }
-        
-        .subtitle {
-            color: #718096;
-            font-size: 1.1em;
+        p {
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 3s ease-in-out forwards;
         }
-        
-        .files-container {
-            display: grid;
-            gap: 20px;
-        }
-        
-        .file-card {
-            background: #f8f9fa;
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 40px;
             border-radius: 10px;
-            padding: 25px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
-        
-        .file-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        .file-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .file-name {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #2d3748;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .file-icon {
-            color: #667eea;
-        }
-        
-        .status-badge {
-            background: #48bb78;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .info-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .info-label {
-            display: block;
-            color: #718096;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-        
-        .info-value {
-            display: block;
-            font-size: 1.1em;
-            font-weight: 500;
-            color: #2d3748;
-        }
-        
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .download-btn:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .last-updated {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-            color: #718096;
-            font-size: 0.9em;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-        }
-        
-        .error {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2em;
-                flex-direction: column;
-            }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(10px); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>
-                <span class="tv-icon">📺</span>
-                EPG Программа телепередач
-            </h1>
-            <p class="subtitle">Автоматически обновляемые XMLTV файлы</p>
-        </header>
-        
-        <main id="app">
-            <div class="loading" id="loading">
-                Загрузка информации о файлах...
-            </div>
-        </main>
-        
-        <footer class="last-updated" id="lastUpdated">
-            <!-- Здесь будет время обновления страницы -->
-        </footer>
+        <h1>Сайт в разработке</h1>
+        <p>Скоро здесь появится что-то интересное!</p>
     </div>
-
-    <script>
-        // Конфигурация
-        const CONFIG = {
-            repoOwner: 'gitnnm',  // Замените на ваш логин
-            repoName: 'gitnnm.github.io',    // Замените на имя репозитория
-            files: ['epg.xml.gz', 'epg2.xml.gz']  // Список отслеживаемых файлов
-        };
-
-        // Функция для форматирования размера файла
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Функция для форматирования даты
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleString('ru-RU', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short'
-            });
-        }
-
-        // Функция для получения информации о файле
-        async function getFileInfo(fileName) {
-            try {
-                // Получаем информацию о файле
-                const fileResponse = await fetch(
-                    `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/contents/${fileName}`
-                );
-                
-                if (!fileResponse.ok) throw new Error('Файл не найден');
-                
-                const fileData = await fileResponse.json();
-                
-                // Получаем последний коммит для этого файла
-                const commitResponse = await fetch(
-                    `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/commits?path=${fileName}&per_page=1`
-                );
-                
-                const commits = await commitResponse.json();
-                const lastCommit = commits[0];
-                
-                return {
-                    name: fileName,
-                    size: fileData.size,
-                    sizeFormatted: formatFileSize(fileData.size),
-                    downloadUrl: fileData.download_url,
-                    lastCommit: {
-                        date: lastCommit?.commit?.committer?.date || new Date().toISOString(),
-                        message: lastCommit?.commit?.message || 'Нет информации',
-                        author: lastCommit?.commit?.author?.name || 'Неизвестно'
-                    }
-                };
-            } catch (error) {
-                console.error(`Ошибка загрузки информации о файле ${fileName}:`, error);
-                return null;
-            }
-        }
-
-        // Функция для отображения информации о файле
-        function renderFileCard(fileInfo) {
-            return `
-                <div class="file-card">
-                    <div class="file-header">
-                        <div class="file-name">
-                            <span class="file-icon">📁</span>
-                            ${fileInfo.name}
-                        </div>
-                        <span class="status-badge">Актуально</span>
-                    </div>
-                    
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">Размер файла</span>
-                            <span class="info-value">${fileInfo.sizeFormatted}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Последнее обновление</span>
-                            <span class="info-value">${formatDate(fileInfo.lastCommit.date)}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Автор обновления</span>
-                            <span class="info-value">${fileInfo.lastCommit.author}</span>
-                        </div>
-                    </div>
-                    
-                    <a href="${fileInfo.downloadUrl}" class="download-btn" download>
-                        <span>⬇️</span> Скачать файл
-                    </a>
-                </div>
-            `;
-        }
-
-        // Основная функция загрузки
-        async function loadFilesInfo() {
-            const app = document.getElementById('app');
-            
-            try {
-                // Загружаем информацию о всех файлах
-                const filePromises = CONFIG.files.map(file => getFileInfo(file));
-                const filesInfo = await Promise.all(filePromises);
-                
-                // Фильтруем существующие файлы
-                const existingFiles = filesInfo.filter(file => file !== null);
-                
-                if (existingFiles.length === 0) {
-                    app.innerHTML = '<div class="error">Файлы не найдены в репозитории</div>';
-                    return;
-                }
-                
-                // Отображаем файлы
-                app.innerHTML = `
-                    <div class="files-container">
-                        ${existingFiles.map(fileInfo => renderFileCard(fileInfo)).join('')}
-                    </div>
-                `;
-                
-                // Обновляем информацию о последнем обновлении страницы
-                document.getElementById('lastUpdated').textContent = 
-                    `Информация обновлена: ${formatDate(new Date().toISOString())}`;
-                    
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                app.innerHTML = `
-                    <div class="error">
-                        <strong>Ошибка загрузки данных:</strong><br>
-                        ${error.message}<br><br>
-                        Убедитесь, что:<br>
-                        1. Репозиторий публичный<br>
-                        2. Файлы существуют в корне репозитория<br>
-                        3. CORS политики не блокируют запросы
-                    </div>
-                `;
-            }
-        }
-
-        // Запускаем загрузку при открытии страницы
-        document.addEventListener('DOMContentLoaded', loadFilesInfo);
-        
-        // Автообновление каждые 5 минут (опционально)
-        setInterval(loadFilesInfo, 5 * 60 * 1000);
-    </script>
 </body>
-    </html>
+</html>
