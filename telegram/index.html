@@ -3,556 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram архивы</title>
+    <title>Telegram архив сообщений</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            color: #333;
         }
-
+        
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
-
+        
         .header {
-            background: white;
-            border-radius: 15px 15px 0 0;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
         }
-
+        
         .header h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header h1:before {
-            content: '📁';
-            font-size: 1.2em;
-        }
-
-        .stats-panel {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin: 20px 0;
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            border: 1px solid #e9ecef;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .stat-label {
-            color: #6c757d;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            color: #28a745;
-            font-weight: bold;
-            font-size: 1.2em;
-            background: #e8f5e9;
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        .update-time {
-            color: #6c757d;
-            font-size: 0.9em;
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .update-time:before {
-            content: '🕐';
-            font-size: 1.1em;
-        }
-
-        .channels-grid {
-            background: white;
-            padding: 30px;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .channel-card {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .channel-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            border-color: #0088cc;
-        }
-
-        .channel-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #0088cc, #00a3e0);
-        }
-
-        .channel-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            font-size: 3.5em;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: 700;
         }
-
-        .channel-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #0088cc, #00a3e0);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            box-shadow: 0 5px 15px rgba(0,136,204,0.3);
+        
+        .stats-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.2em;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
-        .channel-info h2 {
-            color: #333;
+        
+        .stats-badge span {
+            font-weight: 700;
             font-size: 1.5em;
-            margin-bottom: 5px;
+            margin: 0 5px;
         }
-
-        .channel-folder {
-            color: #6c757d;
+        
+        .last-update {
+            margin-top: 15px;
             font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            opacity: 0.9;
         }
-
-        .channel-folder:before {
-            content: '📂';
-            font-size: 0.9em;
+        
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
         }
-
-        .years-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .year-card {
-            flex: 1 1 auto;
-            min-width: 140px;
-        }
-
-        .year-link {
-            display: flex;
-            flex-direction: column;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 15px;
-            text-decoration: none;
+        
+        .channel-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
-            height: 100%;
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeIn 0.5s ease-out;
         }
-
-        .year-link:hover {
-            background: #0088cc;
-            border-color: #0088cc;
-            transform: scale(1.02);
+        
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            background: white;
         }
-
-        .year-number {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #0088cc;
-            margin-bottom: 5px;
-            transition: color 0.3s;
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .year-link:hover .year-number {
-            color: white;
-        }
-
-        .year-stats {
-            font-size: 0.85em;
-            color: #6c757d;
+        
+        .channel-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
-            transition: color 0.3s;
+            align-items: center;
         }
-
-        .year-link:hover .year-stats {
-            color: rgba(255,255,255,0.9);
+        
+        .channel-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
         }
-
-        .message-count {
-            background: #e9ecef;
-            padding: 3px 8px;
-            border-radius: 15px;
-            transition: background 0.3s;
+        
+        .channel-folder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-
-        .year-link:hover .message-count {
-            background: rgba(255,255,255,0.2);
+        
+        .channel-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        .channel-meta-item {
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .channel-meta-item i {
+            color: #667eea;
+        }
+        
+        .total-messages {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 700;
+        }
+        
+        .total-messages i {
             color: white;
         }
-
+        
+        .years-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .year-item {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 30px;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .year-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+            border-color: transparent;
+        }
+        
+        .year-item:hover .year-count {
+            background: white;
+            color: #667eea;
+        }
+        
+        .year-number {
+            font-weight: 700;
+        }
+        
+        .year-count {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .year-item:hover .year-count {
+            background: white;
+            color: #667eea;
+        }
+        
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
-            color: #6c757d;
+            padding: 60px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-top: 40px;
         }
-
-        .empty-state:before {
-            content: '📭';
-            font-size: 4em;
-            display: block;
-            margin-bottom: 20px;
+        
+        .empty-state h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 2em;
         }
-
+        
+        .empty-state p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
         .footer {
             text-align: center;
-            padding: 30px;
+            margin-top: 60px;
             color: rgba(255,255,255,0.8);
             font-size: 0.9em;
         }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(255,255,255,0.5);
-        }
-
-        .footer a:hover {
-            border-bottom-color: white;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(0,0,0,.1);
-            border-radius: 50%;
-            border-top-color: #0088cc;
-            animation: spin 1s ease-in-out infinite;
-            margin: 50px auto;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        
         @media (max-width: 768px) {
             .header h1 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
             
-            .stats-panel {
+            .channels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .channel-header {
                 flex-direction: column;
-                gap: 15px;
+                align-items: flex-start;
+                gap: 10px;
             }
             
-            .update-time {
-                margin-left: 0;
+            .stats-badge {
+                font-size: 1em;
+                padding: 12px 20px;
             }
-            
-            .year-card {
-                min-width: calc(50% - 6px);
-            }
-        }
-
-        .api-badge {
-            background: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            margin-left: 15px;
-        }
-
-        .raw-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #0088cc;
-            text-decoration: none;
-            font-size: 0.9em;
-        }
-
-        .raw-link:hover {
-            text-decoration: underline;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
         <div class="header">
-            <h1>Telegram архивы</h1>
-            <p style="color: #6c757d;">Автоматически собранные сообщения из Telegram каналов</p>
-            
-            <div class="stats-panel" id="stats-panel">
-                <div class="stat-item">
-                    <span class="stat-label">Каналов</span>
-                    <span class="stat-value" id="channels-count">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Файлов</span>
-                    <span class="stat-value" id="files-count">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Сообщений</span>
-                    <span class="stat-value" id="messages-count">0</span>
-                </div>
-                <div class="update-time" id="update-time">
-                    Загрузка...
-                </div>
+            <h1><i class="fas fa-paper-plane"></i> Telegram архив</h1>
+            <div class="stats-badge">
+                <i class="fas fa-database"></i> 
+                <span>16,522</span> сообщений из 
+                <span>2</span> каналов
+            </div>
+            <div class="last-update">
+                <i class="far fa-clock"></i> Последнее обновление: 11 марта 2026 г. в 09:19
             </div>
         </div>
-
-        <!-- Сетка каналов -->
-        <div class="channels-grid" id="channels-container">
-            <div style="text-align: center;">
-                <div class="loading"></div>
-                <p style="color: #6c757d; margin-top: 20px;">Загрузка архивов...</p>
+        
+        
+            <div class="channels-grid">
+                
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <span class="channel-name">
+                                <i class="fas fa-bolt" style="color: #667eea; margin-right: 8px;"></i>
+                                Пошлое
+                            </span>
+                            <span class="channel-folder">
+                                <i class="fas fa-folder"></i> poshloe
+                            </span>
+                        </div>
+                        
+                        <div class="channel-meta">
+                            <span class="channel-meta-item total-messages">
+                                <i class="fas fa-envelope"></i> Всего: 16,093
+                            </span>
+                            <span class="channel-meta-item">
+                                <i class="far fa-calendar-alt"></i> ID: 1088978043
+                            </span>
+                            <span class="channel-meta-item">
+                                <i class="far fa-clock"></i> 3/11/2026
+                            </span>
+                        </div>
+                        
+                        <div class="years-list">
+                            
+                                <a href="/telegram/poshloe/2016-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2016</span>
+                                    <span class="year-count">288</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2017-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2017</span>
+                                    <span class="year-count">603</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2018-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2018</span>
+                                    <span class="year-count">1,701</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2019-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2019</span>
+                                    <span class="year-count">1,850</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2020-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2020</span>
+                                    <span class="year-count">1,984</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2021-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2021</span>
+                                    <span class="year-count">1,934</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2022-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2022</span>
+                                    <span class="year-count">1,871</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2023-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2023</span>
+                                    <span class="year-count">1,859</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2024-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2024</span>
+                                    <span class="year-count">1,872</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2025-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2025</span>
+                                    <span class="year-count">1,849</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2026-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2026</span>
+                                    <span class="year-count">282</span>
+                                </a>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="channel-card">
+                        <div class="channel-header">
+                            <span class="channel-name">
+                                <i class="fas fa-bolt" style="color: #667eea; margin-right: 8px;"></i>
+                                Интимные истории
+                            </span>
+                            <span class="channel-folder">
+                                <i class="fas fa-folder"></i> intimnye-istorii
+                            </span>
+                        </div>
+                        
+                        <div class="channel-meta">
+                            <span class="channel-meta-item total-messages">
+                                <i class="fas fa-envelope"></i> Всего: 429
+                            </span>
+                            <span class="channel-meta-item">
+                                <i class="far fa-calendar-alt"></i> ID: 1752191027
+                            </span>
+                            <span class="channel-meta-item">
+                                <i class="far fa-clock"></i> 3/11/2026
+                            </span>
+                        </div>
+                        
+                        <div class="years-list">
+                            
+                                <a href="/telegram/intimnye-istorii/2026-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2026</span>
+                                    <span class="year-count">429</span>
+                                </a>
+                            
+                        </div>
+                    </div>
+                
             </div>
-        </div>
-
-        <!-- Футер -->
+        
+        
         <div class="footer">
-            <p>📊 Данные обновляются автоматически | <a href="https://github.com/gitnnm/gitnnm.github.io/tree/main/telegram" target="_blank">Исходный код</a></p>
-            <p style="margin-top: 10px; font-size: 0.8em;">Доступ к файлам через raw-ссылку GitHub</p>
+            <i class="far fa-heart"></i> Автоматический парсинг Telegram каналов • 
+            <a href="https://github.com/gitnnm/gitnnm.github.io" style="color: white; text-decoration: underline;">GitHub</a>
         </div>
     </div>
-
+    
     <script>
-        // Конфигурация
-        const REPO_OWNER = 'gitnnm';
-        const REPO_NAME = 'gitnnm.github.io';
-        const BRANCH = 'main';
-        const TELEGRAM_PATH = 'telegram';
-
-        // Функция для получения списка файлов через GitHub API
-        async function getTelegramFiles() {
-            try {
-                const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${TELEGRAM_PATH}?ref=${BRANCH}`;
-                const response = await fetch(apiUrl);
-                
-                if (!response.ok) {
-                    throw new Error(`GitHub API error: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                return data.filter(item => item.type === 'dir');
-            } catch (error) {
-                console.error('Error fetching from GitHub API:', error);
-                // Fallback: если API не работает, показываем сообщение об ошибке
-                return null;
-            }
-        }
-
-        // Функция для получения содержимого JSON файла
-        async function getJsonContent(downloadUrl) {
-            try {
-                const response = await fetch(downloadUrl);
-                if (!response.ok) return null;
-                return await response.json();
-            } catch {
-                return null;
-            }
-        }
-
-        // Форматирование даты
-        function formatDate(date) {
-            return new Date(date).toLocaleString('ru-RU', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+        // Добавляем плавную загрузку
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.channel-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = index * 0.1 + 's';
             });
-        }
-
-        // Функция для создания URL raw-файла
-        function getRawUrl(folder, filename) {
-            return `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${TELEGRAM_PATH}/${folder}/${filename}`;
-        }
-
-        // Функция для создания ссылки на GitHub
-        function getGithubUrl(folder, filename) {
-            return `https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/${BRANCH}/${TELEGRAM_PATH}/${folder}/${filename}`;
-        }
-
-        // Основная функция загрузки и отображения данных
-        async function loadTelegramArchives() {
-            const channelsContainer = document.getElementById('channels-container');
-            const channelsCountSpan = document.getElementById('channels-count');
-            const filesCountSpan = document.getElementById('files-count');
-            const messagesCountSpan = document.getElementById('messages-count');
-            const updateTimeSpan = document.getElementById('update-time');
-
-            try {
-                const folders = await getTelegramFiles();
-                
-                if (!folders || folders.length === 0) {
-                    channelsContainer.innerHTML = `
-                        <div class="empty-state">
-                            <h3>Нет доступных архивов</h3>
-                            <p>Архивы появятся после первого парсинга каналов</p>
-                        </div>
-                    `;
-                    updateTimeSpan.innerHTML = `🕐 ${formatDate(new Date())}`;
-                    return;
-                }
-
-                let totalFiles = 0;
-                let totalMessages = 0;
-                let channelsHtml = '';
-
-                // Обрабатываем каждую папку (канал)
-                for (const folder of folders) {
-                    try {
-                        // Получаем список JSON файлов в папке
-                        const folderContentsUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${TELEGRAM_PATH}/${folder.name}?ref=${BRANCH}`;
-                        const folderResponse = await fetch(folderContentsUrl);
-                        
-                        if (!folderResponse.ok) continue;
-                        
-                        const folderContents = await folderResponse.json();
-                        const jsonFiles = folderContents
-                            .filter(f => f.name.endsWith('-messages.json'))
-                            .sort((a, b) => b.name.localeCompare(a.name)); // Сортируем по убыванию (новые года сверху)
-
-                        if (jsonFiles.length === 0) continue;
-
-                        totalFiles += jsonFiles.length;
-                        
-                        // Формируем HTML для канала
-                        let yearsHtml = '';
-                        
-                        for (const jsonFile of jsonFiles) {
-                            const year = jsonFile.name.replace('-messages.json', '');
-                            
-                            // Пытаемся получить количество сообщений
-                            let messageCount = 0;
-                            try {
-                                const content = await getJsonContent(jsonFile.download_url);
-                                messageCount = content ? content.length : 0;
-                                totalMessages += messageCount;
-                            } catch {
-                                // Если не удалось получить, показываем прочерк
-                            }
-
-                            const rawUrl = getRawUrl(folder.name, jsonFile.name);
-                            const githubUrl = getGithubUrl(folder.name, jsonFile.name);
-
-                            yearsHtml += `
-                                <div class="year-card">
-                                    <a href="${rawUrl}" target="_blank" class="year-link" title="Открыть raw файл">
-                                        <span class="year-number">${year}</span>
-                                        <div class="year-stats">
-                                            <span>📝 ${messageCount ? messageCount + ' сообщ.' : 'загрузка...'}</span>
-                                            <span class="message-count">📥 raw</span>
-                                        </div>
-                                    </a>
-                                    <a href="${githubUrl}" target="_blank" class="raw-link" title="Просмотр на GitHub">👁️ просмотр</a>
-                                </div>
-                            `;
-                        }
-
-                        // Название канала (пытаемся сделать красивым из имени папки)
-                        let channelName = folder.name
-                            .split('-')
-                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                            .join(' ');
-
-                        channelsHtml += `
-                            <div class="channel-card">
-                                <div class="channel-header">
-                                    <div class="channel-icon">📢</div>
-                                    <div class="channel-info">
-                                        <h2>${channelName}</h2>
-                                        <div class="channel-folder">${folder.name}</div>
-                                    </div>
-                                </div>
-                                <div class="years-container">
-                                    ${yearsHtml}
-                                </div>
-                            </div>
-                        `;
-                    } catch (error) {
-                        console.error(`Error processing folder ${folder.name}:`, error);
-                    }
-                }
-
-                // Обновляем статистику
-                channelsCountSpan.textContent = folders.length;
-                filesCountSpan.textContent = totalFiles;
-                messagesCountSpan.textContent = totalMessages.toLocaleString();
-                updateTimeSpan.innerHTML = `🕐 ${formatDate(new Date())}`;
-
-                // Обновляем контейнер
-                channelsContainer.innerHTML = channelsHtml || `
-                    <div class="empty-state">
-                        <h3>Нет доступных архивов</h3>
-                        <p>JSON файлы не найдены в папках</p>
-                    </div>
-                `;
-
-            } catch (error) {
-                console.error('Error loading archives:', error);
-                channelsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <h3>Ошибка загрузки</h3>
-                        <p>${error.message}</p>
-                        <p style="margin-top: 20px; font-size: 0.9em;">
-                            🔧 Проверьте:<br>
-                            1. Репозиторий существует<br>
-                            2. Папка telegram содержит JSON файлы<br>
-                            3. GitHub API доступен
-                        </p>
-                    </div>
-                `;
-            }
-        }
-
-        // Запускаем загрузку при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadTelegramArchives);
-        
-        // Обновляем каждые 5 минут (опционально)
-        setInterval(loadTelegramArchives, 5 * 60 * 1000);
+        });
     </script>
 </body>
 </html>

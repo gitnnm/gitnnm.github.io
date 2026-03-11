@@ -1,0 +1,95 @@
+{
+  "channels": [
+    {
+      "name": "Интимные истории",
+      "folder": "intimnye-istorii",
+      "channelId": 1752191027,
+      "lastParsed": "2026-03-11T09:19:28.079Z",
+      "totalMessages": 429,
+      "years": [
+        {
+          "year": 2026,
+          "count": 429,
+          "file": "2026-messages.json",
+          "url": "/telegram/intimnye-istorii/2026-messages.json"
+        }
+      ]
+    },
+    {
+      "name": "Пошлое",
+      "folder": "poshloe",
+      "channelId": 1088978043,
+      "lastParsed": "2026-03-11T09:19:39.255Z",
+      "totalMessages": 16093,
+      "years": [
+        {
+          "year": 2016,
+          "count": 288,
+          "file": "2016-messages.json",
+          "url": "/telegram/poshloe/2016-messages.json"
+        },
+        {
+          "year": 2017,
+          "count": 603,
+          "file": "2017-messages.json",
+          "url": "/telegram/poshloe/2017-messages.json"
+        },
+        {
+          "year": 2018,
+          "count": 1701,
+          "file": "2018-messages.json",
+          "url": "/telegram/poshloe/2018-messages.json"
+        },
+        {
+          "year": 2019,
+          "count": 1850,
+          "file": "2019-messages.json",
+          "url": "/telegram/poshloe/2019-messages.json"
+        },
+        {
+          "year": 2020,
+          "count": 1984,
+          "file": "2020-messages.json",
+          "url": "/telegram/poshloe/2020-messages.json"
+        },
+        {
+          "year": 2021,
+          "count": 1934,
+          "file": "2021-messages.json",
+          "url": "/telegram/poshloe/2021-messages.json"
+        },
+        {
+          "year": 2022,
+          "count": 1871,
+          "file": "2022-messages.json",
+          "url": "/telegram/poshloe/2022-messages.json"
+        },
+        {
+          "year": 2023,
+          "count": 1859,
+          "file": "2023-messages.json",
+          "url": "/telegram/poshloe/2023-messages.json"
+        },
+        {
+          "year": 2024,
+          "count": 1872,
+          "file": "2024-messages.json",
+          "url": "/telegram/poshloe/2024-messages.json"
+        },
+        {
+          "year": 2025,
+          "count": 1849,
+          "file": "2025-messages.json",
+          "url": "/telegram/poshloe/2025-messages.json"
+        },
+        {
+          "year": 2026,
+          "count": 282,
+          "file": "2026-messages.json",
+          "url": "/telegram/poshloe/2026-messages.json"
+        }
+      ]
+    }
+  ],
+  "lastUpdate": "2026-03-11T09:19:39.255Z"
+}
