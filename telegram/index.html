@@ -162,6 +162,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            text-decoration: none;
+            color: inherit;
         }
         
         .year-item:hover {
@@ -190,11 +192,6 @@
             transition: all 0.3s ease;
         }
         
-        .year-item:hover .year-count {
-            background: white;
-            color: #667eea;
-        }
-        
         .empty-state {
             text-align: center;
             padding: 60px;
@@ -215,18 +212,16 @@
             font-size: 1.1em;
         }
         
-        .loading {
-            text-align: center;
-            padding: 60px;
-            color: white;
-            font-size: 1.2em;
-        }
-        
         .footer {
             text-align: center;
             margin-top: 60px;
             color: rgba(255,255,255,0.8);
             font-size: 0.9em;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
         }
         
         @media (max-width: 768px) {
@@ -258,11 +253,11 @@
             <h1><i class="fas fa-paper-plane"></i> Telegram архив</h1>
             <div class="stats-badge">
                 <i class="fas fa-database"></i> 
-                <span>16,522</span> сообщений из 
+                <span>25,914</span> сообщений из 
                 <span>2</span> каналов
             </div>
             <div class="last-update">
-                <i class="far fa-clock"></i> Последнее обновление: 11 марта 2026 г. в 09:19
+                <i class="far fa-clock"></i> Последнее обновление: 11 марта 2026 г. в 09:31
             </div>
         </div>
         
@@ -288,55 +283,15 @@
                                 <i class="far fa-calendar-alt"></i> ID: 1088978043
                             </span>
                             <span class="channel-meta-item">
-                                <i class="far fa-clock"></i> 3/11/2026
+                                <i class="far fa-clock"></i> 11.03.2026
                             </span>
                         </div>
                         
                         <div class="years-list">
                             
-                                <a href="/telegram/poshloe/2016-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2016</span>
-                                    <span class="year-count">288</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2017-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2017</span>
-                                    <span class="year-count">603</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2018-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2018</span>
-                                    <span class="year-count">1,701</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2019-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2019</span>
-                                    <span class="year-count">1,850</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2020-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2020</span>
-                                    <span class="year-count">1,984</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2021-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2021</span>
-                                    <span class="year-count">1,934</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2022-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2022</span>
-                                    <span class="year-count">1,871</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2023-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2023</span>
-                                    <span class="year-count">1,859</span>
-                                </a>
-                            
-                                <a href="/telegram/poshloe/2024-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2024</span>
-                                    <span class="year-count">1,872</span>
+                                <a href="/telegram/poshloe/2026-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2026</span>
+                                    <span class="year-count">282</span>
                                 </a>
                             
                                 <a href="/telegram/poshloe/2025-messages.json" class="year-item" target="_blank">
@@ -344,9 +299,49 @@
                                     <span class="year-count">1,849</span>
                                 </a>
                             
-                                <a href="/telegram/poshloe/2026-messages.json" class="year-item" target="_blank">
-                                    <span class="year-number">2026</span>
-                                    <span class="year-count">282</span>
+                                <a href="/telegram/poshloe/2024-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2024</span>
+                                    <span class="year-count">1,872</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2023-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2023</span>
+                                    <span class="year-count">1,859</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2022-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2022</span>
+                                    <span class="year-count">1,871</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2021-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2021</span>
+                                    <span class="year-count">1,934</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2020-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2020</span>
+                                    <span class="year-count">1,984</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2019-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2019</span>
+                                    <span class="year-count">1,850</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2018-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2018</span>
+                                    <span class="year-count">1,701</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2017-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2017</span>
+                                    <span class="year-count">603</span>
+                                </a>
+                            
+                                <a href="/telegram/poshloe/2016-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2016</span>
+                                    <span class="year-count">288</span>
                                 </a>
                             
                         </div>
@@ -365,13 +360,13 @@
                         
                         <div class="channel-meta">
                             <span class="channel-meta-item total-messages">
-                                <i class="fas fa-envelope"></i> Всего: 429
+                                <i class="fas fa-envelope"></i> Всего: 9,821
                             </span>
                             <span class="channel-meta-item">
                                 <i class="far fa-calendar-alt"></i> ID: 1752191027
                             </span>
                             <span class="channel-meta-item">
-                                <i class="far fa-clock"></i> 3/11/2026
+                                <i class="far fa-clock"></i> 11.03.2026
                             </span>
                         </div>
                         
@@ -382,6 +377,26 @@
                                     <span class="year-count">429</span>
                                 </a>
                             
+                                <a href="/telegram/intimnye-istorii/2025-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2025</span>
+                                    <span class="year-count">2,941</span>
+                                </a>
+                            
+                                <a href="/telegram/intimnye-istorii/2024-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2024</span>
+                                    <span class="year-count">3,065</span>
+                                </a>
+                            
+                                <a href="/telegram/intimnye-istorii/2023-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2023</span>
+                                    <span class="year-count">2,968</span>
+                                </a>
+                            
+                                <a href="/telegram/intimnye-istorii/2022-messages.json" class="year-item" target="_blank">
+                                    <span class="year-number">2022</span>
+                                    <span class="year-count">418</span>
+                                </a>
+                            
                         </div>
                     </div>
                 
@@ -390,16 +405,15 @@
         
         <div class="footer">
             <i class="far fa-heart"></i> Автоматический парсинг Telegram каналов • 
-            <a href="https://github.com/gitnnm/gitnnm.github.io" style="color: white; text-decoration: underline;">GitHub</a>
+            <a href="https://github.com/gitnnm/gitnnm.github.io" target="_blank">GitHub</a>
         </div>
     </div>
     
     <script>
-        // Добавляем плавную загрузку
         document.addEventListener('DOMContentLoaded', () => {
             const cards = document.querySelectorAll('.channel-card');
             cards.forEach((card, index) => {
-                card.style.animationDelay = index * 0.1 + 's';
+                card.style.animationDelay = (index * 0.1) + 's';
             });
         });
     </script>
