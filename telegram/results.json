@@ -4,12 +4,12 @@
       "name": "Интимные истории",
       "folder": "intimnye-istorii",
       "channelId": 1752191027,
-      "lastParsed": "2026-03-11T09:42:31.127Z",
-      "totalMessages": 9821,
+      "lastParsed": "2026-03-16T07:54:33.455Z",
+      "totalMessages": 9851,
       "years": [
         {
           "year": 2026,
-          "count": 429,
+          "count": 459,
           "file": "2026-messages.json",
           "url": "https://gitnnm.github.io/telegram/intimnye-istorii/2026-messages.json",
           "relativeUrl": "/telegram/intimnye-istorii/2026-messages.json"
@@ -48,12 +48,12 @@
       "name": "Пошлое",
       "folder": "poshloe",
       "channelId": 1088978043,
-      "lastParsed": "2026-03-11T09:42:42.498Z",
-      "totalMessages": 16093,
+      "lastParsed": "2026-03-16T07:54:47.717Z",
+      "totalMessages": 16107,
       "years": [
         {
           "year": 2026,
-          "count": 282,
+          "count": 296,
           "file": "2026-messages.json",
           "url": "https://gitnnm.github.io/telegram/poshloe/2026-messages.json",
           "relativeUrl": "/telegram/poshloe/2026-messages.json"
@@ -131,5 +131,5 @@
       ]
     }
   ],
-  "lastUpdate": "2026-03-11T09:42:42.498Z"
+  "lastUpdate": "2026-03-16T07:54:47.718Z"
 }
