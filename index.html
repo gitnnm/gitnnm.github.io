@@ -3,425 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPG Программа телепередач</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>EPG Телепрограмма</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-            padding: 24px;
-            color: #1a1a2e;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 60px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .logo-icon {
-            font-size: 28px;
-        }
-        
-        .logo-text {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        
-        h1 {
-            color: white;
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 18px;
-        }
-        
-        /* Main Card */
-        .main-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 24px;
-        }
-        
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-        
-        .stat-item {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 24px;
-            border-radius: 20px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-        
-        .stat-value {
-            font-size: 42px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        
-        .stat-label {
-            font-size: 15px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-        
-        /* File Info */
-        .file-info {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 24px;
-            border-radius: 20px;
-            color: white;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
-        }
-        
-        .file-header {
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            justify-content: center;
+            padding: 20px;
         }
-        
-        .file-icon {
-            font-size: 28px;
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
         }
-        
+        h1 {
+            font-size: 32px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .stat {
+            background: #f5f5fa;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .file-info {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 16px;
+            color: white;
+            margin-bottom: 24px;
+        }
         .file-name {
             font-size: 20px;
             font-weight: 600;
+            margin-bottom: 12px;
         }
-        
-        .file-details {
+        .file-meta {
             display: flex;
+            justify-content: center;
             gap: 24px;
             font-size: 14px;
-            opacity: 0.95;
+            opacity: 0.9;
         }
-        
-        .file-detail {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
         .download-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: white;
-            color: #f5576c;
+            display: inline-block;
+            background: #1a1a2e;
+            color: white;
             text-decoration: none;
             padding: 16px 32px;
             border-radius: 16px;
             font-weight: 600;
             font-size: 18px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
             width: 100%;
         }
-        
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        
-        /* Channels Section */
-        .channels-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .channels-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-        
-        .channels-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a1a2e;
-        }
-        
-        .channels-count {
-            background: #667eea;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .spoiler-btn {
-            background: #f0f0f5;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a1a2e;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .spoiler-btn:hover {
-            background: #e0e0e8;
-        }
-        
-        .spoiler-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out;
-        }
-        
-        .spoiler-content.active {
-            max-height: 500px;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
-        
-        .search-box {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e8;
-            border-radius: 16px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 16px;
-            transition: border-color 0.2s ease;
-        }
-        
-        .search-box:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .channels-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-        }
-        
-        .channel-item {
-            background: #f8f8fc;
-            padding: 14px 16px;
-            border-radius: 14px;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
-        
-        .channel-item:hover {
-            background: white;
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-        }
-        
-        .channel-name {
-            font-weight: 600;
-            color: #1a1a2e;
-            font-size: 15px;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
+        .channels {
             margin-top: 24px;
-            color: rgba(255, 255, 255, 0.5);
+            text-align: left;
+        }
+        details {
+            cursor: pointer;
+        }
+        summary {
+            font-weight: 600;
+            color: #1a1a2e;
+            padding: 12px;
+            background: #f5f5fa;
+            border-radius: 12px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        .channels-list {
+            margin-top: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        .channel-item {
+            padding: 10px 12px;
+            background: #f5f5fa;
+            border-radius: 8px;
+            margin-bottom: 6px;
             font-size: 14px;
         }
-        
-        /* Arrow icon rotation */
-        .spoiler-btn .arrow {
-            transition: transform 0.3s ease;
-        }
-        
-        .spoiler-btn.active .arrow {
-            transform: rotate(180deg);
-        }
-        
-        @media (max-width: 640px) {
-            body {
-                padding: 16px;
-            }
-            
-            h1 {
-                font-size: 32px;
-            }
-            
-            .main-card {
-                padding: 24px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .file-details {
-                flex-direction: column;
-                gap: 8px;
-            }
+        .footer {
+            margin-top: 24px;
+            color: #999;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <span class="logo-icon">📡</span>
-                <span class="logo-text">XMLTV EPG</span>
+    <div class="card">
+        <h1>📺 EPG Телепрограмма</h1>
+        <p class="subtitle">XMLTV формат</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">681</div>
+                <div class="stat-label">Каналов</div>
             </div>
-            <h1>Телепрограмма</h1>
-            <p class="subtitle">Актуальное расписание передач</p>
+            <div class="stat">
+                <div class="stat-value">12.7 MB</div>
+                <div class="stat-label">Размер файла</div>
+            </div>
         </div>
         
-        <div class="main-card">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value">676</div>
-                    <div class="stat-label">Телеканалов</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">118540</div>
-                    <div class="stat-label">Программ в базе</div>
-                </div>
+        <div class="file-info">
+            <div class="file-name">📦 epg.xml.gz</div>
+            <div class="file-meta">
+                <span>🕐 08.04.2026, 13:19:19</span>
             </div>
-            
-            <div class="file-info">
-                <div class="file-header">
-                    <span class="file-icon">📦</span>
-                    <span class="file-name">epg.xml.gz</span>
-                </div>
-                <div class="file-details">
-                    <div class="file-detail">
-                        <span>📏</span>
-                        <span>Размер: 12.68 MB</span>
-                    </div>
-                    <div class="file-detail">
-                        <span>🕐</span>
-                        <span>Обновлено: 8 апреля 2026 г. в 13:07</span>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="epg.xml.gz" class="download-btn" download>
-                <span>⬇️</span>
-                <span>Скачать EPG файл</span>
-            </a>
         </div>
         
-        <div class="channels-section">
-            <div class="channels-header">
-                <span class="channels-title">Список каналов</span>
-                <span class="channels-count">676</span>
-            </div>
-            
-            <button class="spoiler-btn" onclick="toggleSpoiler()">
-                <span>📋</span>
-                <span id="spoilerText">Показать все каналы</span>
-                <span class="arrow">▼</span>
-            </button>
-            
-            <div class="spoiler-content" id="spoilerContent">
-                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск по названию..." onkeyup="filterChannels()">
-                <div class="channels-grid" id="channelsGrid"></div>
-            </div>
+        <a href="epg.xml.gz" class="download-btn" download>
+            ⬇️ Скачать EPG файл
+        </a>
+        
+        <div class="channels">
+            <details>
+                <summary>
+                    <span>📋</span> Список каналов (681)
+                    <span style="margin-left: auto;">▼</span>
+                </summary>
+                <div class="channels-list">
+                    <div class="channel-item">KION Хит</div><div class="channel-item">4ever Drama</div><div class="channel-item">4ever Theater</div><div class="channel-item">Liberty DC</div><div class="channel-item">Liberty Короткометражный</div><div class="channel-item">Liberty Мелодрамы</div><div class="channel-item">Liberty Боевики</div><div class="channel-item">Liberty Сваты</div><div class="channel-item">Liberty Комедии</div><div class="channel-item">Liberty Сериалы</div><div class="channel-item">Liberty Занавес</div><div class="channel-item">Liberty Шоу</div><div class="channel-item">Liberty Fan</div><div class="channel-item">Liberty Marvel</div><div class="channel-item">Liberty South Park</div><div class="channel-item">Liberty Планктон</div><div class="channel-item">KBC-Ultra</div><div class="channel-item">KBC-Кошмарное</div><div class="channel-item">KBC-Видак</div><div class="channel-item">KBC-Драмаtic</div><div class="channel-item">KBC-Elite Comedys</div><div class="channel-item">KBC-Russian Комедия</div><div class="channel-item">KBC-ВОВ</div><div class="channel-item">KBC-Страна СССР</div><div class="channel-item">KBC-Шпионское</div><div class="channel-item">KBC-Comics</div><div class="channel-item">KBC-History</div><div class="channel-item">KBC-Fantastic</div><div class="channel-item">KBC-Гай Ritchie And Tarantino</div><div class="channel-item">KBC-Newfilm</div><div class="channel-item">KBC-Goblin</div><div class="channel-item">KBC-Вестерн</div><div class="channel-item">KBC-WAR</div><div class="channel-item">KBC-MusKino</div><div class="channel-item">KBC-СпортМикс</div><div class="channel-item">Gold Line Brief</div><div class="channel-item">Gold Line Evidence</div><div class="channel-item">Gold Line Exist</div><div class="channel-item">Gold Line Island</div><div class="channel-item">Gold Line Naked&Funny</div><div class="channel-item">Gold Line Psycho</div><div class="channel-item">Gold Line Series</div><div class="channel-item">Gold Line Survival</div><div class="channel-item">Gold Line Детектив</div><div class="channel-item">Gold Line Невский</div><div class="channel-item">Quadro 4K</div><div class="channel-item">Home 4K</div><div class="channel-item">MyZen 4К</div><div class="channel-item">Liberty Кино ENG</div><div class="channel-item">Liberty Легенда</div><div class="channel-item">Liberty РусФильм</div><div class="channel-item">Liberty Кино Микс</div><div class="channel-item">Liberty Индия</div><div class="channel-item">Liberty Netflix</div><div class="channel-item">Liberty Куб</div><div class="channel-item">Liberty Семейный</div><div class="channel-item">Liberty Триллеры</div><div class="channel-item">Liberty Ужасы</div><div class="channel-item">Liberty ТуркФильм</div><div class="channel-item">Liberty Союз</div><div class="channel-item">Liberty XX Век</div><div class="channel-item">Liberty Криминал</div><div class="channel-item">Liberty Аванпост</div><div class="channel-item">Liberty Dreamworks</div><div class="channel-item">Liberty Мюзикл</div><div class="channel-item">Clarity4K КиноНовинки</div><div class="channel-item">Clarity4K КиноФраншизы</div><div class="channel-item">Clarity4K Netflix</div><div class="channel-item">Clarity4K HBO series</div><div class="channel-item">Clarity4K Фантастика</div><div class="channel-item">Clarity4K Фэнтези</div><div class="channel-item">Clarity4K Galaxy Films</div><div class="channel-item">Clarity4K Сумеречный Эфир</div><div class="channel-item">Clarity4K Приключения</div><div class="channel-item">Clarity4K Боевик</div><div class="channel-item">Clarity4K Боевик VHS</div><div class="channel-item">Clarity4K Триллер</div><div class="channel-item">Clarity4K Комедия</div><div class="channel-item">Clarity4K Комедия VHS</div><div class="channel-item">Clarity4K Ужасы</div><div class="channel-item">Clarity4K Ужасы VHS</div><div class="channel-item">Clarity4K Драмы</div><div class="channel-item">Clarity4K Запал</div><div class="channel-item">Clarity4K Gamefilm</div><div class="channel-item">Clarity4K Семейный</div><div class="channel-item">Clarity4K КиноШарм</div><div class="channel-item">Clarity4K Русские сериалы</div><div class="channel-item">Clarity4K Молодежные комедии</div><div class="channel-item">Clarity4K Классика кино</div><div class="channel-item">Clarity4K КиноСССР</div><div class="channel-item">Clarity4K Kинодети CССР</div><div class="channel-item">Clarity4K Комедия СССР 1</div><div class="channel-item">Clarity4K Комедия СССР 2</div><div class="channel-item">Аппетитный</div><div class="channel-item">DetectiveJam</div><div class="channel-item">Super Baltic</div><div class="channel-item">Super Plus</div><div class="channel-item">1+1</div><div class="channel-item">2x2</div><div class="channel-item">2+2</div><div class="channel-item">365 дней ТВ</div><div class="channel-item">4ever Music</div><div class="channel-item">AIVA</div><div class="channel-item">A HOME OF HBO 1</div><div class="channel-item">A HOME OF HBO 2</div><div class="channel-item">А1</div><div class="channel-item">А2</div><div class="channel-item">Анекдот ТВ</div><div class="channel-item">Animal Planet HD</div><div class="channel-item">Арсенал ТВ</div><div class="channel-item">Авто Плюс</div><div class="channel-item">Barely Legal</div><div class="channel-item">BCU Action HD</div><div class="channel-item">BCU Catastrophe HD</div><div class="channel-item">BCU Cinema HD</div><div class="channel-item">BCU Cinema+ HD</div><div class="channel-item">BCU Comedy HD</div><div class="channel-item">BCU Cosmo HD</div><div class="channel-item">BCU Fantastic HD</div><div class="channel-item">BCU FilMystic HD</div><div class="channel-item">BCU History HD</div><div class="channel-item">BCU Kinorating HD</div><div class="channel-item">BCU Кинозал Premiere 1 HD</div><div class="channel-item">BCU Кинозал Premiere 2 HD</div><div class="channel-item">BCU Кинозал Premiere 3 HD</div><div class="channel-item">BCU Marvel HD</div><div class="channel-item">BCU Kinozakaz</div><div class="channel-item">BCU Premiere HD</div><div class="channel-item">BCU Reality HD</div><div class="channel-item">BCU Romantic HD</div><div class="channel-item">BCU Russian HD</div><div class="channel-item">BCU Кинозал СССР</div><div class="channel-item">BCU Stars HD</div><div class="channel-item">BCU Survival HD</div><div class="channel-item">BCU Сваты HD</div><div class="channel-item">BCU TruMotion HD</div><div class="channel-item">BCU VHS HD</div><div class="channel-item">Беларусь 1 HD</div><div class="channel-item">Беларусь 2 HD</div><div class="channel-item">Беларусь 3 HD</div><div class="channel-item">BelSat</div><div class="channel-item">Кино 1</div><div class="channel-item">Кино 2</div><div class="channel-item">Военное кино</div><div class="channel-item">Big Planet</div><div class="channel-item">Блокбастер HD</div><div class="channel-item">Бобер</div><div class="channel-item">Bollywood</div><div class="channel-item">BOX Cyber HD</div><div class="channel-item">BOX Memory HD</div><div class="channel-item">BOX Metall HD</div><div class="channel-item">BOX Mayday HD</div><div class="channel-item">BOX RU.RAP HD</div><div class="channel-item">BOX Stories HD</div><div class="channel-item">BOX Travel HD</div><div class="channel-item">BOX Travel Premiere HD</div><div class="channel-item">BOX Western HD</div><div class="channel-item">BOX Zombie HD</div><div class="channel-item">Bridge TV</div><div class="channel-item">Че</div><div class="channel-item">CineMan</div><div class="channel-item">CineMan Action</div><div class="channel-item">CineMan Катастрофы</div><div class="channel-item">CineMan Marvel</div><div class="channel-item">CineMan Сваты</div><div class="channel-item">CineMan Thriller</div><div class="channel-item">CineMan Top</div><div class="channel-item">CineMan Ужасы</div><div class="channel-item">CineMan VHS</div><div class="channel-item">Curiosity Stream</div><div class="channel-item">Дача</div><div class="channel-item">День Победы</div><div class="channel-item">Дикая охота HD</div><div class="channel-item">Дикая рыбалка HD</div><div class="channel-item">Дикий HD</div><div class="channel-item">Discovery Channel</div><div class="channel-item">Discovery Science</div><div class="channel-item">DocuBox HD</div><div class="channel-item">Доктор</div><div class="channel-item">Домашний</div><div class="channel-item">Дом кино</div><div class="channel-item">Dorcel</div><div class="channel-item">Дождь</div><div class="channel-item">Драйв</div><div class="channel-item">Душевное HD</div><div class="channel-item">Epic Drama</div><div class="channel-item">Европа Плюс ТВ</div><div class="channel-item">Еврокино</div><div class="channel-item">FAN HD</div><div class="channel-item">Fashion TV</div><div class="channel-item">Феникс+ Кино</div><div class="channel-item">Film.Ua Drama</div><div class="channel-item">Food Network</div><div class="channel-item">Fresh Adventure</div><div class="channel-item">Fresh Cinema</div><div class="channel-item">Fresh Comedy</div><div class="channel-item">Fresh Family</div><div class="channel-item">Fresh Fantastic</div><div class="channel-item">Fresh Horror</div><div class="channel-item">Fresh Premiere</div><div class="channel-item">Fresh Rating</div><div class="channel-item">Fresh Romantic</div><div class="channel-item">Fresh Russian</div><div class="channel-item">Fresh Series</div><div class="channel-item">Fresh Soviet</div><div class="channel-item">Fresh Thriller</div><div class="channel-item">Fuel TV HD</div><div class="channel-item">Глазами туриста</div><div class="channel-item">H2</div><div class="channel-item">Точка.РФ</div><div class="channel-item">HD Медиа</div><div class="channel-item">History</div><div class="channel-item">Hollywood HD</div><div class="channel-item">Hustler HD</div><div class="channel-item">Hustler TV</div><div class="channel-item">Иллюзион +</div><div class="channel-item">Индийское кино</div><div class="channel-item">История</div><div class="channel-item">Камеди</div><div class="channel-item">Хит HD</div><div class="channel-item">КиноТВ</div><div class="channel-item">Кино 1 International</div><div class="channel-item">Кинокомедия</div><div class="channel-item">Киномикс</div><div class="channel-item">Кинопоказ HD</div><div class="channel-item">Кинопремьера</div><div class="channel-item">Киносемья</div><div class="channel-item">Киносерия</div><div class="channel-item">Киносвидание</div><div class="channel-item">Киноужас</div><div class="channel-item">Кинохит</div><div class="channel-item">Классика Кино</div><div class="channel-item">Комедийное HD</div><div class="channel-item">Криминальное HD</div><div class="channel-item">Россия К</div><div class="channel-item">Кухня ТВ</div><div class="channel-item">КВН ТВ</div><div class="channel-item">Liberty МиксMusic</div><div class="channel-item">Live Music Channel HD</div><div class="channel-item">Luxury HD</div><div class="channel-item">Magic Action</div><div class="channel-item">Magic Adventure</div><div class="channel-item">Magic Comedy</div><div class="channel-item">Magic Family</div><div class="channel-item">Magic Galaxy</div><div class="channel-item">Magic Horror</div><div class="channel-item">Magic Karate</div><div class="channel-item">Magic Love</div><div class="channel-item">Magic Russian</div><div class="channel-item">Magic Thriller</div><div class="channel-item">Magic VHS</div><div class="channel-item">Mezzo</div><div class="channel-item">Mezzo Live HD</div><div class="channel-item">MM 007 HD</div><div class="channel-item">MM Агата Кристи HD</div><div class="channel-item">MM Боевик HD</div><div class="channel-item">MM Боевик Classic HD</div><div class="channel-item">MM Celebrity HD</div><div class="channel-item">MM Classic HD</div><div class="channel-item">MM Комедия HD</div><div class="channel-item">MM Комедия Classic HD</div><div class="channel-item">MM Драма HD</div><div class="channel-item">MM Experiment HD</div><div class="channel-item">MM Семейный 1 HD</div><div class="channel-item">MM Семейный 2 HD</div><div class="channel-item">MM Фантастика HD</div><div class="channel-item">MM Фобия HD</div><div class="channel-item">MM Грайндхаус HD</div><div class="channel-item">MM История HD</div><div class="channel-item">MM Катастрофа HD</div><div class="channel-item">MM Киберпанк HD</div><div class="channel-item">MM Кинофестиваль HD</div><div class="channel-item">MM Криминал HD</div><div class="channel-item">MM Крутые 90-е HD</div><div class="channel-item">MM Кунг-Фу HD</div><div class="channel-item">MM Квартирник HD</div><div class="channel-item">MM Love HD</div><div class="channel-item">MM Мифология HD</div><div class="channel-item">MS Crime HD</div><div class="channel-item">MS Prisons HD</div><div class="channel-item">MS Young Blood HD</div><div class="channel-item">MM NewFilm 1 HD</div><div class="channel-item">MM NewFilm 2 HD</div><div class="channel-item">MM NewFilm 3 HD</div><div class="channel-item">MM NewFilm RU HD</div><div class="channel-item">MM Нуар HD</div><div class="channel-item">MM Открытия HD</div><div class="channel-item">MM Погружение HD</div><div class="channel-item">MM Приключения HD</div><div class="channel-item">MM Роскино HD</div><div class="channel-item">MM Синематограф HD</div><div class="channel-item">MM Ситком HD</div><div class="channel-item">MM Ситком 2.0 HD</div><div class="channel-item">MM Скорость HD</div><div class="channel-item">MM Спорт HD</div><div class="channel-item">MM Стивен Кинг HD</div><div class="channel-item">MM Супергерои HD</div><div class="channel-item">MM Сваты HD</div><div class="channel-item">MM Translation HD</div><div class="channel-item">MM Триллер HD</div><div class="channel-item">MM UFO HD</div><div class="channel-item">MM Ужасы HD</div><div class="channel-item">MM Ужасы Classic HD</div><div class="channel-item">MM Ужастик HD</div><div class="channel-item">MM USSR 1941-1945 HD</div><div class="channel-item">MM USSR Детектив HD</div><div class="channel-item">MM USSR Комедия HD</div><div class="channel-item">MM USSR Приключения HD</div><div class="channel-item">MM Воронины HD</div><div class="channel-item">MM Вестерн HD</div><div class="channel-item">MM Затмение HD</div><div class="channel-item">Моя стихия</div><div class="channel-item">Муви ТВ</div><div class="channel-item">Мужское кино HD</div><div class="channel-item">Мужской</div><div class="channel-item">Музыка Первого</div><div class="channel-item">Наш Кинопоказ HD</div><div class="channel-item">Наша Сибирь</div><div class="channel-item">Любимое HD</div><div class="channel-item">Наше Мужское HD</div><div class="channel-item">Наше HD</div><div class="channel-item">Настоящее время HD</div><div class="channel-item">Nat Geo Wild</div><div class="channel-item">National Geographic</div><div class="channel-item">Ностальгия</div><div class="channel-item">НСТ</div><div class="channel-item">НТВ</div><div class="channel-item">НТВ-Беларусь</div><div class="channel-item">НТВ Право</div><div class="channel-item">НТВ Сериал</div><div class="channel-item">НТВ Стиль</div><div class="channel-item">НТВ-Хит</div><div class="channel-item">О2ТВ</div><div class="channel-item">Ocean TV</div><div class="channel-item">ОНТ</div><div class="channel-item">Оружие</div><div class="channel-item">Остросюжетное HD</div><div class="channel-item">Первый канал</div><div class="channel-item">Пятница!</div><div class="channel-item">Победа</div><div class="channel-item">Поехали!</div><div class="channel-item">Премиальное HD</div><div class="channel-item">Приключения HD</div><div class="channel-item">Private TV</div><div class="channel-item">Про Любовь</div><div class="channel-item">Психология 21</div><div class="channel-item">Redlight HD</div><div class="channel-item">Рен ТВ</div><div class="channel-item">Романтичное HD</div><div class="channel-item">Россия 1</div><div class="channel-item">RTG HD</div><div class="channel-item">RTG TV</div><div class="channel-item">РТР-Беларусь</div><div class="channel-item">Русская комедия</div><div class="channel-item">Сапфир</div><div class="channel-item">Сарафан</div><div class="channel-item">Scream</div><div class="channel-item">Шокирующее HD</div><div class="channel-item">Shot TV</div><div class="channel-item">.sci-fi</div><div class="channel-item">.black</div><div class="channel-item">.red</div><div class="channel-item">Совершенно секретно</div><div class="channel-item">Star Family Россия</div><div class="channel-item">Страшное HD</div><div class="channel-item">СТС</div><div class="channel-item">СТС Love</div><div class="channel-item">СТВ Беларусь</div><div class="channel-item">Суббота!</div><div class="channel-item">Светлое ТВ</div><div class="channel-item">Телекафе</div><div class="channel-item">Т24</div><div class="channel-item">TLC</div><div class="channel-item">ТНТ</div><div class="channel-item">ТНТ-Music</div><div class="channel-item">ТНТ4</div><div class="channel-item">Точка отрыва</div><div class="channel-item">Точка</div><div class="channel-item">Travel+Adventure</div><div class="channel-item">Travel Channel</div><div class="channel-item">Travel XP HD</div><div class="channel-item">Viasat Kino Action</div><div class="channel-item">Viasat Kino</div><div class="channel-item">Viasat Kino World</div><div class="channel-item">ТВ3 Беларусь</div><div class="channel-item">ТВ3</div><div class="channel-item">Усадьба</div><div class="channel-item">В мире животных HD</div><div class="channel-item">VeleS 60FPS</div><div class="channel-item">VeleS Dj Set</div><div class="channel-item">VeleS Киносерия</div><div class="channel-item">VeleS Магнитофон</div><div class="channel-item">VeleS Movie Hits</div><div class="channel-item">VeleS Premiere</div><div class="channel-item">VeleS СССР</div><div class="channel-item">VeleS Страшное</div><div class="channel-item">VF Привет из 90х</div><div class="channel-item">VF Adventure</div><div class="channel-item">VF Американская история ужасов</div><div class="channel-item">VF Art house</div><div class="channel-item">VF Беларусьфильм</div><div class="channel-item">VF Без цензуры</div><div class="channel-item">VF Боевик</div><div class="channel-item">VF Чернобыль</div><div class="channel-item">VF Classic</div><div class="channel-item">VF Comedy</div><div class="channel-item">VF Comedy Woman</div><div class="channel-item">VF Comics</div><div class="channel-item">VF Detective</div><div class="channel-item">VF Джеки Чан</div><div class="channel-item">VF Family</div><div class="channel-item">VF Fantastic</div><div class="channel-item">VF Fantasy</div><div class="channel-item">VF Фильмы СССР</div><div class="channel-item">VF Друзья</div><div class="channel-item">VF Леонид Гайдай</div><div class="channel-item">VF Городок</div><div class="channel-item">VF HBO</div><div class="channel-item">VF Доктор Хаус</div><div class="channel-item">VF Игра престолов</div><div class="channel-item">VF Индия</div><div class="channel-item">VF История</div><div class="channel-item">VF Катастрофы</div><div class="channel-item">VF Киностудия им. Горького</div><div class="channel-item">VF Классика</div><div class="channel-item">VF Комедия</div><div class="channel-item">VF Криминал</div><div class="channel-item">VF Ленфильм</div><div class="channel-item">VF Луи де Фюнес</div><div class="channel-item">VF Marvel</div><div class="channel-item">VF Melodrama</div><div class="channel-item">VF Мосфильм</div><div class="channel-item">VF Мыльные оперы</div><div class="channel-item">VF Mystic</div><div class="channel-item">VF Наша Раша</div><div class="channel-item">VF Netflix</div><div class="channel-item">VF Одесская киностудия</div><div class="channel-item">VF Однажды в России</div><div class="channel-item">VF Оскар</div><div class="channel-item">VF Наша победа</div><div class="channel-item">VF Премьера</div><div class="channel-item">VF Premiere</div><div class="channel-item">VF Реальные пацаны</div><div class="channel-item">VF Рижская киностудия</div><div class="channel-item">VF Эльдар Рязанов</div><div class="channel-item">VF СашаТаня</div><div class="channel-item">VF Сериал</div><div class="channel-item">VF Series</div><div class="channel-item">VF След</div><div class="channel-item">VF Солдаты</div><div class="channel-item">VF Сверхъестественное</div><div class="channel-item">VF Свердловская киностудия</div><div class="channel-item">VF Сваты</div><div class="channel-item">VF Тайны следствия</div><div class="channel-item">VF Thriller</div><div class="channel-item">VF TOP Series</div><div class="channel-item">VF Универ</div><div class="channel-item">VF Универ новая общага</div><div class="channel-item">VF Ужасы</div><div class="channel-item">VF Ужасы VHS</div><div class="channel-item">VF Военные</div><div class="channel-item">VF Воронины</div><div class="channel-item">VF Ходячие мертвецы</div><div class="channel-item">VF The X-Files</div><div class="channel-item">viju History</div><div class="channel-item">Viasat Kino Comedy</div><div class="channel-item">viju+ Comedy</div><div class="channel-item">Viasat Kino Megahit</div><div class="channel-item">viju+ Megahit</div><div class="channel-item">viju+ Premiere</div><div class="channel-item">Время</div><div class="channel-item">Загородный</div><div class="channel-item">Здоровое ТВ</div><div class="channel-item">Живая природа</div><div class="channel-item">Звезда</div><div class="channel-item">Ю</div><div class="channel-item">ТВ-21M</div><div class="channel-item">RU.TV</div><div class="channel-item">8 канал [BY]</div><div class="channel-item">Пятый канал</div><div class="channel-item">Мир</div><div class="channel-item">Яснае ТВ</div><div class="channel-item">ТВ Центр</div><div class="channel-item">ТНТ-International (Беларусь)</div><div class="channel-item">Наука 2.0</div><div class="channel-item">Живи активно</div><div class="channel-item">Живи</div><div class="channel-item">World Fashion Channel</div><div class="channel-item">Extreme sports</div><div class="channel-item">Моя Планета</div><div class="channel-item">Киносат</div><div class="channel-item">Калейдоскоп ТВ</div><div class="channel-item">viju Explore</div><div class="channel-item">viju Nature</div><div class="channel-item">viju+ Planet</div><div class="channel-item">Terra</div><div class="channel-item">Авто24</div><div class="channel-item">Galaxy-TV</div><div class="channel-item">Советское кино</div><div class="channel-item">Plan B</div><div class="channel-item">Russian Extreme Ultra HD</div><div class="channel-item">Ultra HD Cinema</div><div class="channel-item">Кино UHD</div><div class="channel-item">Русский иллюзион</div><div class="channel-item">Русский роман</div><div class="channel-item">Русский детектив</div><div class="channel-item">Русский бестселлер</div><div class="channel-item">Охота и рыбалка</div><div class="channel-item">Охотник и рыболов</div><div class="channel-item">Наша тема</div><div class="channel-item">Диалоги о рыбалке</div><div class="channel-item">Love Nature 4K</div><div class="channel-item">Start World</div><div class="channel-item">Start Air</div><div class="channel-item">Мир сериала</div><div class="channel-item">Кто Куда</div><div class="channel-item">AMC</div><div class="channel-item">Звезда Плюс</div><div class="channel-item">FlixSnip</div><div class="channel-item">Наше новое кино</div><div class="channel-item">Любимое кино</div><div class="channel-item">Родное кино</div><div class="channel-item">Kinojam 1</div><div class="channel-item">Kinojam 2</div><div class="channel-item">Еда Премиум Int. HD</div><div class="channel-item">FoodTime</div><div class="channel-item">Кус-кус</div><div class="channel-item">Fast&FunBox HD</div><div class="channel-item">FilmBox Russia</div><div class="channel-item">FilmBox ArtHouse</div><div class="channel-item">КиноСезон</div><div class="channel-item">Дом кино Премиум</div><div class="channel-item">Мосфильм. Золотая коллекция</div><div class="channel-item">Star Cinema Россия</div><div class="channel-item">Cinema Cosmos TV</div><div class="channel-item">Cinema</div><div class="channel-item">Bolt Россия</div><div class="channel-item">Novella TV</div><div class="channel-item">viju TV1000</div><div class="channel-item">viju TV1000 Русское</div><div class="channel-item">viju TV1000 Новелла</div><div class="channel-item">viju TV1000 romantica</div><div class="channel-item">viju TV1000 Action</div><div class="channel-item">viju+ Serial</div><div class="channel-item">VHS-ка</div><div class="channel-item">KinoLiving</div><div class="channel-item">Кино без границ</div><div class="channel-item">Кинеко</div><div class="channel-item">FX</div><div class="channel-item">FX Life</div><div class="channel-item">Trash</div><div class="channel-item">Insight TV HD</div><div class="channel-item">ID Xtra EU</div><div class="channel-item">Квартал ТВ</div><div class="channel-item">Нано</div><div class="channel-item">Iнтер+</div><div class="channel-item">RTVi</div><div class="channel-item">Загородная жизнь</div><div class="channel-item">Загородный International</div><div class="channel-item">YOSSO TV Travel</div><div class="channel-item">YOSSO TV Science</div><div class="channel-item">CineMan Скорая помощь</div><div class="channel-item">CineMan Melodrama</div><div class="channel-item">CineMan Комедия</div><div class="channel-item">CineMan MiniSeries</div><div class="channel-item">BOX Franchise HD</div><div class="channel-item">BOX Hybrid HD</div><div class="channel-item">BOX Gangster HD</div><div class="channel-item">BOX Spy HD</div><div class="channel-item">BOX Oscar HD</div><div class="channel-item">BOX Serial HD</div><div class="channel-item">BCU RUSerial HD</div><div class="channel-item">BCU Criminal HD</div><div class="channel-item">VF VHS</div><div class="channel-item">YOSSO TV Grand</div><div class="channel-item">YOSSO TV VHS</div><div class="channel-item">YOSSO TV Русские фильмы</div><div class="channel-item">YOSSO TV Советские фильмы</div><div class="channel-item">YOSSO TV New Кино</div><div class="channel-item">YOSSO TV Трагичное</div><div class="channel-item">YOSSO TV Забавное</div><div class="channel-item">YOSSO TV BEST</div><div class="channel-item">YOSSO TV Ковбойское</div><div class="channel-item">YOSSO TV Adrenaline</div><div class="channel-item">YOSSO TV Oblivion</div><div class="channel-item">YOSSO TV Adventure</div><div class="channel-item">YOSSO TV Thriller</div><div class="channel-item">YOSSO TV Мелодрама</div><div class="channel-item">YOSSO TV Netflix</div><div class="channel-item">YOSSO TV BEST 60fps</div><div class="channel-item">C-History</div><div class="channel-item">C-Inquest</div><div class="channel-item">C-Marvel</div><div class="channel-item">Fresh VHS</div><div class="channel-item">VeleS Киноплёнка</div><div class="channel-item">VeleS Криминальный</div><div class="channel-item">Первый музыкальный</div><div class="channel-item">1HD Music</div><div class="channel-item">Муз-ТВ</div><div class="channel-item">Телеканал Радио Страна ФМ</div><div class="channel-item">Bridge TV Deluxe</div><div class="channel-item">Жара</div><div class="channel-item">EU.Music</div><div class="channel-item">VIVA Russia</div><div class="channel-item">Жар Птица</div><div class="channel-item">MCM Top</div><div class="channel-item">Шансон-TB</div><div class="channel-item">YOSSO TV Music Hits</div><div class="channel-item">Рыбалка и охота</div><div class="channel-item">МузТВ Беларусь</div><div class="channel-item">Oasis Action</div><div class="channel-item">Oasis Comedy</div><div class="channel-item">Oasis Soviet Comedy</div><div class="channel-item">Oasis Detective</div><div class="channel-item">Oasis Drama</div><div class="channel-item">Oasis DC</div><div class="channel-item">Oasis Marvel</div><div class="channel-item">Oasis Family</div><div class="channel-item">Oasis Мелодрама</div><div class="channel-item">Oasis Horror</div><div class="channel-item">Oasis Old Horrors</div><div class="channel-item">Oasis Comedy Horrors</div><div class="channel-item">Oasis Biography</div><div class="channel-item">Oasis Mafia</div><div class="channel-item">Oasis Фантастика</div><div class="channel-item">Oasis Тайны Смолвиля</div><div class="channel-item">Oasis Ufo And Aliens</div><div class="channel-item">Oasis Alien and Predator</div><div class="channel-item">Oasis Celentano Brando Connery</div><div class="channel-item">Oasis Demon Slayer and Dororo</div><div class="channel-item">Oasis Serkan Bolat</div><div class="channel-item">Oasis Миядзаки</div><div class="channel-item">Oasis In English</div><div class="channel-item">Oasis RUS Драма</div><div class="channel-item">Oasis RUS Комедии</div><div class="channel-item">Oasis RUS Сериалы</div><div class="channel-item">Oasis RUS Сериалы Драма</div><div class="channel-item">Oasis Superheroes Сериалы</div><div class="channel-item">Oasis Корейские Сериалы</div><div class="channel-item">Oasis Латиноамериканские Сериалы</div><div class="channel-item">Oasis Учим Английский</div><div class="channel-item">Oasis Учим Испанский</div><div class="channel-item">Oasis USA Series</div><div class="channel-item">Oasis Кухня Отель</div><div class="channel-item">KLI Premium HD</div><div class="channel-item">KLI Cinema HD</div><div class="channel-item">KLI Comedy HD</div><div class="channel-item">KLI History HD</div><div class="channel-item">KLI Russian HD</div><div class="channel-item">KLI Fantastic HD</div><div class="channel-item">KLI VHS HD</div><div class="channel-item">KLI Thriller HD</div><div class="channel-item">KLI USSR HD</div><div class="channel-item">KLI Family HD</div><div class="channel-item">KLI Kinoseries</div><div class="channel-item">KLI Horror HD</div><div class="channel-item">KLI Action HD</div><div class="channel-item">KLI Drama HD</div><div class="channel-item">KLI Fantasy HD</div><div class="channel-item">KLI Сериал HD</div><div class="channel-item">KLI Netflix HD</div><div class="channel-item">KLI Marvel HD</div><div class="channel-item">KLI Новинки HD</div><div class="channel-item">KLI Franchise HD</div><div class="channel-item">KLI Однажды в России HD</div><div class="channel-item">KLI Relax HD</div><div class="channel-item">Cobra Detektiv HD</div><div class="channel-item">Cobra Thriller HD</div><div class="channel-item">Cobra Drama HD</div><div class="channel-item">Cobra Melodrama HD</div><div class="channel-item">Cobra Comedy HD</div><div class="channel-item">Velilla TV Action War Films HD</div><div class="channel-item">Velilla TV Русский Сериал HD</div><div class="channel-item">Velilla TV Домашний HD</div><div class="channel-item">Velilla TV Мосгаз HD</div><div class="channel-item">Velilla TV Морские дьяволы HD</div><div class="channel-item">Liberty Medval 4K</div><div class="channel-item">TOP 80</div><div class="channel-item">TOP BUDO HD</div><div class="channel-item">TOP CINEMA HD</div><div class="channel-item">TOP MIX HD</div>
+                </div>
+            </details>
         </div>
         
         <div class="footer">
-            © 2026 EPG Service • Автоматическое обновление
+            Автоматическое обновление
         </div>
     </div>
-    
-    <script>
-        const channelsData = [{"name":"KION Хит","programsCount":163},{"name":"4ever Drama","programsCount":35},{"name":"4ever Theater","programsCount":33},{"name":"Liberty DC","programsCount":140},{"name":"Liberty Короткометражный","programsCount":197},{"name":"Liberty Мелодрамы","programsCount":89},{"name":"Liberty Боевики","programsCount":91},{"name":"Liberty Сваты","programsCount":81},{"name":"Liberty Комедии","programsCount":101},{"name":"Liberty Сериалы","programsCount":215},{"name":"Liberty Занавес","programsCount":91},{"name":"Liberty Шоу","programsCount":182},{"name":"Liberty Fan","programsCount":78},{"name":"Liberty Marvel","programsCount":122},{"name":"Liberty South Park","programsCount":304},{"name":"Liberty Планктон","programsCount":417},{"name":"KBC-Ultra","programsCount":72},{"name":"KBC-Кошмарное","programsCount":79},{"name":"KBC-Видак","programsCount":70},{"name":"KBC-Драмаtic","programsCount":71},{"name":"KBC-Elite Comedys","programsCount":79},{"name":"KBC-Russian Комедия","programsCount":86},{"name":"KBC-ВОВ","programsCount":84},{"name":"KBC-Страна СССР","programsCount":84},{"name":"KBC-Шпионское","programsCount":66},{"name":"KBC-Comics","programsCount":69},{"name":"KBC-History","programsCount":64},{"name":"KBC-Fantastic","programsCount":72},{"name":"KBC-Гай Ritchie And Tarantino","programsCount":65},{"name":"KBC-Newfilm","programsCount":73},{"name":"KBC-Goblin","programsCount":72},{"name":"KBC-Вестерн","programsCount":69},{"name":"KBC-WAR","programsCount":63},{"name":"KBC-MusKino","programsCount":78},{"name":"KBC-СпортМикс","programsCount":73},{"name":"Gold Line Brief","programsCount":118},{"name":"Gold Line Evidence","programsCount":155},{"name":"Gold Line Exist","programsCount":173},{"name":"Gold Line Island","programsCount":129},{"name":"Gold Line Naked&Funny","programsCount":250},{"name":"Gold Line Psycho","programsCount":132},{"name":"Gold Line Series","programsCount":140},{"name":"Gold Line Survival","programsCount":142},{"name":"Gold Line Детектив","programsCount":92},{"name":"Gold Line Невский","programsCount":164},{"name":"Quadro 4K","programsCount":244},{"name":"Home 4K","programsCount":2954},{"name":"MyZen 4К","programsCount":224},{"name":"Liberty Кино ENG","programsCount":88},{"name":"Liberty Легенда","programsCount":38},{"name":"Liberty РусФильм","programsCount":70},{"name":"Liberty Кино Микс","programsCount":83},{"name":"Liberty Индия","programsCount":335},{"name":"Liberty Netflix","programsCount":82},{"name":"Liberty Куб","programsCount":432},{"name":"Liberty Семейный","programsCount":91},{"name":"Liberty Триллеры","programsCount":87},{"name":"Liberty Ужасы","programsCount":58},{"name":"Liberty ТуркФильм","programsCount":125},{"name":"Liberty Союз","programsCount":37},{"name":"Liberty XX Век","programsCount":60},{"name":"Liberty Криминал","programsCount":73},{"name":"Liberty Аванпост","programsCount":59},{"name":"Liberty Dreamworks","programsCount":81},{"name":"Liberty Мюзикл","programsCount":62},{"name":"Clarity4K КиноНовинки","programsCount":93},{"name":"Clarity4K КиноФраншизы","programsCount":74},{"name":"Clarity4K Netflix","programsCount":93},{"name":"Clarity4K HBO series","programsCount":179},{"name":"Clarity4K Фантастика","programsCount":87},{"name":"Clarity4K Фэнтези","programsCount":66},{"name":"Clarity4K Galaxy Films","programsCount":80},{"name":"Clarity4K Сумеречный Эфир","programsCount":95},{"name":"Clarity4K Приключения","programsCount":86},{"name":"Clarity4K Боевик","programsCount":87},{"name":"Clarity4K Боевик VHS","programsCount":89},{"name":"Clarity4K Триллер","programsCount":0},{"name":"Clarity4K Комедия","programsCount":100},{"name":"Clarity4K Комедия VHS","programsCount":102},{"name":"Clarity4K Ужасы","programsCount":92},{"name":"Clarity4K Ужасы VHS","programsCount":96},{"name":"Clarity4K Драмы","programsCount":90},{"name":"Clarity4K Запал","programsCount":217},{"name":"Clarity4K Gamefilm","programsCount":80},{"name":"Clarity4K Семейный","programsCount":101},{"name":"Clarity4K КиноШарм","programsCount":106},{"name":"Clarity4K Русские сериалы","programsCount":233},{"name":"Clarity4K Молодежные комедии","programsCount":108},{"name":"Clarity4K Классика кино","programsCount":85},{"name":"Clarity4K КиноСССР","programsCount":120},{"name":"Clarity4K Kинодети CССР","programsCount":144},{"name":"Clarity4K Комедия СССР 1","programsCount":140},{"name":"Clarity4K Комедия СССР 2","programsCount":119},{"name":"Аппетитный","programsCount":348},{"name":"DetectiveJam","programsCount":71},{"name":"Super Baltic","programsCount":143},{"name":"Super Plus","programsCount":160},{"name":"1+1","programsCount":202},{"name":"2x2","programsCount":533},{"name":"2+2","programsCount":78},{"name":"365 дней ТВ","programsCount":225},{"name":"4ever Music","programsCount":88},{"name":"AIVA","programsCount":335},{"name":"A HOME OF HBO 1","programsCount":208},{"name":"A HOME OF HBO 2","programsCount":203},{"name":"А1","programsCount":221},{"name":"А2","programsCount":246},{"name":"Анекдот ТВ","programsCount":948},{"name":"Animal Planet HD","programsCount":202},{"name":"Арсенал ТВ","programsCount":223},{"name":"Авто Плюс","programsCount":792},{"name":"Barely Legal","programsCount":134},{"name":"BCU Action HD","programsCount":92},{"name":"BCU Catastrophe HD","programsCount":97},{"name":"BCU Cinema HD","programsCount":86},{"name":"BCU Cinema+ HD","programsCount":107},{"name":"BCU Comedy HD","programsCount":98},{"name":"BCU Cosmo HD","programsCount":93},{"name":"BCU Fantastic HD","programsCount":90},{"name":"BCU FilMystic HD","programsCount":99},{"name":"BCU History HD","programsCount":61},{"name":"BCU Kinorating HD","programsCount":89},{"name":"BCU Кинозал Premiere 1 HD","programsCount":88},{"name":"BCU Кинозал Premiere 2 HD","programsCount":62},{"name":"BCU Кинозал Premiere 3 HD","programsCount":101},{"name":"BCU Marvel HD","programsCount":80},{"name":"BCU Kinozakaz","programsCount":101},{"name":"BCU Premiere HD","programsCount":101},{"name":"BCU Reality HD","programsCount":85},{"name":"BCU Romantic HD","programsCount":90},{"name":"BCU Russian HD","programsCount":104},{"name":"BCU Кинозал СССР","programsCount":140},{"name":"BCU Stars HD","programsCount":101},{"name":"BCU Survival HD","programsCount":97},{"name":"BCU Сваты HD","programsCount":227},{"name":"BCU TruMotion HD","programsCount":84},{"name":"BCU VHS HD","programsCount":90},{"name":"Беларусь 1 HD","programsCount":178},{"name":"Беларусь 2 HD","programsCount":150},{"name":"Беларусь 3 HD","programsCount":144},{"name":"BelSat","programsCount":320},{"name":"Кино 1","programsCount":98},{"name":"Кино 2","programsCount":97},{"name":"Военное кино","programsCount":105},{"name":"Big Planet","programsCount":249},{"name":"Блокбастер HD","programsCount":91},{"name":"Бобер","programsCount":137},{"name":"Bollywood","programsCount":74},{"name":"BOX Cyber HD","programsCount":95},{"name":"BOX Memory HD","programsCount":194},{"name":"BOX Metall HD","programsCount":59},{"name":"BOX Mayday HD","programsCount":227},{"name":"BOX RU.RAP HD","programsCount":86},{"name":"BOX Stories HD","programsCount":349},{"name":"BOX Travel HD","programsCount":222},{"name":"BOX Travel Premiere HD","programsCount":179},{"name":"BOX Western HD","programsCount":91},{"name":"BOX Zombie HD","programsCount":71},{"name":"Bridge TV","programsCount":79},{"name":"Че","programsCount":285},{"name":"CineMan","programsCount":97},{"name":"CineMan Action","programsCount":93},{"name":"CineMan Катастрофы","programsCount":94},{"name":"CineMan Marvel","programsCount":80},{"name":"CineMan Сваты","programsCount":224},{"name":"CineMan Thriller","programsCount":98},{"name":"CineMan Top","programsCount":80},{"name":"CineMan Ужасы","programsCount":104},{"name":"CineMan VHS","programsCount":97},{"name":"Curiosity Stream","programsCount":340},{"name":"Дача","programsCount":291},{"name":"День Победы","programsCount":113},{"name":"Дикая охота HD","programsCount":311},{"name":"Дикая рыбалка HD","programsCount":307},{"name":"Дикий HD","programsCount":279},{"name":"Discovery Channel","programsCount":199},{"name":"Discovery Science","programsCount":285},{"name":"DocuBox HD","programsCount":287},{"name":"Доктор","programsCount":347},{"name":"Домашний","programsCount":221},{"name":"Дом кино","programsCount":75},{"name":"Dorcel","programsCount":156},{"name":"Дождь","programsCount":328},{"name":"Драйв","programsCount":384},{"name":"Душевное HD","programsCount":126},{"name":"Epic Drama","programsCount":137},{"name":"Европа Плюс ТВ","programsCount":214},{"name":"Еврокино","programsCount":109},{"name":"FAN HD","programsCount":180},{"name":"Fashion TV","programsCount":171},{"name":"Феникс+ Кино","programsCount":168},{"name":"Film.Ua Drama","programsCount":202},{"name":"Food Network","programsCount":0},{"name":"Fresh Adventure","programsCount":88},{"name":"Fresh Cinema","programsCount":74},{"name":"Fresh Comedy","programsCount":94},{"name":"Fresh Family","programsCount":88},{"name":"Fresh Fantastic","programsCount":79},{"name":"Fresh Horror","programsCount":96},{"name":"Fresh Premiere","programsCount":82},{"name":"Fresh Rating","programsCount":79},{"name":"Fresh Romantic","programsCount":92},{"name":"Fresh Russian","programsCount":92},{"name":"Fresh Series","programsCount":215},{"name":"Fresh Soviet","programsCount":112},{"name":"Fresh Thriller","programsCount":83},{"name":"Fuel TV HD","programsCount":306},{"name":"Глазами туриста","programsCount":323},{"name":"H2","programsCount":223},{"name":"Точка.РФ","programsCount":264},{"name":"HD Медиа","programsCount":235},{"name":"History","programsCount":221},{"name":"Hollywood HD","programsCount":101},{"name":"Hustler HD","programsCount":151},{"name":"Hustler TV","programsCount":137},{"name":"Иллюзион +","programsCount":103},{"name":"Индийское кино","programsCount":56},{"name":"История","programsCount":213},{"name":"Камеди","programsCount":237},{"name":"Хит HD","programsCount":161},{"name":"КиноТВ","programsCount":101},{"name":"Кино 1 International","programsCount":114},{"name":"Кинокомедия","programsCount":89},{"name":"Киномикс","programsCount":96},{"name":"Кинопоказ HD","programsCount":90},{"name":"Кинопремьера","programsCount":100},{"name":"Киносемья","programsCount":102},{"name":"Киносерия","programsCount":177},{"name":"Киносвидание","programsCount":90},{"name":"Киноужас","programsCount":96},{"name":"Кинохит","programsCount":93},{"name":"Классика Кино","programsCount":103},{"name":"Комедийное HD","programsCount":97},{"name":"Криминальное HD","programsCount":262},{"name":"Россия К","programsCount":207},{"name":"Кухня ТВ","programsCount":380},{"name":"КВН ТВ","programsCount":99},{"name":"Liberty МиксMusic","programsCount":0},{"name":"Live Music Channel HD","programsCount":148},{"name":"Luxury HD","programsCount":294},{"name":"Magic Action","programsCount":81},{"name":"Magic Adventure","programsCount":83},{"name":"Magic Comedy","programsCount":90},{"name":"Magic Family","programsCount":96},{"name":"Magic Galaxy","programsCount":95},{"name":"Magic Horror","programsCount":93},{"name":"Magic Karate","programsCount":91},{"name":"Magic Love","programsCount":85},{"name":"Magic Russian","programsCount":96},{"name":"Magic Thriller","programsCount":87},{"name":"Magic VHS","programsCount":85},{"name":"Mezzo","programsCount":118},{"name":"Mezzo Live HD","programsCount":127},{"name":"MM 007 HD","programsCount":88},{"name":"MM Агата Кристи HD","programsCount":167},{"name":"MM Боевик HD","programsCount":107},{"name":"MM Боевик Classic HD","programsCount":105},{"name":"MM Celebrity HD","programsCount":88},{"name":"MM Classic HD","programsCount":150},{"name":"MM Комедия HD","programsCount":105},{"name":"MM Комедия Classic HD","programsCount":110},{"name":"MM Драма HD","programsCount":89},{"name":"MM Experiment HD","programsCount":183},{"name":"MM Семейный 1 HD","programsCount":109},{"name":"MM Семейный 2 HD","programsCount":124},{"name":"MM Фантастика HD","programsCount":100},{"name":"MM Фобия HD","programsCount":87},{"name":"MM Грайндхаус HD","programsCount":120},{"name":"MM История HD","programsCount":85},{"name":"MM Катастрофа HD","programsCount":48},{"name":"MM Киберпанк HD","programsCount":39},{"name":"MM Кинофестиваль HD","programsCount":94},{"name":"MM Криминал HD","programsCount":95},{"name":"MM Крутые 90-е HD","programsCount":203},{"name":"MM Кунг-Фу HD","programsCount":106},{"name":"MM Квартирник HD","programsCount":166},{"name":"MM Love HD","programsCount":95},{"name":"MM Мифология HD","programsCount":193},{"name":"MS Crime HD","programsCount":262},{"name":"MS Prisons HD","programsCount":171},{"name":"MS Young Blood HD","programsCount":92},{"name":"MM NewFilm 1 HD","programsCount":59},{"name":"MM NewFilm 2 HD","programsCount":103},{"name":"MM NewFilm 3 HD","programsCount":103},{"name":"MM NewFilm RU HD","programsCount":110},{"name":"MM Нуар HD","programsCount":113},{"name":"MM Открытия HD","programsCount":338},{"name":"MM Погружение HD","programsCount":58},{"name":"MM Приключения HD","programsCount":100},{"name":"MM Роскино HD","programsCount":88},{"name":"MM Синематограф HD","programsCount":85},{"name":"MM Ситком HD","programsCount":306},{"name":"MM Ситком 2.0 HD","programsCount":395},{"name":"MM Скорость HD","programsCount":103},{"name":"MM Спорт HD","programsCount":97},{"name":"MM Стивен Кинг HD","programsCount":168},{"name":"MM Супергерои HD","programsCount":88},{"name":"MM Сваты HD","programsCount":126},{"name":"MM Translation HD","programsCount":74},{"name":"MM Триллер HD","programsCount":100},{"name":"MM UFO HD","programsCount":97},{"name":"MM Ужасы HD","programsCount":111},{"name":"MM Ужасы Classic HD","programsCount":116},{"name":"MM Ужастик HD","programsCount":87},{"name":"MM USSR 1941-1945 HD","programsCount":53},{"name":"MM USSR Детектив HD","programsCount":126},{"name":"MM USSR Комедия HD","programsCount":110},{"name":"MM USSR Приключения HD","programsCount":86},{"name":"MM Воронины HD","programsCount":282},{"name":"MM Вестерн HD","programsCount":102},{"name":"MM Затмение HD","programsCount":110},{"name":"Моя стихия","programsCount":224},{"name":"Муви ТВ","programsCount":71},{"name":"Мужское кино HD","programsCount":108},{"name":"Мужской","programsCount":353},{"name":"Музыка Первого","programsCount":158},{"name":"Наш Кинопоказ HD","programsCount":111},{"name":"Наша Сибирь","programsCount":1877},{"name":"Любимое HD","programsCount":168},{"name":"Наше Мужское HD","programsCount":188},{"name":"Наше HD","programsCount":125},{"name":"Настоящее время HD","programsCount":220},{"name":"Nat Geo Wild","programsCount":243},{"name":"National Geographic","programsCount":243},{"name":"Ностальгия","programsCount":232},{"name":"НСТ","programsCount":111},{"name":"НТВ","programsCount":170},{"name":"НТВ-Беларусь","programsCount":217},{"name":"НТВ Право","programsCount":192},{"name":"НТВ Сериал","programsCount":185},{"name":"НТВ Стиль","programsCount":221},{"name":"НТВ-Хит","programsCount":250},{"name":"О2ТВ","programsCount":87},{"name":"Ocean TV","programsCount":262},{"name":"ОНТ","programsCount":184},{"name":"Оружие","programsCount":340},{"name":"Остросюжетное HD","programsCount":106},{"name":"Первый канал","programsCount":179},{"name":"Пятница!","programsCount":138},{"name":"Победа","programsCount":50},{"name":"Поехали!","programsCount":236},{"name":"Премиальное HD","programsCount":110},{"name":"Приключения HD","programsCount":289},{"name":"Private TV","programsCount":67},{"name":"Про Любовь","programsCount":104},{"name":"Психология 21","programsCount":319},{"name":"Redlight HD","programsCount":113},{"name":"Рен ТВ","programsCount":153},{"name":"Романтичное HD","programsCount":164},{"name":"Россия 1","programsCount":135},{"name":"RTG HD","programsCount":319},{"name":"RTG TV","programsCount":517},{"name":"РТР-Беларусь","programsCount":184},{"name":"Русская комедия","programsCount":122},{"name":"Сапфир","programsCount":164},{"name":"Сарафан","programsCount":229},{"name":"Scream","programsCount":102},{"name":"Шокирующее HD","programsCount":115},{"name":"Shot TV","programsCount":576},{"name":".sci-fi","programsCount":214},{"name":".black","programsCount":160},{"name":".red","programsCount":168},{"name":"Совершенно секретно","programsCount":227},{"name":"Star Family Россия","programsCount":187},{"name":"Страшное HD","programsCount":118},{"name":"СТС","programsCount":132},{"name":"СТС Love","programsCount":388},{"name":"СТВ Беларусь","programsCount":177},{"name":"Суббота!","programsCount":227},{"name":"Светлое ТВ","programsCount":1266},{"name":"Телекафе","programsCount":158},{"name":"Т24","programsCount":157},{"name":"TLC","programsCount":194},{"name":"ТНТ","programsCount":233},{"name":"ТНТ-Music","programsCount":160},{"name":"ТНТ4","programsCount":299},{"name":"Точка отрыва","programsCount":329},{"name":"Точка","programsCount":172},{"name":"Travel+Adventure","programsCount":243},{"name":"Travel Channel","programsCount":173},{"name":"Travel XP HD","programsCount":336},{"name":"Viasat Kino Action","programsCount":99},{"name":"Viasat Kino","programsCount":89},{"name":"Viasat Kino World","programsCount":100},{"name":"ТВ3 Беларусь","programsCount":113},{"name":"ТВ3","programsCount":203},{"name":"Усадьба","programsCount":426},{"name":"В мире животных HD","programsCount":246},{"name":"VeleS 60FPS","programsCount":58},{"name":"VeleS Dj Set","programsCount":62},{"name":"VeleS Киносерия","programsCount":146},{"name":"VeleS Магнитофон","programsCount":0},{"name":"VeleS Movie Hits","programsCount":56},{"name":"VeleS Premiere","programsCount":47},{"name":"VeleS СССР","programsCount":89},{"name":"VeleS Страшное","programsCount":60},{"name":"VF Привет из 90х","programsCount":1639},{"name":"VF Adventure","programsCount":99},{"name":"VF Американская история ужасов","programsCount":227},{"name":"VF Art house","programsCount":90},{"name":"VF Беларусьфильм","programsCount":88},{"name":"VF Без цензуры","programsCount":247},{"name":"VF Боевик","programsCount":104},{"name":"VF Чернобыль","programsCount":107},{"name":"VF Classic","programsCount":111},{"name":"VF Comedy","programsCount":97},{"name":"VF Comedy Woman","programsCount":220},{"name":"VF Comics","programsCount":83},{"name":"VF Detective","programsCount":96},{"name":"VF Джеки Чан","programsCount":99},{"name":"VF Family","programsCount":109},{"name":"VF Fantastic","programsCount":88},{"name":"VF Fantasy","programsCount":96},{"name":"VF Фильмы СССР","programsCount":132},{"name":"VF Друзья","programsCount":447},{"name":"VF Леонид Гайдай","programsCount":65},{"name":"VF Городок","programsCount":42},{"name":"VF HBO","programsCount":197},{"name":"VF Доктор Хаус","programsCount":230},{"name":"VF Игра престолов","programsCount":180},{"name":"VF Индия","programsCount":70},{"name":"VF История","programsCount":102},{"name":"VF Катастрофы","programsCount":92},{"name":"VF Киностудия им. Горького","programsCount":121},{"name":"VF Классика","programsCount":109},{"name":"VF Комедия","programsCount":110},{"name":"VF Криминал","programsCount":215},{"name":"VF Ленфильм","programsCount":91},{"name":"VF Луи де Фюнес","programsCount":108},{"name":"VF Marvel","programsCount":114},{"name":"VF Melodrama","programsCount":108},{"name":"VF Мосфильм","programsCount":128},{"name":"VF Мыльные оперы","programsCount":249},{"name":"VF Mystic","programsCount":95},{"name":"VF Наша Раша","programsCount":275},{"name":"VF Netflix","programsCount":198},{"name":"VF Одесская киностудия","programsCount":130},{"name":"VF Однажды в России","programsCount":220},{"name":"VF Оскар","programsCount":79},{"name":"VF Наша победа","programsCount":143},{"name":"VF Премьера","programsCount":127},{"name":"VF Premiere","programsCount":94},{"name":"VF Реальные пацаны","programsCount":446},{"name":"VF Рижская киностудия","programsCount":106},{"name":"VF Эльдар Рязанов","programsCount":92},{"name":"VF СашаТаня","programsCount":458},{"name":"VF Сериал","programsCount":254},{"name":"VF Series","programsCount":192},{"name":"VF След","programsCount":261},{"name":"VF Солдаты","programsCount":225},{"name":"VF Сверхъестественное","programsCount":245},{"name":"VF Свердловская киностудия","programsCount":95},{"name":"VF Сваты","programsCount":158},{"name":"VF Тайны следствия","programsCount":209},{"name":"VF Thriller","programsCount":100},{"name":"VF TOP Series","programsCount":197},{"name":"VF Универ","programsCount":445},{"name":"VF Универ новая общага","programsCount":260},{"name":"VF Ужасы","programsCount":105},{"name":"VF Ужасы VHS","programsCount":111},{"name":"VF Военные","programsCount":89},{"name":"VF Воронины","programsCount":422},{"name":"VF Ходячие мертвецы","programsCount":224},{"name":"VF The X-Files","programsCount":229},{"name":"viju History","programsCount":210},{"name":"Viasat Kino Comedy","programsCount":92},{"name":"viju+ Comedy","programsCount":106},{"name":"Viasat Kino Megahit","programsCount":0},{"name":"viju+ Megahit","programsCount":97},{"name":"viju+ Premiere","programsCount":100},{"name":"Время","programsCount":90},{"name":"Загородный","programsCount":336},{"name":"Здоровое ТВ","programsCount":538},{"name":"Живая природа","programsCount":3404},{"name":"Звезда","programsCount":226},{"name":"Ю","programsCount":77},{"name":"ТВ-21M","programsCount":92},{"name":"RU.TV","programsCount":109},{"name":"8 канал [BY]","programsCount":169},{"name":"Пятый канал","programsCount":240},{"name":"Мир","programsCount":202},{"name":"Яснае ТВ","programsCount":204},{"name":"ТВ Центр","programsCount":217},{"name":"ТНТ-International (Беларусь)","programsCount":140},{"name":"Наука 2.0","programsCount":298},{"name":"Живи активно","programsCount":400},{"name":"Живи","programsCount":357},{"name":"World Fashion Channel","programsCount":1726},{"name":"Extreme sports","programsCount":127},{"name":"Моя Планета","programsCount":248},{"name":"Киносат","programsCount":105},{"name":"Калейдоскоп ТВ","programsCount":246},{"name":"viju Explore","programsCount":200},{"name":"viju Nature","programsCount":201},{"name":"viju+ Planet","programsCount":282},{"name":"Terra","programsCount":209},{"name":"Авто24","programsCount":604},{"name":"Galaxy-TV","programsCount":251},{"name":"Советское кино","programsCount":123},{"name":"Plan B","programsCount":136},{"name":"Russian Extreme Ultra HD","programsCount":181},{"name":"Ultra HD Cinema","programsCount":105},{"name":"Кино UHD","programsCount":137},{"name":"Русский иллюзион","programsCount":104},{"name":"Русский роман","programsCount":68},{"name":"Русский детектив","programsCount":198},{"name":"Русский бестселлер","programsCount":185},{"name":"Охота и рыбалка","programsCount":319},{"name":"Охотник и рыболов","programsCount":323},{"name":"Наша тема","programsCount":346},{"name":"Диалоги о рыбалке","programsCount":373},{"name":"Love Nature 4K","programsCount":141},{"name":"Start World","programsCount":172},{"name":"Start Air","programsCount":270},{"name":"Мир сериала","programsCount":189},{"name":"Кто Куда","programsCount":437},{"name":"AMC","programsCount":118},{"name":"Звезда Плюс","programsCount":234},{"name":"FlixSnip","programsCount":848},{"name":"Наше новое кино","programsCount":114},{"name":"Любимое кино","programsCount":91},{"name":"Родное кино","programsCount":133},{"name":"Kinojam 1","programsCount":135},{"name":"Kinojam 2","programsCount":111},{"name":"Еда Премиум Int. HD","programsCount":451},{"name":"FoodTime","programsCount":373},{"name":"Кус-кус","programsCount":780},{"name":"Fast&FunBox HD","programsCount":319},{"name":"FilmBox Russia","programsCount":108},{"name":"FilmBox ArtHouse","programsCount":166},{"name":"КиноСезон","programsCount":167},{"name":"Дом кино Премиум","programsCount":84},{"name":"Мосфильм. Золотая коллекция","programsCount":119},{"name":"Star Cinema Россия","programsCount":188},{"name":"Cinema Cosmos TV","programsCount":99},{"name":"Cinema","programsCount":91},{"name":"Bolt Россия","programsCount":193},{"name":"Novella TV","programsCount":61},{"name":"viju TV1000","programsCount":97},{"name":"viju TV1000 Русское","programsCount":129},{"name":"viju TV1000 Новелла","programsCount":99},{"name":"viju TV1000 romantica","programsCount":161},{"name":"viju TV1000 Action","programsCount":90},{"name":"viju+ Serial","programsCount":190},{"name":"VHS-ка","programsCount":98},{"name":"KinoLiving","programsCount":146},{"name":"Кино без границ","programsCount":166},{"name":"Кинеко","programsCount":178},{"name":"FX","programsCount":258},{"name":"FX Life","programsCount":247},{"name":"Trash","programsCount":106},{"name":"Insight TV HD","programsCount":344},{"name":"ID Xtra EU","programsCount":176},{"name":"Квартал ТВ","programsCount":154},{"name":"Нано","programsCount":145},{"name":"Iнтер+","programsCount":268},{"name":"RTVi","programsCount":185},{"name":"Загородная жизнь","programsCount":401},{"name":"Загородный International","programsCount":421},{"name":"YOSSO TV Travel","programsCount":233},{"name":"YOSSO TV Science","programsCount":112},{"name":"CineMan Скорая помощь","programsCount":229},{"name":"CineMan Melodrama","programsCount":93},{"name":"CineMan Комедия","programsCount":106},{"name":"CineMan MiniSeries","programsCount":197},{"name":"BOX Franchise HD","programsCount":80},{"name":"BOX Hybrid HD","programsCount":102},{"name":"BOX Gangster HD","programsCount":92},{"name":"BOX Spy HD","programsCount":92},{"name":"BOX Oscar HD","programsCount":78},{"name":"BOX Serial HD","programsCount":199},{"name":"BCU RUSerial HD","programsCount":307},{"name":"BCU Criminal HD","programsCount":94},{"name":"VF VHS","programsCount":93},{"name":"YOSSO TV Grand","programsCount":83},{"name":"YOSSO TV VHS","programsCount":95},{"name":"YOSSO TV Русские фильмы","programsCount":94},{"name":"YOSSO TV Советские фильмы","programsCount":114},{"name":"YOSSO TV New Кино","programsCount":95},{"name":"YOSSO TV Трагичное","programsCount":99},{"name":"YOSSO TV Забавное","programsCount":97},{"name":"YOSSO TV BEST","programsCount":90},{"name":"YOSSO TV Ковбойское","programsCount":109},{"name":"YOSSO TV Adrenaline","programsCount":97},{"name":"YOSSO TV Oblivion","programsCount":63},{"name":"YOSSO TV Adventure","programsCount":85},{"name":"YOSSO TV Thriller","programsCount":96},{"name":"YOSSO TV Мелодрама","programsCount":39},{"name":"YOSSO TV Netflix","programsCount":93},{"name":"YOSSO TV BEST 60fps","programsCount":91},{"name":"C-History","programsCount":86},{"name":"C-Inquest","programsCount":83},{"name":"C-Marvel","programsCount":70},{"name":"Fresh VHS","programsCount":81},{"name":"VeleS Киноплёнка","programsCount":46},{"name":"VeleS Криминальный","programsCount":36},{"name":"Первый музыкальный","programsCount":88},{"name":"1HD Music","programsCount":121},{"name":"Муз-ТВ","programsCount":179},{"name":"Телеканал Радио Страна ФМ","programsCount":139},{"name":"Bridge TV Deluxe","programsCount":175},{"name":"Жара","programsCount":155},{"name":"EU.Music","programsCount":43},{"name":"VIVA Russia","programsCount":108},{"name":"Жар Птица","programsCount":105},{"name":"MCM Top","programsCount":34},{"name":"Шансон-TB","programsCount":139},{"name":"YOSSO TV Music Hits","programsCount":57},{"name":"Рыбалка и охота","programsCount":386},{"name":"МузТВ Беларусь","programsCount":72},{"name":"Oasis Action","programsCount":67},{"name":"Oasis Comedy","programsCount":103},{"name":"Oasis Soviet Comedy","programsCount":33},{"name":"Oasis Detective","programsCount":42},{"name":"Oasis Drama","programsCount":45},{"name":"Oasis DC","programsCount":64},{"name":"Oasis Marvel","programsCount":47},{"name":"Oasis Family","programsCount":59},{"name":"Oasis Мелодрама","programsCount":47},{"name":"Oasis Horror","programsCount":51},{"name":"Oasis Old Horrors","programsCount":25},{"name":"Oasis Comedy Horrors","programsCount":92},{"name":"Oasis Biography","programsCount":78},{"name":"Oasis Mafia","programsCount":71},{"name":"Oasis Фантастика","programsCount":37},{"name":"Oasis Тайны Смолвиля","programsCount":94},{"name":"Oasis Ufo And Aliens","programsCount":47},{"name":"Oasis Alien and Predator","programsCount":20},{"name":"Oasis Celentano Brando Connery","programsCount":20},{"name":"Oasis Demon Slayer and Dororo","programsCount":60},{"name":"Oasis Serkan Bolat","programsCount":127},{"name":"Oasis Миядзаки","programsCount":23},{"name":"Oasis In English","programsCount":27},{"name":"Oasis RUS Драма","programsCount":23},{"name":"Oasis RUS Комедии","programsCount":24},{"name":"Oasis RUS Сериалы","programsCount":232},{"name":"Oasis RUS Сериалы Драма","programsCount":125},{"name":"Oasis Superheroes Сериалы","programsCount":65},{"name":"Oasis Корейские Сериалы","programsCount":79},{"name":"Oasis Латиноамериканские Сериалы","programsCount":246},{"name":"Oasis Учим Английский","programsCount":117},{"name":"Oasis Учим Испанский","programsCount":281},{"name":"Oasis USA Series","programsCount":222},{"name":"Oasis Кухня Отель","programsCount":234},{"name":"KLI Premium HD","programsCount":176},{"name":"KLI History HD","programsCount":101},{"name":"KLI Russian HD","programsCount":153},{"name":"KLI VHS HD","programsCount":205},{"name":"KLI Thriller HD","programsCount":210},{"name":"KLI USSR HD","programsCount":142},{"name":"KLI Family HD","programsCount":130},{"name":"KLI Kinoseries","programsCount":216},{"name":"KLI Horror HD","programsCount":54},{"name":"KLI Drama HD","programsCount":111},{"name":"KLI Fantasy HD","programsCount":131},{"name":"KLI Сериал HD","programsCount":125},{"name":"KLI Netflix HD","programsCount":164},{"name":"KLI Marvel HD","programsCount":122},{"name":"KLI Новинки HD","programsCount":79},{"name":"KLI Franchise HD","programsCount":131},{"name":"KLI Однажды в России HD","programsCount":149},{"name":"KLI Relax HD","programsCount":143},{"name":"Cobra Detektiv HD","programsCount":721},{"name":"Cobra Thriller HD","programsCount":166},{"name":"Cobra Drama HD","programsCount":49},{"name":"Cobra Melodrama HD","programsCount":188},{"name":"Cobra Comedy HD","programsCount":193},{"name":"Velilla TV Русский Сериал HD","programsCount":211},{"name":"Velilla TV Домашний HD","programsCount":95},{"name":"Velilla TV Мосгаз HD","programsCount":88},{"name":"Velilla TV Морские дьяволы HD","programsCount":77},{"name":"Liberty Medval 4K","programsCount":81},{"name":"TOP 80","programsCount":48},{"name":"TOP BUDO HD","programsCount":166},{"name":"TOP CINEMA HD","programsCount":131},{"name":"TOP MIX HD","programsCount":2705}];
-        
-        function displayChannels(filterText) {
-            const grid = document.getElementById('channelsGrid');
-            const filtered = filterText 
-                ? channelsData.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase()))
-                : channelsData;
-            
-            grid.innerHTML = filtered.map(c => `
-                <div class="channel-item">
-                    <div class="channel-name">${c.name}</div>
-                </div>
-            `).join('');
-        }
-        
-        function filterChannels() {
-            displayChannels(document.getElementById('searchBox').value);
-        }
-        
-        function toggleSpoiler() {
-            const content = document.getElementById('spoilerContent');
-            const btn = document.querySelector('.spoiler-btn');
-            const text = document.getElementById('spoilerText');
-            
-            if (content.classList.contains('active')) {
-                content.classList.remove('active');
-                btn.classList.remove('active');
-                text.textContent = 'Показать все каналы';
-            } else {
-                content.classList.add('active');
-                btn.classList.add('active');
-                text.textContent = 'Скрыть каналы';
-                displayChannels('');
-            }
-        }
-    </script>
 </body>
 </html>
