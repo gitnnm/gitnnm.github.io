@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPG Программа телепередач</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -18,347 +13,202 @@
             padding: 20px;
             color: #333;
         }
-        
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
         h1 {
+            text-align: center;
             color: #2d3748;
-            font-size: 2.5em;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
-        
-        .tv-icon {
-            font-size: 1.2em;
-        }
-        
         .subtitle {
+            text-align: center;
             color: #718096;
-            font-size: 1.1em;
+            margin-bottom: 30px;
         }
-        
-        .files-container {
+        .stats {
             display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            margin-bottom: 30px;
         }
-        
-        .file-card {
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .stat-label {
+            opacity: 0.9;
+        }
+        .download-section {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 25px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            text-align: center;
         }
-        
-        .file-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
-        }
-        
-        .file-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .file-name {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #2d3748;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .file-icon {
-            color: #667eea;
-        }
-        
-        .status-badge {
-            background: #48bb78;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .info-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .info-label {
-            display: block;
-            color: #718096;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-        
-        .info-value {
-            display: block;
-            font-size: 1.1em;
-            font-weight: 500;
-            color: #2d3748;
-        }
-        
         .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            display: inline-block;
             background: #667eea;
             color: white;
             text-decoration: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 1.2em;
+            margin-top: 15px;
         }
-        
         .download-btn:hover {
             background: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+        .spoiler-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .spoiler-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .spoiler-content.active {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        .channel-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .channel-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .channel-meta {
+            font-size: 0.85em;
+            color: #718096;
+        }
+        .source-badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
         .last-updated {
             text-align: center;
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
             color: #718096;
-            font-size: 0.9em;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-        }
-        
-        .error {
-            background: #fed7d7;
-            color: #c53030;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2em;
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>
-                <span class="tv-icon">📺</span>
-                EPG Программа телепередач
-            </h1>
-            <p class="subtitle">Автоматически обновляемые XMLTV файлы</p>
-        </header>
+        <h1>📺 EPG Программа телепередач</h1>
+        <p class="subtitle">Автоматически обновляемый XMLTV файл</p>
         
-        <main id="app">
-            <div class="loading" id="loading">
-                Загрузка информации о файлах...
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">676</div>
+                <div class="stat-label">Каналов</div>
             </div>
-        </main>
+            <div class="stat-card">
+                <div class="stat-value">118540</div>
+                <div class="stat-label">Программ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Источника</div>
+            </div>
+        </div>
         
-        <footer class="last-updated" id="lastUpdated">
-            <!-- Здесь будет время обновления страницы -->
-        </footer>
+        <div class="download-section">
+            <h2>📁 epg.xml.gz</h2>
+            <p>Обновлено: 08.04.2026, 12:47:02</p>
+            <a href="epg.xml.gz" class="download-btn" download>⬇️ Скачать EPG файл</a>
+        </div>
+        
+        <button class="spoiler-btn" onclick="toggleSpoiler()">
+            <span id="spoilerIcon">▶</span> Показать список каналов
+        </button>
+        
+        <div class="spoiler-content" id="spoilerContent">
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Поиск канала..." onkeyup="filterChannels()">
+            <div class="channels-grid" id="channelsGrid"></div>
+        </div>
+        
+        <div class="last-updated">
+            Страница сгенерирована: 08.04.2026, 12:47:02
+        </div>
     </div>
-
+    
     <script>
-        // Конфигурация
-        const CONFIG = {
-            repoOwner: 'gitnnm',  // Замените на ваш логин
-            repoName: 'gitnnm.github.io',    // Замените на имя репозитория
-            files: ['epg.xml.gz', 'epg2.xml.gz']  // Список отслеживаемых файлов
-        };
-
-        // Функция для форматирования размера файла
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Функция для форматирования даты
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleString('ru-RU', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short'
-            });
-        }
-
-        // Функция для получения информации о файле
-        async function getFileInfo(fileName) {
-            try {
-                // Получаем информацию о файле
-                const fileResponse = await fetch(
-                    `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/contents/${fileName}`
-                );
-                
-                if (!fileResponse.ok) throw new Error('Файл не найден');
-                
-                const fileData = await fileResponse.json();
-                
-                // Получаем последний коммит для этого файла
-                const commitResponse = await fetch(
-                    `https://api.github.com/repos/${CONFIG.repoOwner}/${CONFIG.repoName}/commits?path=${fileName}&per_page=1`
-                );
-                
-                const commits = await commitResponse.json();
-                const lastCommit = commits[0];
-                
-                return {
-                    name: fileName,
-                    size: fileData.size,
-                    sizeFormatted: formatFileSize(fileData.size),
-                    downloadUrl: fileData.download_url,
-                    lastCommit: {
-                        date: lastCommit?.commit?.committer?.date || new Date().toISOString(),
-                        message: lastCommit?.commit?.message || 'Нет информации',
-                        author: lastCommit?.commit?.author?.name || 'Неизвестно'
-                    }
-                };
-            } catch (error) {
-                console.error(`Ошибка загрузки информации о файле ${fileName}:`, error);
-                return null;
-            }
-        }
-
-        // Функция для отображения информации о файле
-        function renderFileCard(fileInfo) {
-            return `
-                <div class="file-card">
-                    <div class="file-header">
-                        <div class="file-name">
-                            <span class="file-icon">📁</span>
-                            ${fileInfo.name}
-                        </div>
-                        <span class="status-badge">Актуально</span>
-                    </div>
-                    
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">Размер файла</span>
-                            <span class="info-value">${fileInfo.sizeFormatted}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Последнее обновление</span>
-                            <span class="info-value">${formatDate(fileInfo.lastCommit.date)}</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Автор обновления</span>
-                            <span class="info-value">${fileInfo.lastCommit.author}</span>
-                        </div>
-                    </div>
-                    
-                    <a href="${fileInfo.downloadUrl}" class="download-btn" download>
-                        <span>⬇️</span> Скачать файл
-                    </a>
-                </div>
-            `;
-        }
-
-        // Основная функция загрузки
-        async function loadFilesInfo() {
-            const app = document.getElementById('app');
-            
-            try {
-                // Загружаем информацию о всех файлах
-                const filePromises = CONFIG.files.map(file => getFileInfo(file));
-                const filesInfo = await Promise.all(filePromises);
-                
-                // Фильтруем существующие файлы
-                const existingFiles = filesInfo.filter(file => file !== null);
-                
-                if (existingFiles.length === 0) {
-                    app.innerHTML = '<div class="error">Файлы не найдены в репозитории</div>';
-                    return;
-                }
-                
-                // Отображаем файлы
-                app.innerHTML = `
-                    <div class="files-container">
-                        ${existingFiles.map(fileInfo => renderFileCard(fileInfo)).join('')}
-                    </div>
-                `;
-                
-                // Обновляем информацию о последнем обновлении страницы
-                document.getElementById('lastUpdated').textContent = 
-                    `Информация обновлена: ${formatDate(new Date().toISOString())}`;
-                    
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                app.innerHTML = `
-                    <div class="error">
-                        <strong>Ошибка загрузки данных:</strong><br>
-                        ${error.message}<br><br>
-                        Убедитесь, что:<br>
-                        1. Репозиторий публичный<br>
-                        2. Файлы существуют в корне репозитория<br>
-                        3. CORS политики не блокируют запросы
-                    </div>
-                `;
-            }
-        }
-
-        // Запускаем загрузку при открытии страницы
-        document.addEventListener('DOMContentLoaded', loadFilesInfo);
+        const channelsData = [{"name":"KION Хит","source":"IPTVX","programsCount":163},{"name":"4ever Drama","source":"IPTVX","programsCount":35},{"name":"4ever Theater","source":"IPTVX","programsCount":33},{"name":"Liberty DC","source":"IPTVX","programsCount":140},{"name":"Liberty Короткометражный","source":"IPTVX","programsCount":197},{"name":"Liberty Мелодрамы","source":"IPTVX","programsCount":89},{"name":"Liberty Боевики","source":"IPTVX","programsCount":91},{"name":"Liberty Сваты","source":"IPTVX","programsCount":81},{"name":"Liberty Комедии","source":"IPTVX","programsCount":101},{"name":"Liberty Сериалы","source":"IPTVX","programsCount":215},{"name":"Liberty Занавес","source":"IPTVX","programsCount":91},{"name":"Liberty Шоу","source":"IPTVX","programsCount":182},{"name":"Liberty Fan","source":"IPTVX","programsCount":78},{"name":"Liberty Marvel","source":"IPTVX","programsCount":122},{"name":"Liberty South Park","source":"IPTVX","programsCount":304},{"name":"Liberty Планктон","source":"IPTVX","programsCount":417},{"name":"KBC-Ultra","source":"IPTVX","programsCount":72},{"name":"KBC-Кошмарное","source":"IPTVX","programsCount":79},{"name":"KBC-Видак","source":"IPTVX","programsCount":70},{"name":"KBC-Драмаtic","source":"IPTVX","programsCount":71},{"name":"KBC-Elite Comedys","source":"IPTVX","programsCount":79},{"name":"KBC-Russian Комедия","source":"IPTVX","programsCount":86},{"name":"KBC-ВОВ","source":"IPTVX","programsCount":84},{"name":"KBC-Страна СССР","source":"IPTVX","programsCount":84},{"name":"KBC-Шпионское","source":"IPTVX","programsCount":66},{"name":"KBC-Comics","source":"IPTVX","programsCount":69},{"name":"KBC-History","source":"IPTVX","programsCount":64},{"name":"KBC-Fantastic","source":"IPTVX","programsCount":72},{"name":"KBC-Гай Ritchie And Tarantino","source":"IPTVX","programsCount":65},{"name":"KBC-Newfilm","source":"IPTVX","programsCount":73},{"name":"KBC-Goblin","source":"IPTVX","programsCount":72},{"name":"KBC-Вестерн","source":"IPTVX","programsCount":69},{"name":"KBC-WAR","source":"IPTVX","programsCount":63},{"name":"KBC-MusKino","source":"IPTVX","programsCount":78},{"name":"KBC-СпортМикс","source":"IPTVX","programsCount":73},{"name":"Gold Line Brief","source":"IPTVX","programsCount":118},{"name":"Gold Line Evidence","source":"IPTVX","programsCount":155},{"name":"Gold Line Exist","source":"IPTVX","programsCount":173},{"name":"Gold Line Island","source":"IPTVX","programsCount":129},{"name":"Gold Line Naked&Funny","source":"IPTVX","programsCount":250},{"name":"Gold Line Psycho","source":"IPTVX","programsCount":132},{"name":"Gold Line Series","source":"IPTVX","programsCount":140},{"name":"Gold Line Survival","source":"IPTVX","programsCount":142},{"name":"Gold Line Детектив","source":"IPTVX","programsCount":92},{"name":"Gold Line Невский","source":"IPTVX","programsCount":164},{"name":"Quadro 4K","source":"IPTVX","programsCount":244},{"name":"Home 4K","source":"IPTVX","programsCount":2954},{"name":"MyZen 4К","source":"IPTVX","programsCount":224},{"name":"Liberty Кино ENG","source":"IPTVX","programsCount":88},{"name":"Liberty Легенда","source":"IPTVX","programsCount":38},{"name":"Liberty РусФильм","source":"IPTVX","programsCount":70},{"name":"Liberty Кино Микс","source":"IPTVX","programsCount":83},{"name":"Liberty Индия","source":"IPTVX","programsCount":335},{"name":"Liberty Netflix","source":"IPTVX","programsCount":82},{"name":"Liberty Куб","source":"IPTVX","programsCount":432},{"name":"Liberty Семейный","source":"IPTVX","programsCount":91},{"name":"Liberty Триллеры","source":"IPTVX","programsCount":87},{"name":"Liberty Ужасы","source":"IPTVX","programsCount":58},{"name":"Liberty ТуркФильм","source":"IPTVX","programsCount":125},{"name":"Liberty Союз","source":"IPTVX","programsCount":37},{"name":"Liberty XX Век","source":"IPTVX","programsCount":60},{"name":"Liberty Криминал","source":"IPTVX","programsCount":73},{"name":"Liberty Аванпост","source":"IPTVX","programsCount":59},{"name":"Liberty Dreamworks","source":"IPTVX","programsCount":81},{"name":"Liberty Мюзикл","source":"IPTVX","programsCount":62},{"name":"Clarity4K КиноНовинки","source":"IPTVX","programsCount":93},{"name":"Clarity4K КиноФраншизы","source":"IPTVX","programsCount":74},{"name":"Clarity4K Netflix","source":"IPTVX","programsCount":93},{"name":"Clarity4K HBO series","source":"IPTVX","programsCount":179},{"name":"Clarity4K Фантастика","source":"IPTVX","programsCount":87},{"name":"Clarity4K Фэнтези","source":"IPTVX","programsCount":66},{"name":"Clarity4K Galaxy Films","source":"IPTVX","programsCount":80},{"name":"Clarity4K Сумеречный Эфир","source":"IPTVX","programsCount":95},{"name":"Clarity4K Приключения","source":"IPTVX","programsCount":86},{"name":"Clarity4K Боевик","source":"IPTVX","programsCount":87},{"name":"Clarity4K Боевик VHS","source":"IPTVX","programsCount":89},{"name":"Clarity4K Триллер","source":"IPTVX","programsCount":0},{"name":"Clarity4K Комедия","source":"IPTVX","programsCount":100},{"name":"Clarity4K Комедия VHS","source":"IPTVX","programsCount":102},{"name":"Clarity4K Ужасы","source":"IPTVX","programsCount":92},{"name":"Clarity4K Ужасы VHS","source":"IPTVX","programsCount":96},{"name":"Clarity4K Драмы","source":"IPTVX","programsCount":90},{"name":"Clarity4K Запал","source":"IPTVX","programsCount":217},{"name":"Clarity4K Gamefilm","source":"IPTVX","programsCount":80},{"name":"Clarity4K Семейный","source":"IPTVX","programsCount":101},{"name":"Clarity4K КиноШарм","source":"IPTVX","programsCount":106},{"name":"Clarity4K Русские сериалы","source":"IPTVX","programsCount":233},{"name":"Clarity4K Молодежные комедии","source":"IPTVX","programsCount":108},{"name":"Clarity4K Классика кино","source":"IPTVX","programsCount":85},{"name":"Clarity4K КиноСССР","source":"IPTVX","programsCount":120},{"name":"Clarity4K Kинодети CССР","source":"IPTVX","programsCount":144},{"name":"Clarity4K Комедия СССР 1","source":"IPTVX","programsCount":140},{"name":"Clarity4K Комедия СССР 2","source":"IPTVX","programsCount":119},{"name":"Аппетитный","source":"IPTVX","programsCount":348},{"name":"DetectiveJam","source":"IPTVX","programsCount":71},{"name":"Super Baltic","source":"IPTVX","programsCount":143},{"name":"Super Plus","source":"IPTVX","programsCount":160},{"name":"1+1","source":"IPTVX","programsCount":202},{"name":"2x2","source":"IPTVX","programsCount":533},{"name":"2+2","source":"IPTVX","programsCount":78},{"name":"365 дней ТВ","source":"IPTVX","programsCount":225},{"name":"4ever Music","source":"IPTVX","programsCount":88},{"name":"AIVA","source":"IPTVX","programsCount":335},{"name":"A HOME OF HBO 1","source":"IPTVX","programsCount":208},{"name":"A HOME OF HBO 2","source":"IPTVX","programsCount":203},{"name":"А1","source":"IPTVX","programsCount":221},{"name":"А2","source":"IPTVX","programsCount":246},{"name":"Анекдот ТВ","source":"IPTVX","programsCount":948},{"name":"Animal Planet HD","source":"IPTVX","programsCount":202},{"name":"Арсенал ТВ","source":"IPTVX","programsCount":223},{"name":"Авто Плюс","source":"IPTVX","programsCount":792},{"name":"Barely Legal","source":"IPTVX","programsCount":134},{"name":"BCU Action HD","source":"IPTVX","programsCount":92},{"name":"BCU Catastrophe HD","source":"IPTVX","programsCount":97},{"name":"BCU Cinema HD","source":"IPTVX","programsCount":86},{"name":"BCU Cinema+ HD","source":"IPTVX","programsCount":107},{"name":"BCU Comedy HD","source":"IPTVX","programsCount":98},{"name":"BCU Cosmo HD","source":"IPTVX","programsCount":93},{"name":"BCU Fantastic HD","source":"IPTVX","programsCount":90},{"name":"BCU FilMystic HD","source":"IPTVX","programsCount":99},{"name":"BCU History HD","source":"IPTVX","programsCount":61},{"name":"BCU Kinorating HD","source":"IPTVX","programsCount":89},{"name":"BCU Кинозал Premiere 1 HD","source":"IPTVX","programsCount":88},{"name":"BCU Кинозал Premiere 2 HD","source":"IPTVX","programsCount":62},{"name":"BCU Кинозал Premiere 3 HD","source":"IPTVX","programsCount":101},{"name":"BCU Marvel HD","source":"IPTVX","programsCount":80},{"name":"BCU Kinozakaz","source":"IPTVX","programsCount":101},{"name":"BCU Premiere HD","source":"IPTVX","programsCount":101},{"name":"BCU Reality HD","source":"IPTVX","programsCount":85},{"name":"BCU Romantic HD","source":"IPTVX","programsCount":90},{"name":"BCU Russian HD","source":"IPTVX","programsCount":104},{"name":"BCU Кинозал СССР","source":"IPTVX","programsCount":140},{"name":"BCU Stars HD","source":"IPTVX","programsCount":101},{"name":"BCU Survival HD","source":"IPTVX","programsCount":97},{"name":"BCU Сваты HD","source":"IPTVX","programsCount":227},{"name":"BCU TruMotion HD","source":"IPTVX","programsCount":84},{"name":"BCU VHS HD","source":"IPTVX","programsCount":90},{"name":"Беларусь 1 HD","source":"IPTVX","programsCount":178},{"name":"Беларусь 2 HD","source":"IPTVX","programsCount":150},{"name":"Беларусь 3 HD","source":"IPTVX","programsCount":144},{"name":"BelSat","source":"IPTVX","programsCount":320},{"name":"Кино 1","source":"IPTVX","programsCount":98},{"name":"Кино 2","source":"IPTVX","programsCount":97},{"name":"Военное кино","source":"IPTVX","programsCount":105},{"name":"Big Planet","source":"IPTVX","programsCount":249},{"name":"Блокбастер HD","source":"IPTVX","programsCount":91},{"name":"Бобер","source":"IPTVX","programsCount":137},{"name":"Bollywood","source":"IPTVX","programsCount":74},{"name":"BOX Cyber HD","source":"IPTVX","programsCount":95},{"name":"BOX Memory HD","source":"IPTVX","programsCount":194},{"name":"BOX Metall HD","source":"IPTVX","programsCount":59},{"name":"BOX Mayday HD","source":"IPTVX","programsCount":227},{"name":"BOX RU.RAP HD","source":"IPTVX","programsCount":86},{"name":"BOX Stories HD","source":"IPTVX","programsCount":349},{"name":"BOX Travel HD","source":"IPTVX","programsCount":222},{"name":"BOX Travel Premiere HD","source":"IPTVX","programsCount":179},{"name":"BOX Western HD","source":"IPTVX","programsCount":91},{"name":"BOX Zombie HD","source":"IPTVX","programsCount":71},{"name":"Bridge TV","source":"IPTVX","programsCount":79},{"name":"Че","source":"IPTVX","programsCount":285},{"name":"CineMan","source":"IPTVX","programsCount":97},{"name":"CineMan Action","source":"IPTVX","programsCount":93},{"name":"CineMan Катастрофы","source":"IPTVX","programsCount":94},{"name":"CineMan Marvel","source":"IPTVX","programsCount":80},{"name":"CineMan Сваты","source":"IPTVX","programsCount":224},{"name":"CineMan Thriller","source":"IPTVX","programsCount":98},{"name":"CineMan Top","source":"IPTVX","programsCount":80},{"name":"CineMan Ужасы","source":"IPTVX","programsCount":104},{"name":"CineMan VHS","source":"IPTVX","programsCount":97},{"name":"Curiosity Stream","source":"IPTVX","programsCount":340},{"name":"Дача","source":"IPTVX","programsCount":291},{"name":"День Победы","source":"IPTVX","programsCount":113},{"name":"Дикая охота HD","source":"IPTVX","programsCount":311},{"name":"Дикая рыбалка HD","source":"IPTVX","programsCount":307},{"name":"Дикий HD","source":"IPTVX","programsCount":279},{"name":"Discovery Channel","source":"IPTVX","programsCount":199},{"name":"Discovery Science","source":"IPTVX","programsCount":285},{"name":"DocuBox HD","source":"IPTVX","programsCount":287},{"name":"Доктор","source":"IPTVX","programsCount":347},{"name":"Домашний","source":"IPTVX","programsCount":221},{"name":"Дом кино","source":"IPTVX","programsCount":75},{"name":"Dorcel","source":"IPTVX","programsCount":156},{"name":"Дождь","source":"IPTVX","programsCount":328},{"name":"Драйв","source":"IPTVX","programsCount":384},{"name":"Душевное HD","source":"IPTVX","programsCount":126},{"name":"Epic Drama","source":"IPTVX","programsCount":137},{"name":"Европа Плюс ТВ","source":"IPTVX","programsCount":214},{"name":"Еврокино","source":"IPTVX","programsCount":109},{"name":"FAN HD","source":"IPTVX","programsCount":180},{"name":"Fashion TV","source":"IPTVX","programsCount":171},{"name":"Феникс+ Кино","source":"IPTVX","programsCount":168},{"name":"Film.Ua Drama","source":"IPTVX","programsCount":202},{"name":"Food Network","source":"IPTVX","programsCount":0},{"name":"Fresh Adventure","source":"IPTVX","programsCount":88},{"name":"Fresh Cinema","source":"IPTVX","programsCount":74},{"name":"Fresh Comedy","source":"IPTVX","programsCount":94},{"name":"Fresh Family","source":"IPTVX","programsCount":88},{"name":"Fresh Fantastic","source":"IPTVX","programsCount":79},{"name":"Fresh Horror","source":"IPTVX","programsCount":96},{"name":"Fresh Premiere","source":"IPTVX","programsCount":82},{"name":"Fresh Rating","source":"IPTVX","programsCount":79},{"name":"Fresh Romantic","source":"IPTVX","programsCount":92},{"name":"Fresh Russian","source":"IPTVX","programsCount":92},{"name":"Fresh Series","source":"IPTVX","programsCount":215},{"name":"Fresh Soviet","source":"IPTVX","programsCount":112},{"name":"Fresh Thriller","source":"IPTVX","programsCount":83},{"name":"Fuel TV HD","source":"IPTVX","programsCount":306},{"name":"Глазами туриста","source":"IPTVX","programsCount":323},{"name":"H2","source":"IPTVX","programsCount":223},{"name":"Точка.РФ","source":"IPTVX","programsCount":264},{"name":"HD Медиа","source":"IPTVX","programsCount":235},{"name":"History","source":"IPTVX","programsCount":221},{"name":"Hollywood HD","source":"IPTVX","programsCount":101},{"name":"Hustler HD","source":"IPTVX","programsCount":151},{"name":"Hustler TV","source":"IPTVX","programsCount":137},{"name":"Иллюзион +","source":"IPTVX","programsCount":103},{"name":"Индийское кино","source":"IPTVX","programsCount":56},{"name":"История","source":"IPTVX","programsCount":213},{"name":"Камеди","source":"IPTVX","programsCount":237},{"name":"Хит HD","source":"IPTVX","programsCount":161},{"name":"КиноТВ","source":"IPTVX","programsCount":101},{"name":"Кино 1 International","source":"IPTVX","programsCount":114},{"name":"Кинокомедия","source":"IPTVX","programsCount":89},{"name":"Киномикс","source":"IPTVX","programsCount":96},{"name":"Кинопоказ HD","source":"IPTVX","programsCount":90},{"name":"Кинопремьера","source":"IPTVX","programsCount":100},{"name":"Киносемья","source":"IPTVX","programsCount":102},{"name":"Киносерия","source":"IPTVX","programsCount":177},{"name":"Киносвидание","source":"IPTVX","programsCount":90},{"name":"Киноужас","source":"IPTVX","programsCount":96},{"name":"Кинохит","source":"IPTVX","programsCount":93},{"name":"Классика Кино","source":"IPTVX","programsCount":103},{"name":"Комедийное HD","source":"IPTVX","programsCount":97},{"name":"Криминальное HD","source":"IPTVX","programsCount":262},{"name":"Россия К","source":"IPTVX","programsCount":207},{"name":"Кухня ТВ","source":"IPTVX","programsCount":380},{"name":"КВН ТВ","source":"IPTVX","programsCount":99},{"name":"Liberty МиксMusic","source":"IPTVX","programsCount":0},{"name":"Live Music Channel HD","source":"IPTVX","programsCount":148},{"name":"Luxury HD","source":"IPTVX","programsCount":294},{"name":"Magic Action","source":"IPTVX","programsCount":81},{"name":"Magic Adventure","source":"IPTVX","programsCount":83},{"name":"Magic Comedy","source":"IPTVX","programsCount":90},{"name":"Magic Family","source":"IPTVX","programsCount":96},{"name":"Magic Galaxy","source":"IPTVX","programsCount":95},{"name":"Magic Horror","source":"IPTVX","programsCount":93},{"name":"Magic Karate","source":"IPTVX","programsCount":91},{"name":"Magic Love","source":"IPTVX","programsCount":85},{"name":"Magic Russian","source":"IPTVX","programsCount":96},{"name":"Magic Thriller","source":"IPTVX","programsCount":87},{"name":"Magic VHS","source":"IPTVX","programsCount":85},{"name":"Mezzo","source":"IPTVX","programsCount":118},{"name":"Mezzo Live HD","source":"IPTVX","programsCount":127},{"name":"MM 007 HD","source":"IPTVX","programsCount":88},{"name":"MM Агата Кристи HD","source":"IPTVX","programsCount":167},{"name":"MM Боевик HD","source":"IPTVX","programsCount":107},{"name":"MM Боевик Classic HD","source":"IPTVX","programsCount":105},{"name":"MM Celebrity HD","source":"IPTVX","programsCount":88},{"name":"MM Classic HD","source":"IPTVX","programsCount":150},{"name":"MM Комедия HD","source":"IPTVX","programsCount":105},{"name":"MM Комедия Classic HD","source":"IPTVX","programsCount":110},{"name":"MM Драма HD","source":"IPTVX","programsCount":89},{"name":"MM Experiment HD","source":"IPTVX","programsCount":183},{"name":"MM Семейный 1 HD","source":"IPTVX","programsCount":109},{"name":"MM Семейный 2 HD","source":"IPTVX","programsCount":124},{"name":"MM Фантастика HD","source":"IPTVX","programsCount":100},{"name":"MM Фобия HD","source":"IPTVX","programsCount":87},{"name":"MM Грайндхаус HD","source":"IPTVX","programsCount":120},{"name":"MM История HD","source":"IPTVX","programsCount":85},{"name":"MM Катастрофа HD","source":"IPTVX","programsCount":48},{"name":"MM Киберпанк HD","source":"IPTVX","programsCount":39},{"name":"MM Кинофестиваль HD","source":"IPTVX","programsCount":94},{"name":"MM Криминал HD","source":"IPTVX","programsCount":95},{"name":"MM Крутые 90-е HD","source":"IPTVX","programsCount":203},{"name":"MM Кунг-Фу HD","source":"IPTVX","programsCount":106},{"name":"MM Квартирник HD","source":"IPTVX","programsCount":166},{"name":"MM Love HD","source":"IPTVX","programsCount":95},{"name":"MM Мифология HD","source":"IPTVX","programsCount":193},{"name":"MS Crime HD","source":"IPTVX","programsCount":262},{"name":"MS Prisons HD","source":"IPTVX","programsCount":171},{"name":"MS Young Blood HD","source":"IPTVX","programsCount":92},{"name":"MM NewFilm 1 HD","source":"IPTVX","programsCount":59},{"name":"MM NewFilm 2 HD","source":"IPTVX","programsCount":103},{"name":"MM NewFilm 3 HD","source":"IPTVX","programsCount":103},{"name":"MM NewFilm RU HD","source":"IPTVX","programsCount":110},{"name":"MM Нуар HD","source":"IPTVX","programsCount":113},{"name":"MM Открытия HD","source":"IPTVX","programsCount":338},{"name":"MM Погружение HD","source":"IPTVX","programsCount":58},{"name":"MM Приключения HD","source":"IPTVX","programsCount":100},{"name":"MM Роскино HD","source":"IPTVX","programsCount":88},{"name":"MM Синематограф HD","source":"IPTVX","programsCount":85},{"name":"MM Ситком HD","source":"IPTVX","programsCount":306},{"name":"MM Ситком 2.0 HD","source":"IPTVX","programsCount":395},{"name":"MM Скорость HD","source":"IPTVX","programsCount":103},{"name":"MM Спорт HD","source":"IPTVX","programsCount":97},{"name":"MM Стивен Кинг HD","source":"IPTVX","programsCount":168},{"name":"MM Супергерои HD","source":"IPTVX","programsCount":88},{"name":"MM Сваты HD","source":"IPTVX","programsCount":126},{"name":"MM Translation HD","source":"IPTVX","programsCount":74},{"name":"MM Триллер HD","source":"IPTVX","programsCount":100},{"name":"MM UFO HD","source":"IPTVX","programsCount":97},{"name":"MM Ужасы HD","source":"IPTVX","programsCount":111},{"name":"MM Ужасы Classic HD","source":"IPTVX","programsCount":116},{"name":"MM Ужастик HD","source":"IPTVX","programsCount":87},{"name":"MM USSR 1941-1945 HD","source":"IPTVX","programsCount":53},{"name":"MM USSR Детектив HD","source":"IPTVX","programsCount":126},{"name":"MM USSR Комедия HD","source":"IPTVX","programsCount":110},{"name":"MM USSR Приключения HD","source":"IPTVX","programsCount":86},{"name":"MM Воронины HD","source":"IPTVX","programsCount":282},{"name":"MM Вестерн HD","source":"IPTVX","programsCount":102},{"name":"MM Затмение HD","source":"IPTVX","programsCount":110},{"name":"Моя стихия","source":"IPTVX","programsCount":224},{"name":"Муви ТВ","source":"IPTVX","programsCount":71},{"name":"Мужское кино HD","source":"IPTVX","programsCount":108},{"name":"Мужской","source":"IPTVX","programsCount":353},{"name":"Музыка Первого","source":"IPTVX","programsCount":158},{"name":"Наш Кинопоказ HD","source":"IPTVX","programsCount":111},{"name":"Наша Сибирь","source":"IPTVX","programsCount":1877},{"name":"Любимое HD","source":"IPTVX","programsCount":168},{"name":"Наше Мужское HD","source":"IPTVX","programsCount":188},{"name":"Наше HD","source":"IPTVX","programsCount":125},{"name":"Настоящее время HD","source":"IPTVX","programsCount":220},{"name":"Nat Geo Wild","source":"IPTVX","programsCount":243},{"name":"National Geographic","source":"IPTVX","programsCount":243},{"name":"Ностальгия","source":"IPTVX","programsCount":232},{"name":"НСТ","source":"IPTVX","programsCount":111},{"name":"НТВ","source":"IPTVX","programsCount":170},{"name":"НТВ-Беларусь","source":"IPTVX","programsCount":217},{"name":"НТВ Право","source":"IPTVX","programsCount":192},{"name":"НТВ Сериал","source":"IPTVX","programsCount":185},{"name":"НТВ Стиль","source":"IPTVX","programsCount":221},{"name":"НТВ-Хит","source":"IPTVX","programsCount":250},{"name":"О2ТВ","source":"IPTVX","programsCount":87},{"name":"Ocean TV","source":"IPTVX","programsCount":262},{"name":"ОНТ","source":"IPTVX","programsCount":184},{"name":"Оружие","source":"IPTVX","programsCount":340},{"name":"Остросюжетное HD","source":"IPTVX","programsCount":106},{"name":"Первый канал","source":"IPTVX","programsCount":179},{"name":"Пятница!","source":"IPTVX","programsCount":138},{"name":"Победа","source":"IPTVX","programsCount":50},{"name":"Поехали!","source":"IPTVX","programsCount":236},{"name":"Премиальное HD","source":"IPTVX","programsCount":110},{"name":"Приключения HD","source":"IPTVX","programsCount":289},{"name":"Private TV","source":"IPTVX","programsCount":67},{"name":"Про Любовь","source":"IPTVX","programsCount":104},{"name":"Психология 21","source":"IPTVX","programsCount":319},{"name":"Redlight HD","source":"IPTVX","programsCount":113},{"name":"Рен ТВ","source":"IPTVX","programsCount":153},{"name":"Романтичное HD","source":"IPTVX","programsCount":164},{"name":"Россия 1","source":"IPTVX","programsCount":135},{"name":"RTG HD","source":"IPTVX","programsCount":319},{"name":"RTG TV","source":"IPTVX","programsCount":517},{"name":"РТР-Беларусь","source":"IPTVX","programsCount":184},{"name":"Русская комедия","source":"IPTVX","programsCount":122},{"name":"Сапфир","source":"IPTVX","programsCount":164},{"name":"Сарафан","source":"IPTVX","programsCount":229},{"name":"Scream","source":"IPTVX","programsCount":102},{"name":"Шокирующее HD","source":"IPTVX","programsCount":115},{"name":"Shot TV","source":"IPTVX","programsCount":576},{"name":".sci-fi","source":"IPTVX","programsCount":214},{"name":".black","source":"IPTVX","programsCount":160},{"name":".red","source":"IPTVX","programsCount":168},{"name":"Совершенно секретно","source":"IPTVX","programsCount":227},{"name":"Star Family Россия","source":"IPTVX","programsCount":187},{"name":"Страшное HD","source":"IPTVX","programsCount":118},{"name":"СТС","source":"IPTVX","programsCount":132},{"name":"СТС Love","source":"IPTVX","programsCount":388},{"name":"СТВ Беларусь","source":"IPTVX","programsCount":177},{"name":"Суббота!","source":"IPTVX","programsCount":227},{"name":"Светлое ТВ","source":"IPTVX","programsCount":1266},{"name":"Телекафе","source":"IPTVX","programsCount":158},{"name":"Т24","source":"IPTVX","programsCount":157},{"name":"TLC","source":"IPTVX","programsCount":194},{"name":"ТНТ","source":"IPTVX","programsCount":233},{"name":"ТНТ-Music","source":"IPTVX","programsCount":160},{"name":"ТНТ4","source":"IPTVX","programsCount":299},{"name":"Точка отрыва","source":"IPTVX","programsCount":329},{"name":"Точка","source":"IPTVX","programsCount":172},{"name":"Travel+Adventure","source":"IPTVX","programsCount":243},{"name":"Travel Channel","source":"IPTVX","programsCount":173},{"name":"Travel XP HD","source":"IPTVX","programsCount":336},{"name":"Viasat Kino Action","source":"IPTVX","programsCount":99},{"name":"Viasat Kino","source":"IPTVX","programsCount":89},{"name":"Viasat Kino World","source":"IPTVX","programsCount":100},{"name":"ТВ3 Беларусь","source":"IPTVX","programsCount":113},{"name":"ТВ3","source":"IPTVX","programsCount":203},{"name":"Усадьба","source":"IPTVX","programsCount":426},{"name":"В мире животных HD","source":"IPTVX","programsCount":246},{"name":"VeleS 60FPS","source":"IPTVX","programsCount":58},{"name":"VeleS Dj Set","source":"IPTVX","programsCount":62},{"name":"VeleS Киносерия","source":"IPTVX","programsCount":146},{"name":"VeleS Магнитофон","source":"IPTVX","programsCount":0},{"name":"VeleS Movie Hits","source":"IPTVX","programsCount":56},{"name":"VeleS Premiere","source":"IPTVX","programsCount":47},{"name":"VeleS СССР","source":"IPTVX","programsCount":89},{"name":"VeleS Страшное","source":"IPTVX","programsCount":60},{"name":"VF Привет из 90х","source":"IPTVX","programsCount":1639},{"name":"VF Adventure","source":"IPTVX","programsCount":99},{"name":"VF Американская история ужасов","source":"IPTVX","programsCount":227},{"name":"VF Art house","source":"IPTVX","programsCount":90},{"name":"VF Беларусьфильм","source":"IPTVX","programsCount":88},{"name":"VF Без цензуры","source":"IPTVX","programsCount":247},{"name":"VF Боевик","source":"IPTVX","programsCount":104},{"name":"VF Чернобыль","source":"IPTVX","programsCount":107},{"name":"VF Classic","source":"IPTVX","programsCount":111},{"name":"VF Comedy","source":"IPTVX","programsCount":97},{"name":"VF Comedy Woman","source":"IPTVX","programsCount":220},{"name":"VF Comics","source":"IPTVX","programsCount":83},{"name":"VF Detective","source":"IPTVX","programsCount":96},{"name":"VF Джеки Чан","source":"IPTVX","programsCount":99},{"name":"VF Family","source":"IPTVX","programsCount":109},{"name":"VF Fantastic","source":"IPTVX","programsCount":88},{"name":"VF Fantasy","source":"IPTVX","programsCount":96},{"name":"VF Фильмы СССР","source":"IPTVX","programsCount":132},{"name":"VF Друзья","source":"IPTVX","programsCount":447},{"name":"VF Леонид Гайдай","source":"IPTVX","programsCount":65},{"name":"VF Городок","source":"IPTVX","programsCount":42},{"name":"VF HBO","source":"IPTVX","programsCount":197},{"name":"VF Доктор Хаус","source":"IPTVX","programsCount":230},{"name":"VF Игра престолов","source":"IPTVX","programsCount":180},{"name":"VF Индия","source":"IPTVX","programsCount":70},{"name":"VF История","source":"IPTVX","programsCount":102},{"name":"VF Катастрофы","source":"IPTVX","programsCount":92},{"name":"VF Киностудия им. Горького","source":"IPTVX","programsCount":121},{"name":"VF Классика","source":"IPTVX","programsCount":109},{"name":"VF Комедия","source":"IPTVX","programsCount":110},{"name":"VF Криминал","source":"IPTVX","programsCount":215},{"name":"VF Ленфильм","source":"IPTVX","programsCount":91},{"name":"VF Луи де Фюнес","source":"IPTVX","programsCount":108},{"name":"VF Marvel","source":"IPTVX","programsCount":114},{"name":"VF Melodrama","source":"IPTVX","programsCount":108},{"name":"VF Мосфильм","source":"IPTVX","programsCount":128},{"name":"VF Мыльные оперы","source":"IPTVX","programsCount":249},{"name":"VF Mystic","source":"IPTVX","programsCount":95},{"name":"VF Наша Раша","source":"IPTVX","programsCount":275},{"name":"VF Netflix","source":"IPTVX","programsCount":198},{"name":"VF Одесская киностудия","source":"IPTVX","programsCount":130},{"name":"VF Однажды в России","source":"IPTVX","programsCount":220},{"name":"VF Оскар","source":"IPTVX","programsCount":79},{"name":"VF Наша победа","source":"IPTVX","programsCount":143},{"name":"VF Премьера","source":"IPTVX","programsCount":127},{"name":"VF Premiere","source":"IPTVX","programsCount":94},{"name":"VF Реальные пацаны","source":"IPTVX","programsCount":446},{"name":"VF Рижская киностудия","source":"IPTVX","programsCount":106},{"name":"VF Эльдар Рязанов","source":"IPTVX","programsCount":92},{"name":"VF СашаТаня","source":"IPTVX","programsCount":458},{"name":"VF Сериал","source":"IPTVX","programsCount":254},{"name":"VF Series","source":"IPTVX","programsCount":192},{"name":"VF След","source":"IPTVX","programsCount":261},{"name":"VF Солдаты","source":"IPTVX","programsCount":225},{"name":"VF Сверхъестественное","source":"IPTVX","programsCount":245},{"name":"VF Свердловская киностудия","source":"IPTVX","programsCount":95},{"name":"VF Сваты","source":"IPTVX","programsCount":158},{"name":"VF Тайны следствия","source":"IPTVX","programsCount":209},{"name":"VF Thriller","source":"IPTVX","programsCount":100},{"name":"VF TOP Series","source":"IPTVX","programsCount":197},{"name":"VF Универ","source":"IPTVX","programsCount":445},{"name":"VF Универ новая общага","source":"IPTVX","programsCount":260},{"name":"VF Ужасы","source":"IPTVX","programsCount":105},{"name":"VF Ужасы VHS","source":"IPTVX","programsCount":111},{"name":"VF Военные","source":"IPTVX","programsCount":89},{"name":"VF Воронины","source":"IPTVX","programsCount":422},{"name":"VF Ходячие мертвецы","source":"IPTVX","programsCount":224},{"name":"VF The X-Files","source":"IPTVX","programsCount":229},{"name":"viju History","source":"IPTVX","programsCount":210},{"name":"Viasat Kino Comedy","source":"IPTVX","programsCount":92},{"name":"viju+ Comedy","source":"IPTVX","programsCount":106},{"name":"Viasat Kino Megahit","source":"IPTVX","programsCount":0},{"name":"viju+ Megahit","source":"IPTVX","programsCount":97},{"name":"viju+ Premiere","source":"IPTVX","programsCount":100},{"name":"Время","source":"IPTVX","programsCount":90},{"name":"Загородный","source":"IPTVX","programsCount":336},{"name":"Здоровое ТВ","source":"IPTVX","programsCount":538},{"name":"Живая природа","source":"IPTVX","programsCount":3404},{"name":"Звезда","source":"IPTVX","programsCount":226},{"name":"Ю","source":"IPTVX","programsCount":77},{"name":"ТВ-21M","source":"IPTVX","programsCount":92},{"name":"RU.TV","source":"IPTVX","programsCount":109},{"name":"8 канал [BY]","source":"IPTVX","programsCount":169},{"name":"Пятый канал","source":"IPTVX","programsCount":240},{"name":"Мир","source":"IPTVX","programsCount":202},{"name":"Яснае ТВ","source":"IPTVX","programsCount":204},{"name":"ТВ Центр","source":"IPTVX","programsCount":217},{"name":"ТНТ-International (Беларусь)","source":"IPTVX","programsCount":140},{"name":"Наука 2.0","source":"IPTVX","programsCount":298},{"name":"Живи активно","source":"IPTVX","programsCount":400},{"name":"Живи","source":"IPTVX","programsCount":357},{"name":"World Fashion Channel","source":"IPTVX","programsCount":1726},{"name":"Extreme sports","source":"IPTVX","programsCount":127},{"name":"Моя Планета","source":"IPTVX","programsCount":248},{"name":"Киносат","source":"IPTVX","programsCount":105},{"name":"Калейдоскоп ТВ","source":"IPTVX","programsCount":246},{"name":"viju Explore","source":"IPTVX","programsCount":200},{"name":"viju Nature","source":"IPTVX","programsCount":201},{"name":"viju+ Planet","source":"IPTVX","programsCount":282},{"name":"Terra","source":"IPTVX","programsCount":209},{"name":"Авто24","source":"IPTVX","programsCount":604},{"name":"Galaxy-TV","source":"IPTVX","programsCount":251},{"name":"Советское кино","source":"IPTVX","programsCount":123},{"name":"Plan B","source":"IPTVX","programsCount":136},{"name":"Russian Extreme Ultra HD","source":"IPTVX","programsCount":181},{"name":"Ultra HD Cinema","source":"IPTVX","programsCount":105},{"name":"Кино UHD","source":"IPTVX","programsCount":137},{"name":"Русский иллюзион","source":"IPTVX","programsCount":104},{"name":"Русский роман","source":"IPTVX","programsCount":68},{"name":"Русский детектив","source":"IPTVX","programsCount":198},{"name":"Русский бестселлер","source":"IPTVX","programsCount":185},{"name":"Охота и рыбалка","source":"IPTVX","programsCount":319},{"name":"Охотник и рыболов","source":"IPTVX","programsCount":323},{"name":"Наша тема","source":"IPTVX","programsCount":346},{"name":"Диалоги о рыбалке","source":"IPTVX","programsCount":373},{"name":"Love Nature 4K","source":"IPTVX","programsCount":141},{"name":"Start World","source":"IPTVX","programsCount":172},{"name":"Start Air","source":"IPTVX","programsCount":270},{"name":"Мир сериала","source":"IPTVX","programsCount":189},{"name":"Кто Куда","source":"IPTVX","programsCount":437},{"name":"AMC","source":"IPTVX","programsCount":118},{"name":"Звезда Плюс","source":"IPTVX","programsCount":234},{"name":"FlixSnip","source":"IPTVX","programsCount":848},{"name":"Наше новое кино","source":"IPTVX","programsCount":114},{"name":"Любимое кино","source":"IPTVX","programsCount":91},{"name":"Родное кино","source":"IPTVX","programsCount":133},{"name":"Kinojam 1","source":"IPTVX","programsCount":135},{"name":"Kinojam 2","source":"IPTVX","programsCount":111},{"name":"Еда Премиум Int. HD","source":"IPTVX","programsCount":451},{"name":"FoodTime","source":"IPTVX","programsCount":373},{"name":"Кус-кус","source":"IPTVX","programsCount":780},{"name":"Fast&FunBox HD","source":"IPTVX","programsCount":319},{"name":"FilmBox Russia","source":"IPTVX","programsCount":108},{"name":"FilmBox ArtHouse","source":"IPTVX","programsCount":166},{"name":"КиноСезон","source":"IPTVX","programsCount":167},{"name":"Дом кино Премиум","source":"IPTVX","programsCount":84},{"name":"Мосфильм. Золотая коллекция","source":"IPTVX","programsCount":119},{"name":"Star Cinema Россия","source":"IPTVX","programsCount":188},{"name":"Cinema Cosmos TV","source":"IPTVX","programsCount":99},{"name":"Cinema","source":"IPTVX","programsCount":91},{"name":"Bolt Россия","source":"IPTVX","programsCount":193},{"name":"Novella TV","source":"IPTVX","programsCount":61},{"name":"viju TV1000","source":"IPTVX","programsCount":97},{"name":"viju TV1000 Русское","source":"IPTVX","programsCount":129},{"name":"viju TV1000 Новелла","source":"IPTVX","programsCount":99},{"name":"viju TV1000 romantica","source":"IPTVX","programsCount":161},{"name":"viju TV1000 Action","source":"IPTVX","programsCount":90},{"name":"viju+ Serial","source":"IPTVX","programsCount":190},{"name":"VHS-ка","source":"IPTVX","programsCount":98},{"name":"KinoLiving","source":"IPTVX","programsCount":146},{"name":"Кино без границ","source":"IPTVX","programsCount":166},{"name":"Кинеко","source":"IPTVX","programsCount":178},{"name":"FX","source":"IPTVX","programsCount":258},{"name":"FX Life","source":"IPTVX","programsCount":247},{"name":"Trash","source":"IPTVX","programsCount":106},{"name":"Insight TV HD","source":"IPTVX","programsCount":344},{"name":"ID Xtra EU","source":"IPTVX","programsCount":176},{"name":"Квартал ТВ","source":"IPTVX","programsCount":154},{"name":"Нано","source":"IPTVX","programsCount":145},{"name":"Iнтер+","source":"IPTVX","programsCount":268},{"name":"RTVi","source":"IPTVX","programsCount":185},{"name":"Загородная жизнь","source":"IPTVX","programsCount":401},{"name":"Загородный International","source":"IPTVX","programsCount":421},{"name":"YOSSO TV Travel","source":"IPTVX","programsCount":233},{"name":"YOSSO TV Science","source":"IPTVX","programsCount":112},{"name":"CineMan Скорая помощь","source":"IPTVX","programsCount":229},{"name":"CineMan Melodrama","source":"IPTVX","programsCount":93},{"name":"CineMan Комедия","source":"IPTVX","programsCount":106},{"name":"CineMan MiniSeries","source":"IPTVX","programsCount":197},{"name":"BOX Franchise HD","source":"IPTVX","programsCount":80},{"name":"BOX Hybrid HD","source":"IPTVX","programsCount":102},{"name":"BOX Gangster HD","source":"IPTVX","programsCount":92},{"name":"BOX Spy HD","source":"IPTVX","programsCount":92},{"name":"BOX Oscar HD","source":"IPTVX","programsCount":78},{"name":"BOX Serial HD","source":"IPTVX","programsCount":199},{"name":"BCU RUSerial HD","source":"IPTVX","programsCount":307},{"name":"BCU Criminal HD","source":"IPTVX","programsCount":94},{"name":"VF VHS","source":"IPTVX","programsCount":93},{"name":"YOSSO TV Grand","source":"IPTVX","programsCount":83},{"name":"YOSSO TV VHS","source":"IPTVX","programsCount":95},{"name":"YOSSO TV Русские фильмы","source":"IPTVX","programsCount":94},{"name":"YOSSO TV Советские фильмы","source":"IPTVX","programsCount":114},{"name":"YOSSO TV New Кино","source":"IPTVX","programsCount":95},{"name":"YOSSO TV Трагичное","source":"IPTVX","programsCount":99},{"name":"YOSSO TV Забавное","source":"IPTVX","programsCount":97},{"name":"YOSSO TV BEST","source":"IPTVX","programsCount":90},{"name":"YOSSO TV Ковбойское","source":"IPTVX","programsCount":109},{"name":"YOSSO TV Adrenaline","source":"IPTVX","programsCount":97},{"name":"YOSSO TV Oblivion","source":"IPTVX","programsCount":63},{"name":"YOSSO TV Adventure","source":"IPTVX","programsCount":85},{"name":"YOSSO TV Thriller","source":"IPTVX","programsCount":96},{"name":"YOSSO TV Мелодрама","source":"IPTVX","programsCount":39},{"name":"YOSSO TV Netflix","source":"IPTVX","programsCount":93},{"name":"YOSSO TV BEST 60fps","source":"IPTVX","programsCount":91},{"name":"C-History","source":"IPTVX","programsCount":86},{"name":"C-Inquest","source":"IPTVX","programsCount":83},{"name":"C-Marvel","source":"IPTVX","programsCount":70},{"name":"Fresh VHS","source":"IPTVX","programsCount":81},{"name":"VeleS Киноплёнка","source":"IPTVX","programsCount":46},{"name":"VeleS Криминальный","source":"IPTVX","programsCount":36},{"name":"Первый музыкальный","source":"IPTVX","programsCount":88},{"name":"1HD Music","source":"IPTVX","programsCount":121},{"name":"Муз-ТВ","source":"IPTVX","programsCount":179},{"name":"Телеканал Радио Страна ФМ","source":"IPTVX","programsCount":139},{"name":"Bridge TV Deluxe","source":"IPTVX","programsCount":175},{"name":"Жара","source":"IPTVX","programsCount":155},{"name":"EU.Music","source":"IPTVX","programsCount":43},{"name":"VIVA Russia","source":"IPTVX","programsCount":108},{"name":"Жар Птица","source":"IPTVX","programsCount":105},{"name":"MCM Top","source":"IPTVX","programsCount":34},{"name":"Шансон-TB","source":"IPTVX","programsCount":139},{"name":"YOSSO TV Music Hits","source":"IPTVX","programsCount":57},{"name":"Рыбалка и охота","source":"IPTVX","programsCount":386},{"name":"МузТВ Беларусь","source":"IPTVX","programsCount":72},{"name":"Oasis Action","source":"OTT-Play","programsCount":67},{"name":"Oasis Comedy","source":"OTT-Play","programsCount":103},{"name":"Oasis Soviet Comedy","source":"OTT-Play","programsCount":33},{"name":"Oasis Detective","source":"OTT-Play","programsCount":42},{"name":"Oasis Drama","source":"OTT-Play","programsCount":45},{"name":"Oasis DC","source":"OTT-Play","programsCount":64},{"name":"Oasis Marvel","source":"OTT-Play","programsCount":47},{"name":"Oasis Family","source":"OTT-Play","programsCount":59},{"name":"Oasis Мелодрама","source":"OTT-Play","programsCount":47},{"name":"Oasis Horror","source":"OTT-Play","programsCount":51},{"name":"Oasis Old Horrors","source":"OTT-Play","programsCount":25},{"name":"Oasis Comedy Horrors","source":"OTT-Play","programsCount":92},{"name":"Oasis Biography","source":"OTT-Play","programsCount":78},{"name":"Oasis Mafia","source":"OTT-Play","programsCount":71},{"name":"Oasis Фантастика","source":"OTT-Play","programsCount":37},{"name":"Oasis Тайны Смолвиля","source":"OTT-Play","programsCount":94},{"name":"Oasis Ufo And Aliens","source":"OTT-Play","programsCount":47},{"name":"Oasis Alien and Predator","source":"OTT-Play","programsCount":20},{"name":"Oasis Celentano Brando Connery","source":"OTT-Play","programsCount":20},{"name":"Oasis Demon Slayer and Dororo","source":"OTT-Play","programsCount":60},{"name":"Oasis Serkan Bolat","source":"OTT-Play","programsCount":127},{"name":"Oasis Миядзаки","source":"OTT-Play","programsCount":23},{"name":"Oasis In English","source":"OTT-Play","programsCount":27},{"name":"Oasis RUS Драма","source":"OTT-Play","programsCount":23},{"name":"Oasis RUS Комедии","source":"OTT-Play","programsCount":24},{"name":"Oasis RUS Сериалы","source":"OTT-Play","programsCount":232},{"name":"Oasis RUS Сериалы Драма","source":"OTT-Play","programsCount":125},{"name":"Oasis Superheroes Сериалы","source":"OTT-Play","programsCount":65},{"name":"Oasis Корейские Сериалы","source":"OTT-Play","programsCount":79},{"name":"Oasis Латиноамериканские Сериалы","source":"OTT-Play","programsCount":246},{"name":"Oasis Учим Английский","source":"OTT-Play","programsCount":117},{"name":"Oasis Учим Испанский","source":"OTT-Play","programsCount":281},{"name":"Oasis USA Series","source":"OTT-Play","programsCount":222},{"name":"Oasis Кухня Отель","source":"OTT-Play","programsCount":234},{"name":"KLI Premium HD","source":"OTT-Play","programsCount":176},{"name":"KLI History HD","source":"OTT-Play","programsCount":101},{"name":"KLI Russian HD","source":"OTT-Play","programsCount":153},{"name":"KLI VHS HD","source":"OTT-Play","programsCount":205},{"name":"KLI Thriller HD","source":"OTT-Play","programsCount":210},{"name":"KLI USSR HD","source":"OTT-Play","programsCount":142},{"name":"KLI Family HD","source":"OTT-Play","programsCount":130},{"name":"KLI Kinoseries","source":"OTT-Play","programsCount":216},{"name":"KLI Horror HD","source":"OTT-Play","programsCount":54},{"name":"KLI Drama HD","source":"OTT-Play","programsCount":111},{"name":"KLI Fantasy HD","source":"OTT-Play","programsCount":131},{"name":"KLI Сериал HD","source":"OTT-Play","programsCount":125},{"name":"KLI Netflix HD","source":"OTT-Play","programsCount":164},{"name":"KLI Marvel HD","source":"OTT-Play","programsCount":122},{"name":"KLI Новинки HD","source":"OTT-Play","programsCount":79},{"name":"KLI Franchise HD","source":"OTT-Play","programsCount":131},{"name":"KLI Однажды в России HD","source":"OTT-Play","programsCount":149},{"name":"KLI Relax HD","source":"OTT-Play","programsCount":143},{"name":"Cobra Detektiv HD","source":"OTT-Play","programsCount":721},{"name":"Cobra Thriller HD","source":"OTT-Play","programsCount":166},{"name":"Cobra Drama HD","source":"OTT-Play","programsCount":49},{"name":"Cobra Melodrama HD","source":"OTT-Play","programsCount":188},{"name":"Cobra Comedy HD","source":"OTT-Play","programsCount":193},{"name":"Velilla TV Русский Сериал HD","source":"OTT-Play","programsCount":211},{"name":"Velilla TV Домашний HD","source":"OTT-Play","programsCount":95},{"name":"Velilla TV Мосгаз HD","source":"OTT-Play","programsCount":88},{"name":"Velilla TV Морские дьяволы HD","source":"OTT-Play","programsCount":77},{"name":"Liberty Medval 4K","source":"OTT-Play","programsCount":81},{"name":"TOP 80","source":"OTT-Play","programsCount":48},{"name":"TOP BUDO HD","source":"OTT-Play","programsCount":166},{"name":"TOP CINEMA HD","source":"OTT-Play","programsCount":131},{"name":"TOP MIX HD","source":"OTT-Play","programsCount":2705}];
         
-        // Автообновление каждые 5 минут (опционально)
-        setInterval(loadFilesInfo, 5 * 60 * 1000);
+        function displayChannels(filterText) {
+            const grid = document.getElementById('channelsGrid');
+            const filtered = filterText 
+                ? channelsData.filter(c => c.name.toLowerCase().includes(filterText.toLowerCase()))
+                : channelsData;
+            
+            grid.innerHTML = filtered.map(c => `
+                <div class="channel-item">
+                    <div class="channel-name">${c.name}</div>
+                    <div class="channel-meta">
+                        <span class="source-badge">${c.source}</span>
+                        ${c.programsCount} программ
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function filterChannels() {
+            displayChannels(document.getElementById('searchBox').value);
+        }
+        
+        function toggleSpoiler() {
+            const content = document.getElementById('spoilerContent');
+            const icon = document.getElementById('spoilerIcon');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.textContent = '▶';
+            } else {
+                content.classList.add('active');
+                icon.textContent = '▼';
+                displayChannels('');
+            }
+        }
     </script>
 </body>
-    </html>
+</html>
