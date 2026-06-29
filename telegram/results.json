@@ -4,7 +4,7 @@
       "name": "Интимные истории",
       "folder": "intimnye-istorii",
       "channelId": 1752191027,
-      "lastParsed": "2026-06-22T12:32:37.921Z",
+      "lastParsed": "2026-06-29T11:31:38.827Z",
       "totalMessages": 9917,
       "years": [
         {
@@ -48,12 +48,12 @@
       "name": "Пошлое",
       "folder": "poshloe",
       "channelId": 1088978043,
-      "lastParsed": "2026-06-22T12:32:51.917Z",
-      "totalMessages": 16400,
+      "lastParsed": "2026-06-29T11:31:52.671Z",
+      "totalMessages": 16420,
       "years": [
         {
           "year": 2026,
-          "count": 589,
+          "count": 609,
           "file": "2026-messages.json",
           "url": "https://gitnnm.github.io/telegram/poshloe/2026-messages.json",
           "relativeUrl": "/telegram/poshloe/2026-messages.json"
@@ -134,12 +134,12 @@
       "name": "Анонимно | Подслушано",
       "folder": "anonimno_podslushano",
       "channelId": 1194491014,
-      "lastParsed": "2026-06-22T12:33:05.953Z",
-      "totalMessages": 18072,
+      "lastParsed": "2026-06-29T11:32:06.394Z",
+      "totalMessages": 18149,
       "years": [
         {
           "year": 2026,
-          "count": 1852,
+          "count": 1929,
           "file": "2026-messages.json",
           "url": "https://gitnnm.github.io/telegram/anonimno_podslushano/2026-messages.json",
           "relativeUrl": "/telegram/anonimno_podslushano/2026-messages.json"
@@ -189,5 +189,5 @@
       ]
     }
   ],
-  "lastUpdate": "2026-06-22T12:33:05.953Z"
+  "lastUpdate": "2026-06-29T11:32:06.394Z"
 }
