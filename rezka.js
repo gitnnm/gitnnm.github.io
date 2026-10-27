@@ -8,60 +8,28 @@
     var component_name = 'hdrezka_ua';
     var network = new Lampa.Reguest();
 
-    // ---------- Настройки ----------
-    function getCookie() {
-        return Lampa.Storage.get('hdrezka_ua_cookie', '') || '';
-    }
+    // ========== ТВОИ COOKIE ==========
+    var COOKIE = 'PHPSESSID=a5t2q76mr23490t9ihlgu7t5uf; techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExN2VmNC1mMTdiLTdhZWQtOGYzMS05ZGYyN2NkODFlZWEiLCJleHAiOjE3OTU3MjMzNDUsImlhdCI6MTc5MzEzMTM0NSwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzEzMTI4NSwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6ImM5NGI5ZTVhMzA4NDdlMGE2MzNmMmM3MTI0YzVlMTQ5MjI2YjFlMTY2MmQ0YmRjOTk0OTE3NjIzNjBiNjU0NjAifQ.Hp6S_VzCYRRRWxGZBfRnxxDsF-Lu-G6GjXZsJp5GgGHf7WG8Uxi7I-20aG35EzH4Da-6Wl60G_oMmRDiI5CDBw; dle_user_token=6bf57f7fdb61a5463b8de237feee0025; dle_user_taken=1; device_rzk_id=eed0c9546b0ad334ffd7d5af8728ac15; _vc_id=y8EhN9W2istUl896IQBm67LCdE4H1OH5; _vc_day=2026-10-27; rzk_last_refresh=1793131345; _ym_uid=1785609579293811962; _ym_d=1785609579';
+    // ================================
 
-    function addSettings() {
-        // Добавляем раздел настроек
-        Lampa.SettingsApi.addParam({
-            component: 'interface',
-            param: {
-                name: 'hdrezka_ua_cookie',
-                type: 'input',
-                values: '',
-                default: '',
-                placeholder: 'Вставь cookie с rezka-ua.tv'
-            },
-            field: {
-                name: 'HDrezka UA — Cookie',
-                description: 'Открой rezka-ua.tv в браузере, пройди проверку «не бот», скопируй cookie и вставь сюда'
-            },
-            onChange: function (value) {
-                Lampa.Storage.set('hdrezka_ua_cookie', value);
-            }
-        });
-    }
-
-    // ---------- Запрос с cookie ----------
     function request(url, success, error) {
         var headers = {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Referer': BASE + '/',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+            'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Cookie': COOKIE
         };
-
-        var cookie = getCookie();
-        if (cookie) {
-            headers['Cookie'] = cookie;
-        }
 
         network.clear();
         network.timeout(20000);
-
-        // На Android предпочтительнее silent с headers
         network.silent(url, success, error, false, {
             headers: headers
         });
     }
 
-    // ---------- Парсинг поиска ----------
     function parseSearch(html) {
         var items = [];
-
-        // Основной паттерн
         var re = /data-id="(\d+)"[^>]*data-url="([^"]+)"[\s\S]*?<a[^>]*>([^<]+)<\/a>\s*<div[^>]*>([^<]*)<\/div>/gi;
         var m;
         while ((m = re.exec(html)) !== null) {
@@ -72,8 +40,6 @@
                 info: (m[4] || '').trim()
             });
         }
-
-        // Запасной
         if (!items.length) {
             re = /<div class="b-content__inline_item"[^>]*data-id="(\d+)"[^>]*data-url="([^"]+)"[\s\S]*?<div class="b-content__inline_item-link">\s*<a[^>]*>([^<]+)<\/a>/gi;
             while ((m = re.exec(html)) !== null) {
@@ -85,15 +51,12 @@
                 });
             }
         }
-
         return items;
     }
 
-    // ---------- Парсинг потоков ----------
     function parseStreams(html) {
         var streams = [];
 
-        // Способ 1: initCDNMoviesEvents / initCDNSeriesEvents
         var cdnMatch = html.match(/initCDN(?:Movies|Series)Events\s*\(\s*\d+\s*,\s*\d+[\s\S]*?(\{[\s\S]*?\})\s*\)\s*;/);
         if (cdnMatch) {
             try {
@@ -102,32 +65,22 @@
                     var streamRe = /\[([^\]]+)\](https?:\/\/[^,\[]+)/g;
                     var sm;
                     while ((sm = streamRe.exec(data.streams)) !== null) {
-                        streams.push({
-                            quality: sm[1].trim(),
-                            url: sm[2].trim()
-                        });
+                        streams.push({ quality: sm[1].trim(), url: sm[2].trim() });
                     }
                 }
             } catch (e) {}
         }
 
-        // Способ 2: file: '...'
         if (!streams.length) {
             var fileMatch = html.match(/file\s*:\s*['"]([^'"]+)['"]/);
             if (fileMatch) {
                 fileMatch[1].split(',').forEach(function (p) {
                     var qm = p.match(/\[([^\]]+)\](https?:\/\/.+)/);
-                    if (qm) {
-                        streams.push({
-                            quality: qm[1].trim(),
-                            url: qm[2].trim()
-                        });
-                    }
+                    if (qm) streams.push({ quality: qm[1].trim(), url: qm[2].trim() });
                 });
             }
         }
 
-        // Способ 3: "streams": "..."
         if (!streams.length) {
             var alt = html.match(/"streams"\s*:\s*"([^"]+)"/);
             if (alt) {
@@ -135,24 +88,12 @@
                 var streamRe2 = /\[([^\]]+)\](https?:\/\/[^,\[]+)/g;
                 var sm2;
                 while ((sm2 = streamRe2.exec(decoded)) !== null) {
-                    streams.push({
-                        quality: sm2[1].trim(),
-                        url: sm2[2].trim()
-                    });
+                    streams.push({ quality: sm2[1].trim(), url: sm2[2].trim() });
                 }
             }
         }
 
-        // Сортировка
-        var order = {
-            '2160p': 1,
-            '1440p': 2,
-            '1080p Ultra': 3,
-            '1080p': 4,
-            '720p': 5,
-            '480p': 6,
-            '360p': 7
-        };
+        var order = { '2160p': 1, '1440p': 2, '1080p Ultra': 3, '1080p': 4, '720p': 5, '480p': 6, '360p': 7 };
         streams.sort(function (a, b) {
             return (order[a.quality] || 99) - (order[b.quality] || 99);
         });
@@ -160,19 +101,12 @@
         return streams;
     }
 
-    // ---------- Компонент ----------
     function Component(object) {
         var scroll = new Lampa.Scroll({ mask: true, over: true });
         var last;
 
         this.create = function () {
             this.activity.loader(true);
-
-            if (!getCookie()) {
-                this.empty('Нужно вставить Cookie.\n\nОткрой rezka-ua.tv в браузере → пройди проверку → скопируй cookie → Настройки Lampa → HDrezka UA — Cookie');
-                return this.render();
-            }
-
             this.search();
             return this.render();
         };
@@ -181,20 +115,17 @@
             var title = object.movie.title || object.movie.name || '';
             var year = (object.movie.release_date || object.movie.first_air_date || '').substring(0, 4);
             var query = title + (year ? ' ' + year : '');
-
             var url = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(query);
 
             request(url, function (html) {
-                // Проверяем, не попали ли снова на антибот
                 if (html.indexOf('Проверяем, что вы не бот') !== -1 || html.indexOf('anubis') !== -1) {
-                    this.empty('Cookie устарели или неверные.\nОткрой сайт в браузере заново и обнови cookie в настройках.');
+                    this.empty('Cookie устарели.\nНужно обновить их в коде плагина.');
                     return;
                 }
 
                 var items = parseSearch(html);
-
                 if (!items.length) {
-                    this.empty('Ничего не найдено на rezka-ua.tv');
+                    this.empty('Ничего не найдено');
                     return;
                 }
 
@@ -204,7 +135,7 @@
                     this.appendResults(items);
                 }
             }.bind(this), function () {
-                this.empty('Ошибка сети или сайт недоступен');
+                this.empty('Ошибка сети');
             }.bind(this));
         };
 
@@ -234,20 +165,19 @@
 
             request(item.url, function (html) {
                 if (html.indexOf('Проверяем, что вы не бот') !== -1) {
-                    this.empty('Cookie устарели. Обнови их в настройках.');
+                    this.empty('Cookie устарели');
                     return;
                 }
 
                 var streams = parseStreams(html);
-
                 if (!streams.length) {
-                    this.empty('Потоки не найдены.\nВозможно, нужна авторизация или cookie недостаточно.');
+                    this.empty('Потоки не найдены');
                     return;
                 }
 
                 this.showQualities(item, streams);
             }.bind(this), function () {
-                this.empty('Ошибка загрузки страницы фильма');
+                this.empty('Ошибка загрузки');
             }.bind(this));
         };
 
@@ -297,9 +227,7 @@
                     if (Navigator.canmove('left')) Navigator.move('left');
                     else Lampa.Controller.toggle('menu');
                 },
-                right: function () {
-                    Navigator.move('right');
-                },
+                right: function () { Navigator.move('right'); },
                 up: function () {
                     if (Navigator.canmove('up')) Navigator.move('up');
                     else Lampa.Controller.toggle('head');
@@ -307,25 +235,20 @@
                 down: function () {
                     if (Navigator.canmove('down')) Navigator.move('down');
                 },
-                back: function () {
-                    Lampa.Activity.backward();
-                }
+                back: function () { Lampa.Activity.backward(); }
             });
             Lampa.Controller.toggle('content');
         };
 
         this.pause = function () {};
         this.stop = function () {};
-        this.render = function () {
-            return scroll.render();
-        };
+        this.render = function () { return scroll.render(); };
         this.destroy = function () {
             network.clear();
             scroll.destroy();
         };
     }
 
-    // ---------- Кнопка на карточке ----------
     function addButton() {
         Lampa.Listener.follow('full', function (e) {
             if (e.type === 'complite' || e.type === 'complete') {
@@ -357,12 +280,10 @@
         });
     }
 
-    // ---------- Запуск ----------
     function startPlugin() {
         Lampa.Component.add(component_name, Component);
-        addSettings();
         addButton();
-        console.log('[HDrezka UA] Плагин загружен (только cookie, без авторизации)');
+        console.log('[HDrezka UA] Плагин загружен (cookie вшиты)');
     }
 
     if (window.appready) {
