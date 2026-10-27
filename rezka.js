@@ -21,63 +21,34 @@
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-    // Подписи сайта → реальное качество (сайт завышает на одну ступень)
+    // сайт завышает качество на ступень
     var QUALITY_REMAP = {
-        '2160p': '1440p',
-        '1440p': '1080p',
         '1080p Ultra': '1080p',
         '1080p': '720p',
         '720p': '480p',
         '480p': '360p',
         '360p': '240p'
     };
-
-    // Приоритет выбора по ПОДПИСИ сайта (чем выше в списке — тем лучше поток)
     var PICK_ORDER = ['1080p', '720p', '480p', '360p'];
 
-    // --- CSS: не ломаем focus-рамку, только текст ---
-    if (!$('#hdrezka_ua_css').length) {
-        $('head').append(
-            '<style id="hdrezka_ua_css">' +
-            '.hdrezka-ua .scroll__content,' +
-            '.hdrezka-ua .scroll__body{max-width:100%;box-sizing:border-box;}' +
-            '.hdrezka-ua .online{' +
-            '  position:relative;width:100%;max-width:100%;box-sizing:border-box;' +
-            '  margin:0;padding:0;' +
-            '}' +
-            '.hdrezka-ua .online__body{' +
-            '  position:relative;width:100%;max-width:100%;box-sizing:border-box;' +
-            '  padding:0.6em 1em 0.6em 3.2em;min-height:2.6em;' +
-            '}' +
-            '.hdrezka-ua .online__icon{' +
-            '  position:absolute;left:0.5em;top:50%;transform:translateY(-50%);' +
-            '  width:2em;height:2em;display:flex;align-items:center;justify-content:center;' +
-            '}' +
-            '.hdrezka-ua .online__icon svg{width:2em;height:2em;display:block;}' +
-            '.hdrezka-ua .online__title,' +
-            '.hdrezka-ua .online__quality{' +
-            '  display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' +
-            '  max-width:100%;padding-left:0 !important;' +
-            '}' +
-            '</style>'
-        );
-    }
-
-    // Шаблон: иконка по центру по вертикали, текст с отступом
+    // Ровно как online_mod — без своих стилей
     Lampa.Template.add('hdrezka_ua_item',
         '<div class="online selector">' +
         '  <div class="online__body">' +
-        '    <div class="online__icon">' +
-        '      <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '        <circle cx="64" cy="64" r="56" stroke="currentColor" stroke-width="16"/>' +
-        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="currentColor"/>' +
+        '    <div style="position:absolute;left:0;top:-0.3em;width:2.4em;height:2.4em">' +
+        '      <svg style="height:2.4em;width:2.4em" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '        <circle cx="64" cy="64" r="56" stroke="white" stroke-width="16"/>' +
+        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="white"/>' +
         '      </svg>' +
         '    </div>' +
-        '    <div class="online__title">{title}</div>' +
-        '    <div class="online__quality">{quality}</div>' +
+        '    <div class="online__title" style="padding-left:2.1em">{title}</div>' +
+        '    <div class="online__quality" style="padding-left:3.4em">{quality}{info}</div>' +
         '  </div>' +
         '</div>'
     );
+
+    // убрать кривой css от прошлых версий, если остался
+    $('#hdrezka_ua_css').remove();
 
     function headers() {
         return {
@@ -133,8 +104,7 @@
         q = (q || '').trim();
         if (/ultra/i.test(q)) return '1080p Ultra';
         var num = (q.match(/(\d{3,4})/) || [])[1];
-        if (!num) return q;
-        return num + 'p';
+        return num ? (num + 'p') : q;
     }
 
     function realQuality(siteLabel) {
@@ -142,27 +112,21 @@
         return QUALITY_REMAP[key] || key;
     }
 
-    /** Лучший поток + реальная подпись качества */
     function bestStream(str) {
         str = decodeStream(str);
         if (!str) return null;
-
-        var map = {}; // siteLabel -> url
+        var map = {};
         var re = /\[([^\]]+)\](https?:\/\/[^,\s]+)/g, m;
         while ((m = re.exec(str)) !== null) {
             var label = normalizeLabel(m[1]);
             if (/2160|1440|ultra|4k|2k/i.test(label)) continue;
-            if (PICK_ORDER.indexOf(label) === -1 && !/^\d{3,4}p$/.test(label)) continue;
             map[label] = m[2].trim();
         }
-
         for (var i = 0; i < PICK_ORDER.length; i++) {
-            var siteQ = PICK_ORDER[i];
-            if (map[siteQ]) {
+            if (map[PICK_ORDER[i]]) {
                 return {
-                    url: map[siteQ],
-                    quality: realQuality(siteQ), // что показываем пользователю
-                    site_quality: siteQ
+                    url: map[PICK_ORDER[i]],
+                    quality: realQuality(PICK_ORDER[i])
                 };
             }
         }
@@ -174,14 +138,9 @@
         var e = String(ep.episode_id || '');
         var title = 'Сезон ' + s + ' · Серия ' + e;
         var name = (ep.name || '').trim();
-        // убрать дубли вроде «Серия 20»
         if (name) {
             var low = name.toLowerCase();
-            var dup =
-                low === ('серия ' + e) ||
-                low === ('episode ' + e) ||
-                low === e ||
-                low === title.toLowerCase();
+            var dup = low === ('серия ' + e) || low === ('episode ' + e) || low === e;
             if (!dup) title += ' — ' + name;
         }
         return title;
@@ -294,7 +253,7 @@
 
     function Component(object) {
         var network = new Lampa.Reguest();
-        var scroll = new Lampa.Scroll({ mask: true, over: true, step: 150 });
+        var scroll = new Lampa.Scroll({ mask: true, over: true });
         var files = new Lampa.Explorer(object);
         var filter = new Lampa.Filter(object);
 
@@ -305,11 +264,7 @@
         var choice = { voice: 0, season: 0 };
         var filter_items = { voice: [], season: [], season_id: [] };
         var mode = 'search';
-        // кэш качества по озвучке (для подписи в списке)
         var voiceQualityCache = {};
-
-        files.render().addClass('hdrezka-ua');
-        scroll.render().addClass('hdrezka-ua');
 
         this.create = function () {
             this.activity.loader(true);
@@ -343,28 +298,13 @@
             return this.render();
         };
 
-        this.render = function () { return files.render(); };
+        this.render = function () {
+            return files.render();
+        };
 
         this.loading = function (status) {
             this.activity.loader(status);
-            if (!status) {
-                this.activity.toggle();
-                this.fixScroll();
-            }
-        };
-
-        this.fixScroll = function () {
-            try {
-                var head = files.render().find('.explorer__files-head, .files__header, .filter').first();
-                if (head.length) scroll.minus(head);
-                else scroll.minus();
-            } catch (e) {
-                try { scroll.minus(); } catch (e2) {}
-            }
-            try {
-                scroll.render().css({ width: '100%', maxWidth: '100%' });
-                scroll.body().css({ width: '100%', maxWidth: '100%', boxSizing: 'border-box' });
-            } catch (e3) {}
+            if (!status) this.activity.toggle();
         };
 
         this.reset = function () {
@@ -376,7 +316,7 @@
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
-                try { scroll.update($(e.target), true); } catch (err) {}
+                scroll.update($(e.target), true);
             });
             scroll.append(item);
         };
@@ -443,7 +383,11 @@
             filter.set('filter', []);
             filter.chosen('filter', []);
             items.forEach(function (it) {
-                var item = Lampa.Template.get('hdrezka_ua_item', { title: it.title, quality: '' });
+                var item = Lampa.Template.get('hdrezka_ua_item', {
+                    title: it.title,
+                    quality: '',
+                    info: ''
+                });
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -492,7 +436,8 @@
                 var q = voiceQualityCache[voice.id] || '';
                 var item = Lampa.Template.get('hdrezka_ua_item', {
                     title: voice.name,
-                    quality: q
+                    quality: q,
+                    info: ''
                 });
                 item.on('hover:enter', function () {
                     choice.voice = idx;
@@ -626,13 +571,14 @@
                 return;
             }
 
-            // одна подпись качества на озвучку (после первой загрузки обновится)
             var qHint = voiceQualityCache[voice.id] || '';
+            var voiceName = voice ? voice.name : '';
 
             list.forEach(function (ep) {
                 var item = Lampa.Template.get('hdrezka_ua_item', {
                     title: episodeTitle(ep),
-                    quality: qHint
+                    quality: qHint || '',
+                    info: voiceName ? (' / ' + voiceName) : ''
                 });
                 item.on('hover:enter', function () {
                     this.playEpisode(ep, voice, item);
@@ -662,8 +608,15 @@
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 voiceQualityCache[voice.id] = s.quality;
-                // обновить подпись у всех серий в списке
-                scroll.body().find('.online__quality').text(s.quality);
+                scroll.body().find('.online__quality').each(function () {
+                    var el = $(this);
+                    var info = el.text().indexOf(' / ') !== -1 ? el.text().replace(/^[^/]*\//, ' /') : '';
+                    // сохраняем " / озвучка" если была
+                    var full = el.text();
+                    var slash = full.indexOf(' / ');
+                    if (slash !== -1) el.text(s.quality + full.substring(slash));
+                    else el.text(s.quality);
+                });
                 var t = currentTitle + ' — ' + episodeTitle(ep) + ' — ' + voice.name;
                 this.startPlayer(t, s);
             }.bind(this), function () {
@@ -672,19 +625,12 @@
         };
 
         this.startPlayer = function (title, stream) {
-            Lampa.Player.play({
-                title: title,
-                url: stream.url,
-                quality: stream.quality
-            });
-            Lampa.Player.playlist([{
-                title: title + ' — ' + stream.quality,
-                url: stream.url
-            }]);
+            Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality });
+            Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url }]);
         };
 
         this.start = function (first_select) {
-            this.fixScroll();
+            try { scroll.minus(); } catch (e) {}
 
             if (first_select) {
                 last = scroll.render().find('.selector').eq(0)[0];
@@ -716,13 +662,6 @@
             });
 
             Lampa.Controller.toggle('content');
-
-            setTimeout(function () {
-                this.fixScroll();
-                if (last) {
-                    try { scroll.update($(last), true); } catch (e) {}
-                }
-            }.bind(this), 120);
         };
 
         this.pause = function () {};
@@ -763,7 +702,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] layout + quality remap');
+        console.log('[HDrezka UA] design = online_mod template');
     }
 
     if (window.appready) start();
