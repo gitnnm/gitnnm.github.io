@@ -20,6 +20,8 @@
         '_ym_d=1785609579';
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    // Разрешённые качества (без Ultra / 1440 / 2160)
+    var ALLOWED_Q = ['1080p', '720p', '480p', '360p'];
 
     function headers() {
         return {
@@ -55,7 +57,6 @@
         }, function () { err && err('net'); }, body, { headers: h });
     }
 
-    // --- decode потока HDrezka (как в online_mod) ---
     function decodeStream(data) {
         if (!data || data.charAt(0) !== '#') return data || '';
         var enc = function (str) {
@@ -74,17 +75,29 @@
         try { return dec(x); } catch (e) { return ''; }
     }
 
-    function parseQualities(str) {
+    /** Лучшее качество из 1080/720/480/360 */
+    function bestStream(str) {
         str = decodeStream(str);
-        if (!str) return [];
-        var out = [];
+        if (!str) return null;
+        var map = {};
         var re = /\[([^\]]+)\](https?:\/\/[^,\s]+)/g, m;
         while ((m = re.exec(str)) !== null) {
-            out.push({ quality: m[1].trim(), url: m[2].trim() });
+            var q = m[1].trim();
+            // отбрасываем Ultra / 2K / 4K
+            if (/ultra|2160|1440|4k|2k/i.test(q)) continue;
+            // нормализуем к 1080p / 720p ...
+            var num = (q.match(/(\d{3,4})/) || [])[1];
+            if (!num) continue;
+            var key = num + 'p';
+            if (ALLOWED_Q.indexOf(key) === -1) continue;
+            map[key] = m[2].trim();
         }
-        var order = { '2160p': 1, '1440p': 2, '1080p Ultra': 3, '1080p': 4, '720p': 5, '480p': 6, '360p': 7 };
-        out.sort(function (a, b) { return (order[a.quality] || 99) - (order[b.quality] || 99); });
-        return out;
+        for (var i = 0; i < ALLOWED_Q.length; i++) {
+            if (map[ALLOWED_Q[i]]) {
+                return { quality: ALLOWED_Q[i], url: map[ALLOWED_Q[i]] };
+            }
+        }
+        return null;
     }
 
     function parseSearch(html) {
@@ -98,15 +111,11 @@
         return items;
     }
 
-    // Разбор страницы фильма/сериала
     function parsePage(html) {
         var info = {
-            film_id: '',
-            favs: '',
-            is_series: false,
-            voices: [],
-            seasons: [],
-            episodes: []
+            film_id: '', favs: '', is_series: false,
+            voices: [], seasons: [], episodes: [],
+            def_voice_id: '', pageUrl: ''
         };
 
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
@@ -127,7 +136,6 @@
             info.def_director = cdnMovie[5];
         }
 
-        // Озвучки
         var list = html.match(/<ul[^>]*id="translators-list"[^>]*>([\s\S]*?)<\/ul>/i);
         if (list) {
             var itemRe = /class="[^"]*b-translator__item[^"]*"[^>]*data-translator_id="(\d+)"([^>]*)>([\s\S]*?)<\/li>/gi;
@@ -137,12 +145,6 @@
                 var name = $('<div>' + im[3] + '</div>').text().replace(/\s+/g, ' ').trim();
                 var titleAttr = (attrs.match(/title="([^"]*)"/) || [])[1];
                 if (titleAttr) name = titleAttr.trim();
-                // флаги языков из img
-                var imgs = im[3].match(/title="([^"]+)"/g) || im[3].match(/alt="([^"]+)"/g) || [];
-                imgs.forEach(function (t) {
-                    var lang = t.replace(/^(title|alt)="/, '').replace(/"$/, '');
-                    if (lang && name.indexOf(lang) === -1 && lang.length < 20) name += ' (' + lang + ')';
-                });
                 info.voices.push({
                     id: im[1],
                     name: name || ('Озвучка ' + im[1]),
@@ -153,7 +155,6 @@
             }
         }
 
-        // если списка нет — одна дефолтная
         if (!info.voices.length && info.def_voice_id) {
             info.voices.push({
                 id: info.def_voice_id,
@@ -164,7 +165,6 @@
             });
         }
 
-        // сезоны (для сериала, с первой страницы)
         var seasons = html.match(/<ul[^>]*id="simple-seasons-tabs"[^>]*>([\s\S]*?)<\/ul>/i);
         if (seasons) {
             var sRe = /data-tab_id="(\d+)"[^>]*>([^<]+)/gi, sm;
@@ -175,44 +175,80 @@
 
         var episodes = html.match(/<div[^>]*id="simple-episodes-tabs"[^>]*>([\s\S]*?)<\/div>/i);
         if (episodes) {
-            var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]+)/gi, em;
+            var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]*)/gi, em;
             while ((em = eRe.exec(episodes[1])) !== null) {
                 info.episodes.push({
                     season_id: em[1],
                     episode_id: em[2],
-                    name: em[3].trim()
+                    name: (em[3] || '').trim()
                 });
             }
         }
 
-        // потоки прямо со страницы (дефолтная озвучка)
-        var pageStreams = [];
         var cdnBlock = html.match(/initCDN(?:Movies|Series)Events\s*\([\s\S]*?(\{[\s\S]*?\})\s*\)\s*;/);
         if (cdnBlock) {
             try {
                 var data = JSON.parse(cdnBlock[1]);
-                if (data.streams) pageStreams = parseQualities(data.streams);
+                if (data.streams) info.pageStreamRaw = data.streams;
             } catch (e) {}
         }
-        if (!pageStreams.length) {
+        if (!info.pageStreamRaw) {
             var file = html.match(/file\s*:\s*['"]([^'"]+)['"]/);
-            if (file) pageStreams = parseQualities(file[1]);
+            if (file) info.pageStreamRaw = file[1];
         }
-        info.pageStreams = pageStreams;
 
         return info;
     }
 
+    function parseEpisodesHtml(html, translator_id) {
+        var episodes = [];
+        if (!html) return episodes;
+        var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]*)/gi, em;
+        while ((em = eRe.exec(html)) !== null) {
+            episodes.push({
+                season_id: em[1],
+                episode_id: em[2],
+                name: (em[3] || '').trim(),
+                translator_id: translator_id
+            });
+        }
+        return episodes;
+    }
+
+    // ---------- UI helpers ----------
+    function lineItem(title, subtitle, onEnter) {
+        var el = $('<div class="online selector">' +
+            '<div class="online__body">' +
+            '<div class="online__title">' + title + '</div>' +
+            (subtitle ? '<div class="online__texts"><div class="online__text">' + subtitle + '</div></div>' : '') +
+            '</div></div>');
+        el.on('hover:enter', onEnter);
+        return el;
+    }
+
     function Component(object) {
-        var scroll = new Lampa.Scroll({ mask: true, over: true });
+        var scroll = new Lampa.Scroll({ mask: true, over: true, step: 250 });
+        var filter_html = $('<div class="online-filter" style="padding:0 1.2em 0.8em;"></div>');
         var last;
         var pageInfo = null;
         var currentTitle = '';
+        var choice = { voice: 0, season: 0 };
+        var allEpisodes = []; // все серии текущей озвучки
+        var viewEpisodes = [];
 
         this.create = function () {
             this.activity.loader(true);
+            // контейнер: фильтр сверху + скролл
+            var root = $('<div class="online-empty" style="display:flex;flex-direction:column;height:100%;"></div>');
+            root.append(filter_html);
+            root.append(scroll.render());
+            this.root = root;
             this.search();
             return this.render();
+        };
+
+        this.render = function () {
+            return this.root || scroll.render();
         };
 
         this.search = function () {
@@ -224,21 +260,27 @@
                 var items = parseSearch(html);
                 if (!items.length) return this.empty('Ничего не найдено');
                 if (items.length === 1) this.openTitle(items[0]);
-                else this.showSearch(items);
+                else this.drawSearch(items);
             }.bind(this), function (e) {
-                this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка сети');
+                this.empty(e === 'cookie' ? 'Cookie устарели — обнови в коде' : 'Ошибка сети');
             }.bind(this));
         };
 
-        this.showSearch = function (items) {
-            this.activity.loader(false);
+        this.clearList = function () {
             scroll.clear();
             scroll.body().empty();
+        };
+
+        this.drawSearch = function (items) {
+            this.activity.loader(false);
+            filter_html.empty();
+            this.clearList();
             items.forEach(function (item) {
-                var el = $('<div class="online selector"><div class="online__title">' + item.title + '</div></div>');
-                el.on('hover:enter', function () { this.openTitle(item); }.bind(this));
-                scroll.append(el);
+                scroll.append(lineItem(item.title, '', function () {
+                    this.openTitle(item);
+                }.bind(this)));
             }.bind(this));
+            this.focusFirst();
             this.activity.toggle();
         };
 
@@ -247,60 +289,140 @@
             currentTitle = item.title;
             reqGet(item.url, function (html) {
                 pageInfo = parsePage(html);
-                if (!pageInfo.film_id && !pageInfo.voices.length && !pageInfo.pageStreams.length) {
+                if (!pageInfo.film_id && !pageInfo.voices.length) {
                     return this.empty('Не удалось разобрать страницу');
                 }
-                // если одна озвучка и фильм — сразу качества (или ajax)
-                if (!pageInfo.is_series && pageInfo.voices.length <= 1) {
-                    this.loadMovieVoice(pageInfo.voices[0] || null);
+                choice.voice = 0;
+                choice.season = 0;
+                // индекс дефолтной озвучки
+                for (var i = 0; i < pageInfo.voices.length; i++) {
+                    if (String(pageInfo.voices[i].id) === String(pageInfo.def_voice_id)) {
+                        choice.voice = i;
+                        break;
+                    }
+                }
+                if (pageInfo.is_series) {
+                    this.loadEpisodesForVoice(pageInfo.voices[choice.voice]);
                 } else {
-                    this.showVoices();
+                    this.drawFilter();
+                    this.playMovie();
                 }
             }.bind(this), function (e) {
                 this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка загрузки');
             }.bind(this));
         };
 
-        this.showVoices = function () {
-            this.activity.loader(false);
-            scroll.clear();
-            scroll.body().empty();
+        // --- фильтр (озвучка / сезон) ---
+        this.drawFilter = function () {
+            filter_html.empty();
+            var row = $('<div class="items-line__head" style="display:flex;flex-wrap:wrap;gap:0.6em;align-items:center;"></div>');
 
-            if (!pageInfo.voices.length) {
-                this.empty('Озвучки не найдены');
-                return;
+            // кнопка озвучки
+            if (pageInfo.voices.length) {
+                var v = pageInfo.voices[choice.voice];
+                var voiceBtn = $('<div class="simple-button simple-button--filter selector" style="margin:0;">' +
+                    '<span>Озвучка</span> · ' + (v ? v.name : '') + '</div>');
+                voiceBtn.on('hover:enter', function () {
+                    this.openVoiceSelect();
+                }.bind(this));
+                row.append(voiceBtn);
             }
 
-            scroll.append($('<div class="online" style="opacity:.6;padding:10px 16px;">Озвучка</div>'));
-
-            pageInfo.voices.forEach(function (v) {
-                var el = $('<div class="online selector"><div class="online__title">' + v.name + '</div></div>');
-                el.on('hover:enter', function () {
-                    if (pageInfo.is_series) this.loadSeriesVoice(v);
-                    else this.loadMovieVoice(v);
+            // кнопка сезона (только сериал)
+            if (pageInfo.is_series && pageInfo.seasons.length) {
+                var s = pageInfo.seasons[choice.season];
+                var seasonBtn = $('<div class="simple-button simple-button--filter selector" style="margin:0;">' +
+                    '<span>Сезон</span> · ' + (s ? s.name : '') + '</div>');
+                seasonBtn.on('hover:enter', function () {
+                    this.openSeasonSelect();
                 }.bind(this));
-                scroll.append(el);
-            }.bind(this));
+                row.append(seasonBtn);
+            }
 
-            this.activity.toggle();
+            filter_html.append(row);
         };
 
-        // ----- ФИЛЬМ: ajax get_movie -----
-        this.loadMovieVoice = function (voice) {
-            this.activity.loader(true);
+        this.openVoiceSelect = function () {
+            var items = pageInfo.voices.map(function (v, i) {
+                return {
+                    title: v.name,
+                    selected: i === choice.voice,
+                    index: i
+                };
+            });
+            Lampa.Select.show({
+                title: 'Озвучка',
+                items: items,
+                onSelect: function (a) {
+                    choice.voice = a.index;
+                    choice.season = 0;
+                    if (pageInfo.is_series) {
+                        this.loadEpisodesForVoice(pageInfo.voices[choice.voice]);
+                    } else {
+                        this.drawFilter();
+                        this.playMovie();
+                    }
+                }.bind(this),
+                onBack: function () {
+                    Lampa.Controller.toggle('content');
+                }
+            });
+        };
 
-            // если это дефолтная озвучка и потоки уже на странице
-            if (voice && pageInfo.pageStreams.length && String(voice.id) === String(pageInfo.def_voice_id)) {
-                this.showQualities(pageInfo.pageStreams, currentTitle + ' — ' + voice.name);
+        this.openSeasonSelect = function () {
+            var seasons = pageInfo.seasons;
+            if (!seasons.length) {
+                // уникальные сезоны из эпизодов
+                var map = {}, list = [];
+                allEpisodes.forEach(function (e) {
+                    if (!map[e.season_id]) {
+                        map[e.season_id] = true;
+                        list.push({ id: e.season_id, name: 'Сезон ' + e.season_id });
+                    }
+                });
+                seasons = list;
+                pageInfo.seasons = seasons;
+            }
+            var items = seasons.map(function (s, i) {
+                return {
+                    title: s.name,
+                    selected: i === choice.season,
+                    index: i
+                };
+            });
+            Lampa.Select.show({
+                title: 'Сезон',
+                items: items,
+                onSelect: function (a) {
+                    choice.season = a.index;
+                    this.drawFilter();
+                    this.drawEpisodes();
+                }.bind(this),
+                onBack: function () {
+                    Lampa.Controller.toggle('content');
+                }
+            });
+        };
+
+        // --- фильм: сразу play лучшего качества ---
+        this.playMovie = function () {
+            this.activity.loader(true);
+            this.clearList();
+
+            var voice = pageInfo.voices[choice.voice];
+            if (!voice) {
+                this.empty('Нет озвучки');
                 return;
             }
 
-            if (!pageInfo.film_id || !voice) {
-                if (pageInfo.pageStreams.length) {
-                    this.showQualities(pageInfo.pageStreams, currentTitle);
-                } else {
-                    this.empty('Нет данных для загрузки');
-                }
+            // дефолтный поток со страницы
+            if (String(voice.id) === String(pageInfo.def_voice_id) && pageInfo.pageStreamRaw) {
+                var s = bestStream(pageInfo.pageStreamRaw);
+                this.activity.loader(false);
+                if (!s) return this.empty('Нет доступного качества (1080/720/480/360)');
+                this.drawPlayLine(s, currentTitle + ' — ' + voice.name);
+                this.focusFirst();
+                this.activity.toggle();
                 return;
             }
 
@@ -318,20 +440,34 @@
                 if (typeof json === 'string') {
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
-                var streams = parseQualities(json && json.url);
-                if (!streams.length) {
-                    this.empty('Потоки для этой озвучки не найдены');
-                    return;
+                this.activity.loader(false);
+                if (json && json.premium_content) {
+                    return this.empty('Перевод только с Premium');
                 }
-                this.showQualities(streams, currentTitle + ' — ' + voice.name);
+                var s = bestStream(json && json.url);
+                if (!s) return this.empty('Нет доступного качества');
+                this.drawPlayLine(s, currentTitle + ' — ' + voice.name);
+                this.focusFirst();
+                this.activity.toggle();
             }.bind(this), function () {
-                this.empty('Ошибка AJAX');
+                this.empty('Ошибка загрузки потока');
             }.bind(this));
         };
 
-        // ----- СЕРИАЛ: эпизоды для озвучки -----
-        this.loadSeriesVoice = function (voice) {
+        this.drawPlayLine = function (stream, title) {
+            this.clearList();
+            var el = lineItem('Смотреть', stream.quality, function () {
+                Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality });
+                Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url }]);
+            });
+            scroll.append(el);
+        };
+
+        // --- сериал ---
+        this.loadEpisodesForVoice = function (voice) {
             this.activity.loader(true);
+            this.clearList();
+
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body =
                 'id=' + encodeURIComponent(pageInfo.film_id) +
@@ -344,43 +480,38 @@
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
 
-                var episodes = [];
-                // seasons html in json.seasons / episodes in json.episodes
-                var epHtml = (json && (json.episodes || json.seasons)) || '';
-                if (typeof epHtml === 'string') {
-                    var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]*)/gi, em;
-                    while ((em = eRe.exec(epHtml)) !== null) {
-                        episodes.push({
-                            season_id: em[1],
-                            episode_id: em[2],
-                            name: (em[3] || ('S' + em[1] + 'E' + em[2])).trim(),
+                allEpisodes = parseEpisodesHtml(json && json.episodes, voice.id);
+                if (!allEpisodes.length) {
+                    allEpisodes = parseEpisodesHtml(json && json.seasons, voice.id);
+                }
+                if (!allEpisodes.length && pageInfo.episodes.length) {
+                    allEpisodes = pageInfo.episodes.map(function (e) {
+                        return {
+                            season_id: e.season_id,
+                            episode_id: e.episode_id,
+                            name: e.name,
                             translator_id: voice.id
-                        });
+                        };
+                    });
+                }
+
+                // собрать сезоны
+                var map = {}, seasons = [];
+                allEpisodes.forEach(function (e) {
+                    if (!map[e.season_id]) {
+                        map[e.season_id] = true;
+                        seasons.push({ id: e.season_id, name: 'Сезон ' + e.season_id });
                     }
-                }
+                });
+                seasons.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
+                pageInfo.seasons = seasons;
+                if (choice.season >= seasons.length) choice.season = 0;
 
-                // fallback — с первой страницы
-                if (!episodes.length && pageInfo.episodes.length) {
-                    episodes = pageInfo.episodes.map(function (e) {
-                        return {
-                            season_id: e.season_id,
-                            episode_id: e.episode_id,
-                            name: e.name,
-                            translator_id: voice.id
-                        };
-                    });
-                }
-
-                if (!episodes.length) {
-                    this.empty('Серии не найдены');
-                    return;
-                }
-
-                this.showEpisodes(episodes, voice);
+                this.drawFilter();
+                this.drawEpisodes();
             }.bind(this), function () {
-                // fallback на эпизоды со страницы
                 if (pageInfo.episodes.length) {
-                    var episodes = pageInfo.episodes.map(function (e) {
+                    allEpisodes = pageInfo.episodes.map(function (e) {
                         return {
                             season_id: e.season_id,
                             episode_id: e.episode_id,
@@ -388,30 +519,55 @@
                             translator_id: voice.id
                         };
                     });
-                    this.showEpisodes(episodes, voice);
+                    this.drawFilter();
+                    this.drawEpisodes();
                 } else {
-                    this.empty('Ошибка загрузки серий');
+                    this.empty('Не удалось загрузить серии');
                 }
             }.bind(this));
         };
 
-        this.showEpisodes = function (episodes, voice) {
+        this.drawEpisodes = function () {
             this.activity.loader(false);
-            scroll.clear();
-            scroll.body().empty();
-            scroll.append($('<div class="online" style="opacity:.6;padding:10px 16px;">' + voice.name + '</div>'));
+            this.clearList();
 
-            episodes.forEach(function (ep) {
-                var label = 'S' + ep.season_id + 'E' + ep.episode_id + (ep.name ? ' — ' + ep.name : '');
-                var el = $('<div class="online selector"><div class="online__title">' + label + '</div></div>');
-                el.on('hover:enter', function () { this.loadEpisode(ep, voice); }.bind(this));
+            var season = pageInfo.seasons[choice.season];
+            var sid = season ? String(season.id) : null;
+
+            viewEpisodes = allEpisodes.filter(function (e) {
+                return !sid || String(e.season_id) === sid;
+            });
+
+            if (!viewEpisodes.length) {
+                scroll.append($('<div class="empty__text" style="padding:1.5em;">Нет серий в этом сезоне</div>'));
+                this.activity.toggle();
+                return;
+            }
+
+            var voice = pageInfo.voices[choice.voice];
+
+            viewEpisodes.forEach(function (ep, idx) {
+                var num = ep.episode_id;
+                var title = 'Серия ' + num;
+                var sub = ep.name && ep.name !== title ? ep.name : '';
+                var el = lineItem(title, sub, function () {
+                    this.playEpisode(ep, voice);
+                }.bind(this));
+
+                el.on('hover:focus', function () {
+                    last = el;
+                });
+
                 scroll.append(el);
             }.bind(this));
 
+            this.focusFirst();
             this.activity.toggle();
+            // важно для длинных списков
+            try { scroll.update(last || scroll.body().find('.selector').first()); } catch (e) {}
         };
 
-        this.loadEpisode = function (ep, voice) {
+        this.playEpisode = function (ep, voice) {
             this.activity.loader(true);
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body =
@@ -423,45 +579,56 @@
                 '&action=get_stream';
 
             reqPost(url, body, function (json) {
+                this.activity.loader(false);
                 if (typeof json === 'string') {
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
-                var streams = parseQualities(json && json.url);
-                if (!streams.length) {
-                    this.empty('Потоки серии не найдены');
+                if (json && json.premium_content) {
+                    Lampa.Noty.show('Перевод только с Premium');
+                    return;
+                }
+                var s = bestStream(json && json.url);
+                if (!s) {
+                    Lampa.Noty.show('Нет доступного качества');
                     return;
                 }
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                this.showQualities(streams, t);
+                Lampa.Player.play({ title: t, url: s.url, quality: s.quality });
+                // плейлист остальных серий сезона
+                var pl = viewEpisodes.map(function (e) {
+                    return {
+                        title: currentTitle + ' S' + e.season_id + 'E' + e.episode_id,
+                        url: '', // подгрузится только текущая; остальные без url — ок для одной серии
+                        media: e
+                    };
+                });
+                Lampa.Player.playlist([{ title: t + ' — ' + s.quality, url: s.url }]);
             }.bind(this), function () {
-                this.empty('Ошибка загрузки серии');
+                this.activity.loader(false);
+                Lampa.Noty.show('Ошибка загрузки серии');
             }.bind(this));
         };
 
-        this.showQualities = function (streams, title) {
-            this.activity.loader(false);
-            scroll.clear();
-            scroll.body().empty();
-            streams.forEach(function (s) {
-                var el = $('<div class="online selector"><div class="online__title">' + s.quality + '</div></div>');
-                el.on('hover:enter', function () {
-                    Lampa.Player.play({ title: title, url: s.url, quality: s.quality });
-                    Lampa.Player.playlist([{ title: title + ' — ' + s.quality, url: s.url }]);
-                });
-                scroll.append(el);
-            });
-            this.activity.toggle();
+        this.focusFirst = function () {
+            last = scroll.body().find('.selector').first();
         };
 
         this.empty = function (msg) {
             this.activity.loader(false);
-            scroll.clear();
-            scroll.body().empty();
-            scroll.append($('<div class="empty__text" style="padding:20px;white-space:pre-line;">' + msg + '</div>'));
+            filter_html.empty();
+            this.clearList();
+            scroll.append($('<div class="empty__text" style="padding:1.5em;white-space:pre-line;">' + msg + '</div>'));
             this.activity.toggle();
         };
 
         this.start = function () {
+            // высота скролла под экран (чтобы серии не уезжали «в никуда»)
+            try {
+                scroll.minus(filter_html);
+            } catch (e) {
+                try { scroll.minus(); } catch (e2) {}
+            }
+
             Lampa.Controller.add('content', {
                 toggle: function () {
                     Lampa.Controller.collectionSet(scroll.render());
@@ -486,8 +653,9 @@
 
         this.pause = function () {};
         this.stop = function () {};
-        this.render = function () { return scroll.render(); };
-        this.destroy = function () { scroll.destroy(); };
+        this.destroy = function () {
+            scroll.destroy();
+        };
     }
 
     function addButton() {
@@ -519,7 +687,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] voices + series');
+        console.log('[HDrezka UA] UI + filter + auto quality');
     }
 
     if (window.appready) start();
