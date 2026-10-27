@@ -7,7 +7,7 @@
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
 
-    // Сюда вставляйте свои актуальные куки
+    // Вставьте сюда ваши актуальные куки
     var COOKIE =
         'PHPSESSID=a5t2q76mr23490t9ihlgu7t5uf; ' +
         'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExN2VmNC1mMTdiLTdhZWQtOGYzMS05ZGYyN2NkODFlZWEiLCJleHAiOjE3OTU3MjMzNDUsImlhdCI6MTc5MzEzMTM0NSwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzEzMTI4NSwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6ImM5NGI5ZTVhMzA4NDdlMGE2MzNmMmM3MTI0YzVlMTQ5MjI2YjFlMTY2MmQ0YmRjOTk0OTE3NjIzNjBiNjU0NjAifQ.Hp6S_VzCYRRRWxGZBfRnxxDsF-Lu-G6GjXZsJp5GgGHf7WG8Uxi7I-20aG35EzH4Da-6Wl60G_oMmRDiI5CDBw; ' +
@@ -22,6 +22,9 @@
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
+    // === ИСПРАВЛЕНИЕ ОБМАНА КАЧЕСТВА ===
+    // HDrezka отдает на шаг выше реального (1080p на деле 720p).
+    // Эта функция сдвигает качество вниз для отображения.
     function fixQualityCheat(q) {
         if (!q) return '360p';
         var num = parseInt(q, 10);
@@ -32,6 +35,43 @@
         if (num >= 360) return '240p';
         return q;
     }
+
+    // Инжектим стили для точной копии карточки BWA
+    if (!$('#hdrezka_ua_fix_css').length) {
+        $('head').append(
+            '<style id="hdrezka_ua_fix_css">' +
+            '/* Ограничиваем ширину карточки, чтобы не уезжала за экран */' +
+            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; margin-bottom: 0.5em !important; }' +
+            '/* Флексбокс для выравнивания иконки и текста по центру */' +
+            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; }' +
+            '/* Иконка */' +
+            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2em !important; height: 2em !important; margin-right: 1em !important; }' +
+            '/* Текстовая часть */' +
+            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
+            '/* Название */' +
+            '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
+            '/* Подзаголовок (качество/озвучка) */' +
+            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; }' +
+            '</style>'
+        );
+    }
+
+    Lampa.Template.add('hdrezka_ua_item', 
+        '<div class="online selector hdrezka-ua-item">' +
+        '  <div class="online__body hdrezka-ua-inner">' +
+        '    <div class="hdrezka-ua-icon">' +
+        '      <svg style="width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
+        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
+        '      </svg>' +
+        '    </div>' +
+        '    <div class="hdrezka-ua-text">' +
+        '      <div class="hdrezka-ua-title">{title}</div>' +
+        '      <div class="hdrezka-ua-subtext">{quality}{info}</div>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>'
+    );
 
     function headers() {
         return {
@@ -86,7 +126,7 @@
             var num = (q.match(/(\d{3,4})/) || [])[1];
             if (!num) continue;
             var key = num + 'p';
-            if (!map[key]) map[key] = m[2].trim();
+            if (!map[key]) map[key] = m[2].trim(); 
         }
         
         var qualities = ['1080p', '720p', '480p', '360p'];
@@ -273,7 +313,6 @@
             scroll.body().empty();
         };
 
-        // ВОТ ЗДЕСЬ МЫ ИСПОЛЬЗУЕМ НАТИВНЫЙ ШАБЛОН LAMPA
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
@@ -343,12 +382,8 @@
             filter.chosen('filter', []);
 
             items.forEach(function (it) {
-                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
-                var item = Lampa.Template.get('torrent-item', {
-                    title: it.title,
-                    quality: '',
-                    info: it.info || ''
-                });
+                var element = { title: it.title, quality: '', info: '' };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -392,12 +427,8 @@
             this.loading(false);
 
             pageInfo.voices.forEach(function (voice, idx) {
-                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
-                var item = Lampa.Template.get('torrent-item', {
-                    title: voice.name,
-                    quality: 'HD',
-                    info: ' / Фильм'
-                });
+                var element = { title: voice.name, quality: 'HD', info: '' };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () {
                     choice.voice = idx;
                     this.playMovie(voice);
@@ -500,14 +531,17 @@
 
             list.forEach(function (ep) {
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
+                if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) {
+                    titleText += ' (' + ep.name + ')';
+                }
+
+                var element = { 
+                    title: titleText, 
+                    quality: '360p ~ 1080p', 
+                    info: ' / ' + (voice ? voice.name : '') 
+                };
                 
-                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
-                var item = Lampa.Template.get('torrent-item', {
-                    title: titleText,
-                    quality: '', 
-                    info: ' / ' + (voice ? voice.name : '')
-                });
-                
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () {
                     this.playEpisode(ep, voice);
                 }.bind(this));
@@ -622,7 +656,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] moved to native torrent-item template');
+        console.log('[HDrezka UA] fixed layout, titles and quality shift');
     }
 
     if (window.appready) start();
