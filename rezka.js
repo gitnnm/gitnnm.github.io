@@ -7,6 +7,7 @@
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
 
+    // Сюда вставляйте свои актуальные куки
     var COOKIE =
         'PHPSESSID=a5t2q76mr23490t9ihlgu7t5uf; ' +
         'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExN2VmNC1mMTdiLTdhZWQtOGYzMS05ZGYyN2NkODFlZWEiLCJleHAiOjE3OTU3MjMzNDUsImlhdCI6MTc5MzEzMTM0NSwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzEzMTI4NSwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6ImM5NGI5ZTVhMzA4NDdlMGE2MzNmMmM3MTI0YzVlMTQ5MjI2YjFlMTY2MmQ0YmRjOTk0OTE3NjIzNjBiNjU0NjAifQ.Hp6S_VzCYRRRWxGZBfRnxxDsF-Lu-G6GjXZsJp5GgGHf7WG8Uxi7I-20aG35EzH4Da-6Wl60G_oMmRDiI5CDBw; ' +
@@ -21,34 +22,53 @@
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-    // сайт завышает качество на ступень
-    var QUALITY_REMAP = {
-        '1080p Ultra': '1080p',
-        '1080p': '720p',
-        '720p': '480p',
-        '480p': '360p',
-        '360p': '240p'
-    };
-    var PICK_ORDER = ['1080p', '720p', '480p', '360p'];
+    // === ИСПРАВЛЕНИЕ ОБМАНА КАЧЕСТВА ===
+    // HDrezka отдает на шаг выше реального (1080p на деле 720p).
+    // Эта функция сдвигает качество вниз для отображения.
+    function fixQualityCheat(q) {
+        if (!q) return '360p';
+        var num = parseInt(q, 10);
+        if (isNaN(num)) return q;
+        if (num >= 1080) return '720p';
+        if (num >= 720) return '480p';
+        if (num >= 480) return '360p';
+        if (num >= 360) return '240p';
+        return q;
+    }
 
-    // Ровно как online_mod — без своих стилей
-    Lampa.Template.add('hdrezka_ua_item',
-        '<div class="online selector">' +
-        '  <div class="online__body">' +
-        '    <div style="position:absolute;left:0;top:-0.3em;width:2.4em;height:2.4em">' +
-        '      <svg style="height:2.4em;width:2.4em" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    // Инжектим стили для ровных карточек
+    if (!$('#hdrezka_ua_fix_css').length) {
+        $('head').append(
+            '<style id="hdrezka_ua_fix_css">' +
+            '/* Ограничиваем ширину карточки, чтобы не уезжала за экран */' +
+            '.hdrezka-ua-item { box-sizing: border-box !important; width: 100% !important; max-width: 100% !important; overflow: hidden; }' +
+            '/* Флексбокс для выравнивания иконки и текста в одну линию */' +
+            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; }' +
+            '/* Иконка */' +
+            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2em !important; height: 2em !important; margin-right: 0.5em !important; }' +
+            '/* Тексты */' +
+            '.hdrezka-ua-text { flex-grow: 1 !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }' +
+            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; margin-top: 0.2em !important; }' +
+            '</style>'
+        );
+    }
+
+    Lampa.Template.add('hdrezka_ua_item', 
+        '<div class="online selector hdrezka-ua-item">' +
+        '  <div class="online__body hdrezka-ua-inner">' +
+        '    <div class="hdrezka-ua-icon">' +
+        '      <svg style="width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
         '        <circle cx="64" cy="64" r="56" stroke="white" stroke-width="16"/>' +
         '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="white"/>' +
         '      </svg>' +
         '    </div>' +
-        '    <div class="online__title" style="padding-left:2.1em">{title}</div>' +
-        '    <div class="online__quality" style="padding-left:3.4em">{quality}{info}</div>' +
+        '    <div class="hdrezka-ua-text">' +
+        '      <div class="online__title">{title}</div>' +
+        '      <div class="online__quality hdrezka-ua-subtext">{quality}{info}</div>' +
+        '    </div>' +
         '  </div>' +
         '</div>'
     );
-
-    // убрать кривой css от прошлых версий, если остался
-    $('#hdrezka_ua_css').remove();
 
     function headers() {
         return {
@@ -84,32 +104,12 @@
 
     function decodeStream(data) {
         if (!data || data.charAt(0) !== '#') return data || '';
-        var enc = function (str) {
-            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (m, p1) {
-                return String.fromCharCode('0x' + p1);
-            }));
-        };
-        var dec = function (str) {
-            return decodeURIComponent(atob(str).split('').map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-        };
+        var enc = function (str) { return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (m, p1) { return String.fromCharCode('0x' + p1); })); };
+        var dec = function (str) { return decodeURIComponent(atob(str).split('').map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join('')); };
         var trashList = ['$$!!@$$@^!@#$$@', '@@@@@!##!^^^', '####^!!##!@@', '^^^!@##!!##', '$$#!!@#!@##'];
         var x = data.substring(2);
         trashList.forEach(function (t) { x = x.replace('//_//' + enc(t), ''); });
         try { return dec(x); } catch (e) { return ''; }
-    }
-
-    function normalizeLabel(q) {
-        q = (q || '').trim();
-        if (/ultra/i.test(q)) return '1080p Ultra';
-        var num = (q.match(/(\d{3,4})/) || [])[1];
-        return num ? (num + 'p') : q;
-    }
-
-    function realQuality(siteLabel) {
-        var key = normalizeLabel(siteLabel);
-        return QUALITY_REMAP[key] || key;
     }
 
     function bestStream(str) {
@@ -118,32 +118,23 @@
         var map = {};
         var re = /\[([^\]]+)\](https?:\/\/[^,\s]+)/g, m;
         while ((m = re.exec(str)) !== null) {
-            var label = normalizeLabel(m[1]);
-            if (/2160|1440|ultra|4k|2k/i.test(label)) continue;
-            map[label] = m[2].trim();
+            var q = m[1].trim();
+            if (/ultra|2160|1440|4k|2k/i.test(q)) continue;
+            var num = (q.match(/(\d{3,4})/) || [])[1];
+            if (!num) continue;
+            var key = num + 'p';
+            if (!map[key]) map[key] = m[2].trim(); // Берем первый попавшийся, чтобы не перезаписать
         }
-        for (var i = 0; i < PICK_ORDER.length; i++) {
-            if (map[PICK_ORDER[i]]) {
-                return {
-                    url: map[PICK_ORDER[i]],
-                    quality: realQuality(PICK_ORDER[i])
-                };
+        
+        // Ищем от большего к меньшему
+        var qualities = ['1080p', '720p', '480p', '360p'];
+        for (var i = 0; i < qualities.length; i++) {
+            if (map[qualities[i]]) {
+                // Возвращаем ссылку и РЕАЛЬНОЕ (исправленное) качество
+                return { quality: fixQualityCheat(qualities[i]), url: map[qualities[i]] };
             }
         }
         return null;
-    }
-
-    function episodeTitle(ep) {
-        var s = String(ep.season_id || '');
-        var e = String(ep.episode_id || '');
-        var title = 'Сезон ' + s + ' · Серия ' + e;
-        var name = (ep.name || '').trim();
-        if (name) {
-            var low = name.toLowerCase();
-            var dup = low === ('серия ' + e) || low === ('episode ' + e) || low === e;
-            if (!dup) title += ' — ' + name;
-        }
-        return title;
     }
 
     function parseSearch(html) {
@@ -160,7 +151,7 @@
     function parsePage(html) {
         var info = {
             film_id: '', favs: '', is_series: false,
-            voices: [], episodes: [],
+            voices: [], seasons: [], episodes: [],
             def_voice_id: '', pageStreamRaw: ''
         };
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
@@ -253,7 +244,7 @@
 
     function Component(object) {
         var network = new Lampa.Reguest();
-        var scroll = new Lampa.Scroll({ mask: true, over: true });
+        var scroll = new Lampa.Scroll({ mask: true, over: true, step: 150 });
         var files = new Lampa.Explorer(object);
         var filter = new Lampa.Filter(object);
 
@@ -264,7 +255,6 @@
         var choice = { voice: 0, season: 0 };
         var filter_items = { voice: [], season: [], season_id: [] };
         var mode = 'search';
-        var voiceQualityCache = {};
 
         this.create = function () {
             this.activity.loader(true);
@@ -298,13 +288,22 @@
             return this.render();
         };
 
-        this.render = function () {
-            return files.render();
-        };
+        this.render = function () { return files.render(); };
 
         this.loading = function (status) {
             this.activity.loader(status);
-            if (!status) this.activity.toggle();
+            if (!status) {
+                this.activity.toggle();
+                this.fixScroll();
+            }
+        };
+
+        this.fixScroll = function () {
+            try {
+                var head = files.render().find('.explorer__files-head, .files__header, .filter').first();
+                if (head.length) scroll.minus(head);
+                else scroll.minus();
+            } catch (e) {}
         };
 
         this.reset = function () {
@@ -316,7 +315,7 @@
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
-                scroll.update($(e.target), true);
+                try { scroll.update($(e.target), true); } catch (err) {}
             });
             scroll.append(item);
         };
@@ -331,6 +330,7 @@
         this.buildFilter = function () {
             var select = [];
             var need = choice;
+
             var add = function (type, title) {
                 var items = filter_items[type] || [];
                 if (!items.length) return;
@@ -338,16 +338,13 @@
                 items.forEach(function (name, i) {
                     sub.push({ title: name, selected: need[type] == i, index: i });
                 });
-                select.push({
-                    title: title,
-                    subtitle: items[need[type]] || '',
-                    items: sub,
-                    stype: type
-                });
+                select.push({ title: title, subtitle: items[need[type]] || '', items: sub, stype: type });
             };
+
             select.push({ title: Lampa.Lang.translate('torrent_parser_reset') || 'Сбросить', reset: true });
             add('voice', Lampa.Lang.translate('torrent_parser_voice') || 'Озвучка');
             add('season', Lampa.Lang.translate('torrent_serial_season') || 'Сезон');
+
             filter.set('filter', select);
 
             var chosen = [];
@@ -382,27 +379,23 @@
             this.loading(false);
             filter.set('filter', []);
             filter.chosen('filter', []);
+
             items.forEach(function (it) {
-                var item = Lampa.Template.get('hdrezka_ua_item', {
-                    title: it.title,
-                    quality: '',
-                    info: ''
-                });
+                var element = { title: it.title, quality: '', info: '' };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
+
             this.start(true);
         };
 
         this.openTitle = function (item) {
             this.loading(true);
             currentTitle = item.title;
-            voiceQualityCache = {};
             reqGet(item.url, function (html) {
                 pageInfo = parsePage(html);
-                if (!pageInfo.film_id && !pageInfo.voices.length) {
-                    return this.empty('Не удалось разобрать страницу');
-                }
+                if (!pageInfo.film_id && !pageInfo.voices.length) return this.empty('Не удалось разобрать страницу');
                 choice.voice = 0;
                 choice.season = 0;
                 for (var i = 0; i < pageInfo.voices.length; i++) {
@@ -433,15 +426,11 @@
             this.loading(false);
 
             pageInfo.voices.forEach(function (voice, idx) {
-                var q = voiceQualityCache[voice.id] || '';
-                var item = Lampa.Template.get('hdrezka_ua_item', {
-                    title: voice.name,
-                    quality: q,
-                    info: ''
-                });
+                var element = { title: voice.name, quality: 'HD', info: '' };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () {
                     choice.voice = idx;
-                    this.playMovie(voice, item);
+                    this.playMovie(voice);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -449,24 +438,18 @@
             this.start(true);
         };
 
-        this.playMovie = function (voice, itemEl) {
+        this.playMovie = function (voice) {
             Lampa.Noty.show('Загрузка…');
 
-            var finish = function (s) {
-                if (!s) return Lampa.Noty.show('Нет доступного качества');
-                voiceQualityCache[voice.id] = s.quality;
-                if (itemEl) itemEl.find('.online__quality').text(s.quality);
-                this.startPlayer(currentTitle + ' — ' + voice.name, s);
-            }.bind(this);
-
             if (String(voice.id) === String(pageInfo.def_voice_id) && pageInfo.pageStreamRaw) {
-                finish(bestStream(pageInfo.pageStreamRaw));
+                var s0 = bestStream(pageInfo.pageStreamRaw);
+                if (!s0) return Lampa.Noty.show('Нет доступного качества');
+                this.startPlayer(currentTitle + ' — ' + voice.name, s0);
                 return;
             }
 
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
-            var body =
-                'id=' + encodeURIComponent(pageInfo.film_id) +
+            var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
                 '&translator_id=' + encodeURIComponent(voice.id) +
                 '&is_camrip=' + encodeURIComponent(voice.is_camrip || '0') +
                 '&is_ads=' + encodeURIComponent(voice.is_ads || '0') +
@@ -479,8 +462,10 @@
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
                 if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
-                finish(bestStream(json && json.url));
-            }, function () {
+                var s = bestStream(json && json.url);
+                if (!s) return Lampa.Noty.show('Нет доступного качества');
+                this.startPlayer(currentTitle + ' — ' + voice.name, s);
+            }.bind(this), function () {
                 Lampa.Noty.show('Ошибка потока');
             });
         };
@@ -491,8 +476,7 @@
             if (!voice) return this.empty('Нет озвучки');
 
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
-            var body =
-                'id=' + encodeURIComponent(pageInfo.film_id) +
+            var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
                 '&translator_id=' + encodeURIComponent(voice.id) +
                 '&favs=' + encodeURIComponent(pageInfo.favs || '') +
                 '&action=get_episodes';
@@ -505,12 +489,7 @@
                 if (!allEpisodes.length) allEpisodes = parseEpisodesHtml(json && json.seasons, voice.id);
                 if (!allEpisodes.length && pageInfo.episodes.length) {
                     allEpisodes = pageInfo.episodes.map(function (e) {
-                        return {
-                            season_id: e.season_id,
-                            episode_id: e.episode_id,
-                            name: e.name,
-                            translator_id: voice.id
-                        };
+                        return { season_id: e.season_id, episode_id: e.episode_id, name: e.name, translator_id: voice.id };
                     });
                 }
 
@@ -528,29 +507,7 @@
 
                 this.drawEpisodeList();
             }.bind(this), function () {
-                if (pageInfo.episodes.length) {
-                    allEpisodes = pageInfo.episodes.map(function (e) {
-                        return {
-                            season_id: e.season_id,
-                            episode_id: e.episode_id,
-                            name: e.name,
-                            translator_id: voice.id
-                        };
-                    });
-                    var map = {}, pairs = [];
-                    allEpisodes.forEach(function (e) {
-                        if (!map[e.season_id]) {
-                            map[e.season_id] = true;
-                            pairs.push({ id: e.season_id, n: 'Сезон ' + e.season_id });
-                        }
-                    });
-                    pairs.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
-                    filter_items.season = pairs.map(function (p) { return p.n; });
-                    filter_items.season_id = pairs.map(function (p) { return p.id; });
-                    this.drawEpisodeList();
-                } else {
-                    this.empty('Серии не найдены');
-                }
+                this.empty('Ошибка загрузки серий');
             }.bind(this));
         };
 
@@ -571,17 +528,24 @@
                 return;
             }
 
-            var qHint = voiceQualityCache[voice.id] || '';
-            var voiceName = voice ? voice.name : '';
-
             list.forEach(function (ep) {
-                var item = Lampa.Template.get('hdrezka_ua_item', {
-                    title: episodeTitle(ep),
-                    quality: qHint || '',
-                    info: voiceName ? (' / ' + voiceName) : ''
-                });
+                // ИСПРАВЛЕНИЕ НАЗВАНИЙ СЕРИЙ
+                // Больше не пишем "Серия 20 - серия 20", выводим понятный сезон и серию
+                var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
+                // Если в ep.name есть что-то отличное от "серия 20", добавляем как подзаголовок
+                if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) {
+                    titleText += ' (' + ep.name + ')';
+                }
+
+                var element = { 
+                    title: titleText, 
+                    quality: '360p ~ 1080p', 
+                    info: ' / ' + (voice ? voice.name : '') 
+                };
+                
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () {
-                    this.playEpisode(ep, voice, item);
+                    this.playEpisode(ep, voice);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -589,11 +553,10 @@
             this.start(true);
         };
 
-        this.playEpisode = function (ep, voice, itemEl) {
+        this.playEpisode = function (ep, voice) {
             Lampa.Noty.show('Загрузка…');
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
-            var body =
-                'id=' + encodeURIComponent(pageInfo.film_id) +
+            var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
                 '&translator_id=' + encodeURIComponent(voice.id) +
                 '&season=' + encodeURIComponent(ep.season_id) +
                 '&episode=' + encodeURIComponent(ep.episode_id) +
@@ -607,17 +570,7 @@
                 if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
-                voiceQualityCache[voice.id] = s.quality;
-                scroll.body().find('.online__quality').each(function () {
-                    var el = $(this);
-                    var info = el.text().indexOf(' / ') !== -1 ? el.text().replace(/^[^/]*\//, ' /') : '';
-                    // сохраняем " / озвучка" если была
-                    var full = el.text();
-                    var slash = full.indexOf(' / ');
-                    if (slash !== -1) el.text(s.quality + full.substring(slash));
-                    else el.text(s.quality);
-                });
-                var t = currentTitle + ' — ' + episodeTitle(ep) + ' — ' + voice.name;
+                var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
                 this.startPlayer(t, s);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
@@ -630,15 +583,13 @@
         };
 
         this.start = function (first_select) {
-            try { scroll.minus(); } catch (e) {}
+            this.fixScroll();
 
             if (first_select) {
                 last = scroll.render().find('.selector').eq(0)[0];
             }
 
-            try {
-                Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
-            } catch (e) {}
+            try { Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie)); } catch (e) {}
 
             Lampa.Controller.add('content', {
                 toggle: function () {
@@ -662,6 +613,11 @@
             });
 
             Lampa.Controller.toggle('content');
+
+            setTimeout(function () {
+                this.fixScroll();
+                if (last) { try { scroll.update($(last), true); } catch (e) {} }
+            }.bind(this), 100);
         };
 
         this.pause = function () {};
@@ -702,7 +658,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] design = online_mod template');
+        console.log('[HDrezka UA] fixed layout, titles and quality shift');
     }
 
     if (window.appready) start();
