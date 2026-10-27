@@ -22,9 +22,6 @@
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-    // === ИСПРАВЛЕНИЕ ОБМАНА КАЧЕСТВА ===
-    // HDrezka отдает на шаг выше реального (1080p на деле 720p).
-    // Эта функция сдвигает качество вниз для отображения.
     function fixQualityCheat(q) {
         if (!q) return '360p';
         var num = parseInt(q, 10);
@@ -35,40 +32,6 @@
         if (num >= 360) return '240p';
         return q;
     }
-
-    // Инжектим стили для ровных карточек
-    if (!$('#hdrezka_ua_fix_css').length) {
-        $('head').append(
-            '<style id="hdrezka_ua_fix_css">' +
-            '/* Ограничиваем ширину карточки, чтобы не уезжала за экран */' +
-            '.hdrezka-ua-item { box-sizing: border-box !important; width: 100% !important; max-width: 100% !important; overflow: hidden; }' +
-            '/* Флексбокс для выравнивания иконки и текста в одну линию */' +
-            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; }' +
-            '/* Иконка */' +
-            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2em !important; height: 2em !important; margin-right: 0.5em !important; }' +
-            '/* Тексты */' +
-            '.hdrezka-ua-text { flex-grow: 1 !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }' +
-            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; margin-top: 0.2em !important; }' +
-            '</style>'
-        );
-    }
-
-    Lampa.Template.add('hdrezka_ua_item', 
-        '<div class="online selector hdrezka-ua-item">' +
-        '  <div class="online__body hdrezka-ua-inner">' +
-        '    <div class="hdrezka-ua-icon">' +
-        '      <svg style="width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '        <circle cx="64" cy="64" r="56" stroke="white" stroke-width="16"/>' +
-        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="white"/>' +
-        '      </svg>' +
-        '    </div>' +
-        '    <div class="hdrezka-ua-text">' +
-        '      <div class="online__title">{title}</div>' +
-        '      <div class="online__quality hdrezka-ua-subtext">{quality}{info}</div>' +
-        '    </div>' +
-        '  </div>' +
-        '</div>'
-    );
 
     function headers() {
         return {
@@ -123,14 +86,12 @@
             var num = (q.match(/(\d{3,4})/) || [])[1];
             if (!num) continue;
             var key = num + 'p';
-            if (!map[key]) map[key] = m[2].trim(); // Берем первый попавшийся, чтобы не перезаписать
+            if (!map[key]) map[key] = m[2].trim();
         }
         
-        // Ищем от большего к меньшему
         var qualities = ['1080p', '720p', '480p', '360p'];
         for (var i = 0; i < qualities.length; i++) {
             if (map[qualities[i]]) {
-                // Возвращаем ссылку и РЕАЛЬНОЕ (исправленное) качество
                 return { quality: fixQualityCheat(qualities[i]), url: map[qualities[i]] };
             }
         }
@@ -312,6 +273,7 @@
             scroll.body().empty();
         };
 
+        // ВОТ ЗДЕСЬ МЫ ИСПОЛЬЗУЕМ НАТИВНЫЙ ШАБЛОН LAMPA
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
@@ -381,8 +343,12 @@
             filter.chosen('filter', []);
 
             items.forEach(function (it) {
-                var element = { title: it.title, quality: '', info: '' };
-                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
+                var item = Lampa.Template.get('torrent-item', {
+                    title: it.title,
+                    quality: '',
+                    info: it.info || ''
+                });
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -426,8 +392,12 @@
             this.loading(false);
 
             pageInfo.voices.forEach(function (voice, idx) {
-                var element = { title: voice.name, quality: 'HD', info: '' };
-                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
+                var item = Lampa.Template.get('torrent-item', {
+                    title: voice.name,
+                    quality: 'HD',
+                    info: ' / Фильм'
+                });
                 item.on('hover:enter', function () {
                     choice.voice = idx;
                     this.playMovie(voice);
@@ -529,21 +499,15 @@
             }
 
             list.forEach(function (ep) {
-                // ИСПРАВЛЕНИЕ НАЗВАНИЙ СЕРИЙ
-                // Больше не пишем "Серия 20 - серия 20", выводим понятный сезон и серию
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
-                // Если в ep.name есть что-то отличное от "серия 20", добавляем как подзаголовок
-                if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) {
-                    titleText += ' (' + ep.name + ')';
-                }
-
-                var element = { 
-                    title: titleText, 
-                    quality: '360p ~ 1080p', 
-                    info: ' / ' + (voice ? voice.name : '') 
-                };
                 
-                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                // ИСПОЛЬЗУЕМ ШАБЛОН TORRENT-ITEM
+                var item = Lampa.Template.get('torrent-item', {
+                    title: titleText,
+                    quality: '', 
+                    info: ' / ' + (voice ? voice.name : '')
+                });
+                
                 item.on('hover:enter', function () {
                     this.playEpisode(ep, voice);
                 }.bind(this));
@@ -658,7 +622,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] fixed layout, titles and quality shift');
+        console.log('[HDrezka UA] moved to native torrent-item template');
     }
 
     if (window.appready) start();
