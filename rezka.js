@@ -59,14 +59,6 @@
         return m ? m[1] : '';
     }
 
-    function filterByYear(items, year) {
-        if (!year) return items;
-        var exact = items.filter(function (it) {
-            return extractYear(it.info) === year;
-        });
-        return exact.length ? exact : items;
-    }
-
     function parseMoviePage(html) {
         var result = { translators: [], streams: [], subtitles: [] };
 
@@ -106,176 +98,148 @@
         return result;
     }
 
-    // ---------- UI ----------
-    function showSearchResults(items, callback) {
-        if (!items.length) {
-            Lampa.Noty.show('Ничего не найдено на HDrezka');
-            return;
-        }
+    // ---------- Основной поиск и получение ссылки ----------
+    function searchAndGetStream(title, year, onComplete) {
+        var query = title + (year ? ' ' + year : '');
+        var searchUrl = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(query);
 
-        Lampa.Select.show({
-            title: 'HDrezka — выберите фильм',
-            items: items.map(function (it) {
-                return { title: it.title, subtitle: it.info, _data: it };
-            }),
-            onSelect: function (item) {
-                Lampa.Select.close();
-                callback(item._data);
-            },
-            onBack: function () {
-                Lampa.Controller.toggle('content');
-            }
-        });
-    }
-
-    function showStreams(movieTitle, parsed) {
-        if (!parsed.streams.length) {
-            Lampa.Noty.show('Для этого фильма нет доступных потоков без авторизации');
-            return;
-        }
-
-        var proceedToQuality = function (translatorName) {
-            Lampa.Select.show({
-                title: movieTitle + (translatorName ? ' — ' + translatorName : '') + ' — качество',
-                items: parsed.streams.map(function (s) {
-                    return { title: s.quality, _data: s };
-                }),
-                onSelect: function (item) {
-                    Lampa.Select.close();
-                    playStream(movieTitle, item._data);
-                },
-                onBack: function () {
-                    Lampa.Controller.toggle('content');
-                }
-            });
-        };
-
-        if (parsed.translators.length > 1) {
-            Lampa.Select.show({
-                title: 'HDrezka — озвучка',
-                items: parsed.translators.map(function (t) {
-                    return { title: t.name, _data: t };
-                }),
-                onSelect: function (item) {
-                    Lampa.Select.close();
-                    proceedToQuality(item._data.name);
-                },
-                onBack: function () {
-                    Lampa.Controller.toggle('content');
-                }
-            });
-        } else {
-            proceedToQuality(parsed.translators[0] ? parsed.translators[0].name : '');
-        }
-    }
-
-    function playStream(title, stream) {
-        console.log('[HDRezkaUA] playing:', stream.url);
-        Lampa.Player.play({
-            title: title,
-            url: stream.url,
-            quality: stream.quality
-        });
-    }
-
-    // ---------- Ручной ввод ----------
-    function askManualTitle(callback) {
-        Lampa.Input.edit({
-            title: 'Введите название фильма',
-            value: '',
-            free: true,
-            nosave: true
-        }, function (value) {
-            if (!value || !value.trim()) {
-                Lampa.Noty.show('Название не введено');
-                return;
-            }
-            callback(value.trim());
-        });
-    }
-
-    // ---------- Основной сценарий ----------
-    function startFlow(card) {
-        var titles = [];
-        if (card.title) titles.push(card.title);
-        if (card.name && card.name !== card.title) titles.push(card.name);
-        if (card.original_title) titles.push(card.original_title);
-        if (card.original_name && card.original_name !== card.original_title) titles.push(card.original_name);
-
-        var year = (card.release_date || card.first_air_date || '').substring(0, 4);
-
-        titles = titles.filter(function (t, i, arr) { return t && arr.indexOf(t) === i; });
-
-        if (!titles.length) {
-            askManualTitle(function (manual) {
-                searchAndShow(manual, '');
-            });
-            return;
-        }
-
-        tryNextTitle(0);
-
-        function tryNextTitle(index) {
-            if (index >= titles.length) {
-                Lampa.Noty.show('HDrezka: ничего не найдено. Введите название вручную.');
-                askManualTitle(function (manual) {
-                    searchAndShow(manual, '');
-                });
-                return;
+        request(searchUrl, function (err, html) {
+            if (err) return onComplete(null);
+            
+            var items = parseSearch(html);
+            if (year) {
+                var exact = items.filter(function(it) { return extractYear(it.info) === year; });
+                if (exact.length) items = exact;
             }
 
-            var query = titles[index] + (year ? ' ' + year : '');
-            Lampa.Noty.show('Ищем: ' + query);
+            if (!items.length) return onComplete(null);
+            
+            // Берем первый результат из поиска
+            var bestMatch = items[0];
 
-            var searchUrl = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(query);
-
-            request(searchUrl, function (err, html) {
-                if (err) { tryNextTitle(index + 1); return; }
-                var items = parseSearch(html);
-                items = filterByYear(items, year);
-                if (!items.length) { tryNextTitle(index + 1); return; }
-                showSearchResults(items, function (selected) {
-                    loadAndPlay(selected);
-                });
-            });
-        }
-
-        function searchAndShow(query, yearOverride) {
-            var searchUrl = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(query);
-            request(searchUrl, function (err, html) {
-                if (err) { Lampa.Noty.show('Ошибка поиска'); return; }
-                var items = parseSearch(html);
-                if (yearOverride) items = filterByYear(items, yearOverride);
-                if (!items.length) { Lampa.Noty.show('Ничего не найдено'); return; }
-                showSearchResults(items, function (selected) {
-                    loadAndPlay(selected);
-                });
-            });
-        }
-
-        function loadAndPlay(selected) {
-            Lampa.Noty.show('Загружаем страницу...');
-            request(BASE + selected.url, function (err2, movieHtml) {
-                if (err2) { Lampa.Noty.show('Ошибка загрузки страницы'); return; }
+            request(BASE + bestMatch.url, function (err2, movieHtml) {
+                if (err2) return onComplete(null);
                 var parsed = parseMoviePage(movieHtml);
-                showStreams(selected.title, parsed);
+                if (!parsed.streams.length) return onComplete(null);
+
+                // Ищем 720p или 1080p, иначе берем первое доступное
+                var stream = parsed.streams.find(function(s) { return s.quality === '720p'; }) || 
+                             parsed.streams.find(function(s) { return s.quality === '1080p'; }) || 
+                             parsed.streams[0];
+
+                onComplete({
+                    url: stream.url,
+                    quality: stream.quality,
+                    title: bestMatch.title
+                });
             });
-        }
+        });
     }
+
+    // ---------- Source API ----------
+    var hdrezkaSource = {
+        name: 'hdrezka_ua',
+        title: 'HDrezka UA',
+        search: function (params, onComplete) {
+            var query = params.query || '';
+            if (!query) return onComplete([]);
+            
+            var searchUrl = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(query);
+            request(searchUrl, function (err, html) {
+                if (err) return onComplete([]);
+                var items = parseSearch(html);
+                var results = items.map(function(it) {
+                    return {
+                        title: it.title,
+                        year: extractYear(it.info),
+                        url: it.url
+                    };
+                });
+                onComplete(results);
+            });
+        },
+        getStream: function (movie, onComplete) {
+            var title = movie.title || movie.name || '';
+            var year = (movie.release_date || movie.first_air_date || movie.year || '').substring(0, 4);
+            
+            searchAndGetStream(title, year, function(result) {
+                if (result) {
+                    onComplete({ url: result.url, quality: result.quality });
+                } else {
+                    onComplete(null);
+                }
+            });
+        },
+        getEpisodes: function (movie, onComplete) {
+            // Заглушка для сериалов (пока не поддерживается)
+            onComplete(null);
+        }
+    };
 
     // ---------- Регистрация в Lampa ----------
     function init() {
+        // 1. Добавляем в список источников (кнопка "Смотреть")
+        Lampa.Source.add(hdrezkaSource);
+
+        // 2. Добавляем в контекстное меню (ручной выбор качества/озвучки)
         Lampa.Manifest.plugins = {
             type: 'video',
             onContextMenu: function (card) {
-                return { title: 'HDrezka UA' };
+                return { title: 'HDrezka UA (выбор)' };
             },
             onContextLauch: function (card) {
-                startFlow(card);
+                var title = card.title || card.name || '';
+                var year = (card.release_date || card.first_air_date || '').substring(0, 4);
+                
+                Lampa.Noty.show('Поиск на HDrezka...');
+                var searchUrl = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(title + ' ' + year);
+                
+                request(searchUrl, function (err, html) {
+                    if (err) { Lampa.Noty.show('Ошибка поиска'); return; }
+                    var items = parseSearch(html);
+                    if (!items.length) { Lampa.Noty.show('Ничего не найдено'); return; }
+                    
+                    Lampa.Select.show({
+                        title: 'HDrezka — выберите фильм',
+                        items: items.map(function (it) {
+                            return { title: it.title, subtitle: it.info, _data: it };
+                        }),
+                        onSelect: function (item) {
+                            Lampa.Select.close();
+                            Lampa.Noty.show('Загружаем страницу...');
+                            request(BASE + item._data.url, function (err2, movieHtml) {
+                                if (err2) { Lampa.Noty.show('Ошибка загрузки'); return; }
+                                var parsed = parseMoviePage(movieHtml);
+                                if (!parsed.streams.length) {
+                                    Lampa.Noty.show('Нет доступных потоков');
+                                    return;
+                                }
+                                
+                                // Простейшее меню выбора качества
+                                Lampa.Select.show({
+                                    title: item._data.title + ' — качество',
+                                    items: parsed.streams.map(function (s) {
+                                        return { title: s.quality, _data: s };
+                                    }),
+                                    onSelect: function (sItem) {
+                                        Lampa.Select.close();
+                                        Lampa.Player.play({
+                                            title: item._data.title,
+                                            url: sItem._data.url,
+                                            quality: sItem._data.quality
+                                        });
+                                    },
+                                    onBack: function () { Lampa.Controller.toggle('content'); }
+                                });
+                            });
+                        },
+                        onBack: function () { Lampa.Controller.toggle('content'); }
+                    });
+                });
             }
         };
 
-        console.log('[HDRezkaUA] plugin registered');
+        console.log('[HDRezkaUA] Plugin initialized');
     }
 
     if (window.appready) init();
