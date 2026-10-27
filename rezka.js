@@ -22,7 +22,21 @@
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
     var ALLOWED_Q = ['1080p', '720p', '480p', '360p'];
 
-    // шаблон как в online_mod
+    // стили: обрезка длинных названий + скролл-контейнер
+    if (!$('#hdrezka_ua_css').length) {
+        $('head').append(
+            '<style id="hdrezka_ua_css">' +
+            '.hdrezka-ua .online{overflow:hidden;max-width:100%;box-sizing:border-box;}' +
+            '.hdrezka-ua .online__body{overflow:hidden;max-width:100%;}' +
+            '.hdrezka-ua .online__title,' +
+            '.hdrezka-ua .online__quality{' +
+            '  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;' +
+            '}' +
+            '.hdrezka-ua .scroll__body{max-width:100%;}' +
+            '</style>'
+        );
+    }
+
     Lampa.Template.add('hdrezka_ua_item',
         '<div class="online selector">' +
         '  <div class="online__body">' +
@@ -172,14 +186,6 @@
             });
         }
 
-        var seasons = html.match(/<ul[^>]*id="simple-seasons-tabs"[^>]*>([\s\S]*?)<\/ul>/i);
-        if (seasons) {
-            var sRe = /data-tab_id="(\d+)"[^>]*>([^<]+)/gi, sm;
-            while ((sm = sRe.exec(seasons[1])) !== null) {
-                info.seasons.push({ id: sm[1], name: sm[2].trim() });
-            }
-        }
-
         var episodes = html.match(/<div[^>]*id="simple-episodes-tabs"[^>]*>([\s\S]*?)<\/div>/i);
         if (episodes) {
             var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]*)/gi, em;
@@ -221,10 +227,9 @@
         return episodes;
     }
 
-    // ===================== COMPONENT =====================
     function Component(object) {
         var network = new Lampa.Reguest();
-        var scroll = new Lampa.Scroll({ mask: true, over: true });
+        var scroll = new Lampa.Scroll({ mask: true, over: true, step: 150 });
         var files = new Lampa.Explorer(object);
         var filter = new Lampa.Filter(object);
 
@@ -234,7 +239,11 @@
         var allEpisodes = [];
         var choice = { voice: 0, season: 0 };
         var filter_items = { voice: [], season: [], season_id: [] };
-        var mode = 'search'; // search | movie | series
+        var mode = 'search';
+
+        // класс на корень для CSS
+        files.render().addClass('hdrezka-ua');
+        scroll.render().addClass('hdrezka-ua');
 
         this.create = function () {
             this.activity.loader(true);
@@ -276,7 +285,28 @@
 
         this.loading = function (status) {
             this.activity.loader(status);
-            if (!status) this.activity.toggle();
+            if (!status) {
+                this.activity.toggle();
+                // после появления списка пересчитать высоту скролла
+                this.fixScroll();
+            }
+        };
+
+        /** высота области списка = экран минус шапка фильтра */
+        this.fixScroll = function () {
+            try {
+                // убираем высоту шапки explorer / фильтра
+                var head = files.render().find('.explorer__files-head, .files__header, .filter').first();
+                if (head.length) scroll.minus(head);
+                else scroll.minus();
+            } catch (e) {
+                try { scroll.minus(); } catch (e2) {}
+            }
+            try {
+                // ограничить ширину
+                scroll.render().css({ width: '100%', maxWidth: '100%', overflow: 'hidden' });
+                scroll.body().css({ maxWidth: '100%' });
+            } catch (e3) {}
         };
 
         this.reset = function () {
@@ -286,9 +316,12 @@
         };
 
         this.append = function (item) {
+            // при фокусе — сдвигать список, чтобы элемент оставался в зоне видимости
             item.on('hover:focus', function (e) {
                 last = e.target;
-                scroll.update($(e.target), true);
+                try {
+                    scroll.update($(e.target), true);
+                } catch (err) {}
             });
             scroll.append(item);
         };
@@ -300,7 +333,6 @@
             this.start(true);
         };
 
-        // --- filter UI (как online_mod) ---
         this.buildFilter = function () {
             var select = [];
             var need = choice;
@@ -336,7 +368,6 @@
             filter.chosen('filter', chosen);
         };
 
-        // ---------- поиск ----------
         this.search = function () {
             mode = 'search';
             this.loading(true);
@@ -363,9 +394,7 @@
             items.forEach(function (it) {
                 var element = { title: it.title, quality: '', info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
-                item.on('hover:enter', function () {
-                    this.openTitle(it);
-                }.bind(this));
+                item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
 
@@ -404,7 +433,6 @@
             }.bind(this));
         };
 
-        // ---------- фильм: список озвучек ----------
         this.drawMovieList = function () {
             this.reset();
             this.buildFilter();
@@ -460,7 +488,6 @@
             });
         };
 
-        // ---------- сериал ----------
         this.reloadSeries = function () {
             this.loading(true);
             var voice = pageInfo.voices[choice.voice];
@@ -490,16 +517,13 @@
                     });
                 }
 
-                var map = {}, seasons = [], season_ids = [];
+                var map = {}, pairs = [];
                 allEpisodes.forEach(function (e) {
                     if (!map[e.season_id]) {
                         map[e.season_id] = true;
-                        seasons.push('Сезон ' + e.season_id);
-                        season_ids.push(e.season_id);
+                        pairs.push({ id: e.season_id, n: 'Сезон ' + e.season_id });
                     }
                 });
-                // sort
-                var pairs = seasons.map(function (n, i) { return { n: n, id: season_ids[i] }; });
                 pairs.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
                 filter_items.season = pairs.map(function (p) { return p.n; });
                 filter_items.season_id = pairs.map(function (p) { return p.id; });
@@ -516,16 +540,16 @@
                             translator_id: voice.id
                         };
                     });
-                    filter_items.season = [];
-                    filter_items.season_id = [];
-                    var map = {};
+                    var map = {}, pairs = [];
                     allEpisodes.forEach(function (e) {
                         if (!map[e.season_id]) {
                             map[e.season_id] = true;
-                            filter_items.season.push('Сезон ' + e.season_id);
-                            filter_items.season_id.push(e.season_id);
+                            pairs.push({ id: e.season_id, n: 'Сезон ' + e.season_id });
                         }
                     });
+                    pairs.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
+                    filter_items.season = pairs.map(function (p) { return p.n; });
+                    filter_items.season_id = pairs.map(function (p) { return p.id; });
                     this.drawEpisodeList();
                 } else {
                     this.empty('Серии не найдены');
@@ -592,24 +616,21 @@
         };
 
         this.startPlayer = function (title, stream) {
-            Lampa.Player.play({
-                title: title,
-                url: stream.url,
-                quality: stream.quality
-            });
-            Lampa.Player.playlist([{
-                title: title + ' — ' + stream.quality,
-                url: stream.url
-            }]);
+            Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality });
+            Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url }]);
         };
 
-        // ---------- управление (как online_mod) ----------
         this.start = function (first_select) {
+            // критично: высота списка под видимую область
+            this.fixScroll();
+
             if (first_select) {
                 last = scroll.render().find('.selector').eq(0)[0];
             }
 
-            Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
+            try {
+                Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
+            } catch (e) {}
 
             Lampa.Controller.add('content', {
                 toggle: function () {
@@ -637,6 +658,14 @@
             });
 
             Lampa.Controller.toggle('content');
+
+            // ещё раз после отрисовки — на части сборок высота считается с задержкой
+            setTimeout(function () {
+                this.fixScroll();
+                if (last) {
+                    try { scroll.update($(last), true); } catch (e) {}
+                }
+            }.bind(this), 100);
         };
 
         this.pause = function () {};
@@ -677,7 +706,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] Explorer+Filter like online_mod');
+        console.log('[HDrezka UA] scroll fix + ellipsis');
     }
 
     if (window.appready) start();
