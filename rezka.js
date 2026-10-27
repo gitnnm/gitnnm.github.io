@@ -20,8 +20,23 @@
         '_ym_d=1785609579';
 
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-    // Разрешённые качества (без Ultra / 1440 / 2160)
     var ALLOWED_Q = ['1080p', '720p', '480p', '360p'];
+
+    // шаблон как в online_mod
+    Lampa.Template.add('hdrezka_ua_item',
+        '<div class="online selector">' +
+        '  <div class="online__body">' +
+        '    <div style="position:absolute;left:0;top:-0.3em;width:2.4em;height:2.4em">' +
+        '      <svg style="height:2.4em;width:2.4em" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '        <circle cx="64" cy="64" r="56" stroke="white" stroke-width="16"/>' +
+        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="white"/>' +
+        '      </svg>' +
+        '    </div>' +
+        '    <div class="online__title" style="padding-left:2.1em">{title}</div>' +
+        '    <div class="online__quality" style="padding-left:3.4em">{quality}{info}</div>' +
+        '  </div>' +
+        '</div>'
+    );
 
     function headers() {
         return {
@@ -52,9 +67,7 @@
         h['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         h['X-Requested-With'] = 'XMLHttpRequest';
         var m = n.native ? 'native' : 'silent';
-        n[m](url, function (json) {
-            ok && ok(json);
-        }, function () { err && err('net'); }, body, { headers: h });
+        n[m](url, function (json) { ok && ok(json); }, function () { err && err('net'); }, body, { headers: h });
     }
 
     function decodeStream(data) {
@@ -75,7 +88,6 @@
         try { return dec(x); } catch (e) { return ''; }
     }
 
-    /** Лучшее качество из 1080/720/480/360 */
     function bestStream(str) {
         str = decodeStream(str);
         if (!str) return null;
@@ -83,9 +95,7 @@
         var re = /\[([^\]]+)\](https?:\/\/[^,\s]+)/g, m;
         while ((m = re.exec(str)) !== null) {
             var q = m[1].trim();
-            // отбрасываем Ultra / 2K / 4K
             if (/ultra|2160|1440|4k|2k/i.test(q)) continue;
-            // нормализуем к 1080p / 720p ...
             var num = (q.match(/(\d{3,4})/) || [])[1];
             if (!num) continue;
             var key = num + 'p';
@@ -93,9 +103,7 @@
             map[key] = m[2].trim();
         }
         for (var i = 0; i < ALLOWED_Q.length; i++) {
-            if (map[ALLOWED_Q[i]]) {
-                return { quality: ALLOWED_Q[i], url: map[ALLOWED_Q[i]] };
-            }
+            if (map[ALLOWED_Q[i]]) return { quality: ALLOWED_Q[i], url: map[ALLOWED_Q[i]] };
         }
         return null;
     }
@@ -115,9 +123,8 @@
         var info = {
             film_id: '', favs: '', is_series: false,
             voices: [], seasons: [], episodes: [],
-            def_voice_id: '', pageUrl: ''
+            def_voice_id: '', pageStreamRaw: ''
         };
-
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
         if (favs) info.favs = favs[1];
 
@@ -196,7 +203,6 @@
             var file = html.match(/file\s*:\s*['"]([^'"]+)['"]/);
             if (file) info.pageStreamRaw = file[1];
         }
-
         return info;
     }
 
@@ -215,43 +221,125 @@
         return episodes;
     }
 
-    // ---------- UI helpers ----------
-    function lineItem(title, subtitle, onEnter) {
-        var el = $('<div class="online selector">' +
-            '<div class="online__body">' +
-            '<div class="online__title">' + title + '</div>' +
-            (subtitle ? '<div class="online__texts"><div class="online__text">' + subtitle + '</div></div>' : '') +
-            '</div></div>');
-        el.on('hover:enter', onEnter);
-        return el;
-    }
-
+    // ===================== COMPONENT =====================
     function Component(object) {
-        var scroll = new Lampa.Scroll({ mask: true, over: true, step: 250 });
-        var filter_html = $('<div class="online-filter" style="padding:0 1.2em 0.8em;"></div>');
+        var network = new Lampa.Reguest();
+        var scroll = new Lampa.Scroll({ mask: true, over: true });
+        var files = new Lampa.Explorer(object);
+        var filter = new Lampa.Filter(object);
+
         var last;
         var pageInfo = null;
         var currentTitle = '';
+        var allEpisodes = [];
         var choice = { voice: 0, season: 0 };
-        var allEpisodes = []; // все серии текущей озвучки
-        var viewEpisodes = [];
+        var filter_items = { voice: [], season: [], season_id: [] };
+        var mode = 'search'; // search | movie | series
 
         this.create = function () {
             this.activity.loader(true);
-            // контейнер: фильтр сверху + скролл
-            var root = $('<div class="online-empty" style="display:flex;flex-direction:column;height:100%;"></div>');
-            root.append(filter_html);
-            root.append(scroll.render());
-            this.root = root;
+
+            filter.onBack = function () {
+                this.start();
+            }.bind(this);
+
+            filter.onSelect = function (type, a, b) {
+                if (type !== 'filter') return;
+                if (a.reset) {
+                    choice.voice = 0;
+                    choice.season = 0;
+                    if (mode === 'series') this.reloadSeries();
+                    else if (mode === 'movie') this.drawMovieList();
+                    return;
+                }
+                if (a.stype === 'voice') {
+                    choice.voice = b.index;
+                    choice.season = 0;
+                    if (mode === 'series') this.reloadSeries();
+                    else this.drawMovieList();
+                } else if (a.stype === 'season') {
+                    choice.season = b.index;
+                    this.drawEpisodeList();
+                }
+            }.bind(this);
+
+            files.appendHead(filter.render());
+            files.appendFiles(scroll.render());
+
             this.search();
             return this.render();
         };
 
         this.render = function () {
-            return this.root || scroll.render();
+            return files.render();
         };
 
+        this.loading = function (status) {
+            this.activity.loader(status);
+            if (!status) this.activity.toggle();
+        };
+
+        this.reset = function () {
+            last = false;
+            scroll.clear();
+            scroll.body().empty();
+        };
+
+        this.append = function (item) {
+            item.on('hover:focus', function (e) {
+                last = e.target;
+                scroll.update($(e.target), true);
+            });
+            scroll.append(item);
+        };
+
+        this.empty = function (msg) {
+            this.reset();
+            this.loading(false);
+            scroll.append($('<div class="empty__text" style="padding:1.5em">' + (msg || 'Нет данных') + '</div>'));
+            this.start(true);
+        };
+
+        // --- filter UI (как online_mod) ---
+        this.buildFilter = function () {
+            var select = [];
+            var need = choice;
+
+            var add = function (type, title) {
+                var items = filter_items[type] || [];
+                if (!items.length) return;
+                var sub = [];
+                items.forEach(function (name, i) {
+                    sub.push({ title: name, selected: need[type] == i, index: i });
+                });
+                select.push({
+                    title: title,
+                    subtitle: items[need[type]] || '',
+                    items: sub,
+                    stype: type
+                });
+            };
+
+            select.push({ title: Lampa.Lang.translate('torrent_parser_reset') || 'Сбросить', reset: true });
+            add('voice', Lampa.Lang.translate('torrent_parser_voice') || 'Озвучка');
+            add('season', Lampa.Lang.translate('torrent_serial_season') || 'Сезон');
+
+            filter.set('filter', select);
+
+            var chosen = [];
+            if (filter_items.voice && filter_items.voice.length > 1) {
+                chosen.push((Lampa.Lang.translate('torrent_parser_voice') || 'Озвучка') + ': ' + filter_items.voice[choice.voice]);
+            }
+            if (filter_items.season && filter_items.season.length > 1) {
+                chosen.push((Lampa.Lang.translate('torrent_serial_season') || 'Сезон') + ': ' + filter_items.season[choice.season]);
+            }
+            filter.chosen('filter', chosen);
+        };
+
+        // ---------- поиск ----------
         this.search = function () {
+            mode = 'search';
+            this.loading(true);
             var title = object.movie.title || object.movie.name || '';
             var year = (object.movie.release_date || object.movie.first_air_date || '').substring(0, 4);
             var url = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(title + (year ? ' ' + year : ''));
@@ -262,30 +350,30 @@
                 if (items.length === 1) this.openTitle(items[0]);
                 else this.drawSearch(items);
             }.bind(this), function (e) {
-                this.empty(e === 'cookie' ? 'Cookie устарели — обнови в коде' : 'Ошибка сети');
+                this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка сети');
             }.bind(this));
-        };
-
-        this.clearList = function () {
-            scroll.clear();
-            scroll.body().empty();
         };
 
         this.drawSearch = function (items) {
-            this.activity.loader(false);
-            filter_html.empty();
-            this.clearList();
-            items.forEach(function (item) {
-                scroll.append(lineItem(item.title, '', function () {
-                    this.openTitle(item);
-                }.bind(this)));
+            this.reset();
+            this.loading(false);
+            filter.set('filter', []);
+            filter.chosen('filter', []);
+
+            items.forEach(function (it) {
+                var element = { title: it.title, quality: '', info: '' };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                item.on('hover:enter', function () {
+                    this.openTitle(it);
+                }.bind(this));
+                this.append(item);
             }.bind(this));
-            this.focusFirst();
-            this.activity.toggle();
+
+            this.start(true);
         };
 
         this.openTitle = function (item) {
-            this.activity.loader(true);
+            this.loading(true);
             currentTitle = item.title;
             reqGet(item.url, function (html) {
                 pageInfo = parsePage(html);
@@ -294,135 +382,58 @@
                 }
                 choice.voice = 0;
                 choice.season = 0;
-                // индекс дефолтной озвучки
                 for (var i = 0; i < pageInfo.voices.length; i++) {
                     if (String(pageInfo.voices[i].id) === String(pageInfo.def_voice_id)) {
                         choice.voice = i;
                         break;
                     }
                 }
+                filter_items.voice = pageInfo.voices.map(function (v) { return v.name; });
+                filter_items.season = [];
+                filter_items.season_id = [];
+
                 if (pageInfo.is_series) {
-                    this.loadEpisodesForVoice(pageInfo.voices[choice.voice]);
+                    mode = 'series';
+                    this.reloadSeries();
                 } else {
-                    this.drawFilter();
-                    this.playMovie();
+                    mode = 'movie';
+                    this.drawMovieList();
                 }
             }.bind(this), function (e) {
                 this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка загрузки');
             }.bind(this));
         };
 
-        // --- фильтр (озвучка / сезон) ---
-        this.drawFilter = function () {
-            filter_html.empty();
-            var row = $('<div class="items-line__head" style="display:flex;flex-wrap:wrap;gap:0.6em;align-items:center;"></div>');
+        // ---------- фильм: список озвучек ----------
+        this.drawMovieList = function () {
+            this.reset();
+            this.buildFilter();
+            this.loading(false);
 
-            // кнопка озвучки
-            if (pageInfo.voices.length) {
-                var v = pageInfo.voices[choice.voice];
-                var voiceBtn = $('<div class="simple-button simple-button--filter selector" style="margin:0;">' +
-                    '<span>Озвучка</span> · ' + (v ? v.name : '') + '</div>');
-                voiceBtn.on('hover:enter', function () {
-                    this.openVoiceSelect();
-                }.bind(this));
-                row.append(voiceBtn);
-            }
-
-            // кнопка сезона (только сериал)
-            if (pageInfo.is_series && pageInfo.seasons.length) {
-                var s = pageInfo.seasons[choice.season];
-                var seasonBtn = $('<div class="simple-button simple-button--filter selector" style="margin:0;">' +
-                    '<span>Сезон</span> · ' + (s ? s.name : '') + '</div>');
-                seasonBtn.on('hover:enter', function () {
-                    this.openSeasonSelect();
-                }.bind(this));
-                row.append(seasonBtn);
-            }
-
-            filter_html.append(row);
-        };
-
-        this.openVoiceSelect = function () {
-            var items = pageInfo.voices.map(function (v, i) {
-                return {
-                    title: v.name,
-                    selected: i === choice.voice,
-                    index: i
+            pageInfo.voices.forEach(function (voice, idx) {
+                var element = {
+                    title: voice.name,
+                    quality: '360p ~ 1080p',
+                    info: ''
                 };
-            });
-            Lampa.Select.show({
-                title: 'Озвучка',
-                items: items,
-                onSelect: function (a) {
-                    choice.voice = a.index;
-                    choice.season = 0;
-                    if (pageInfo.is_series) {
-                        this.loadEpisodesForVoice(pageInfo.voices[choice.voice]);
-                    } else {
-                        this.drawFilter();
-                        this.playMovie();
-                    }
-                }.bind(this),
-                onBack: function () {
-                    Lampa.Controller.toggle('content');
-                }
-            });
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                item.on('hover:enter', function () {
+                    choice.voice = idx;
+                    this.playMovie(voice);
+                }.bind(this));
+                this.append(item);
+            }.bind(this));
+
+            this.start(true);
         };
 
-        this.openSeasonSelect = function () {
-            var seasons = pageInfo.seasons;
-            if (!seasons.length) {
-                // уникальные сезоны из эпизодов
-                var map = {}, list = [];
-                allEpisodes.forEach(function (e) {
-                    if (!map[e.season_id]) {
-                        map[e.season_id] = true;
-                        list.push({ id: e.season_id, name: 'Сезон ' + e.season_id });
-                    }
-                });
-                seasons = list;
-                pageInfo.seasons = seasons;
-            }
-            var items = seasons.map(function (s, i) {
-                return {
-                    title: s.name,
-                    selected: i === choice.season,
-                    index: i
-                };
-            });
-            Lampa.Select.show({
-                title: 'Сезон',
-                items: items,
-                onSelect: function (a) {
-                    choice.season = a.index;
-                    this.drawFilter();
-                    this.drawEpisodes();
-                }.bind(this),
-                onBack: function () {
-                    Lampa.Controller.toggle('content');
-                }
-            });
-        };
+        this.playMovie = function (voice) {
+            Lampa.Noty.show('Загрузка…');
 
-        // --- фильм: сразу play лучшего качества ---
-        this.playMovie = function () {
-            this.activity.loader(true);
-            this.clearList();
-
-            var voice = pageInfo.voices[choice.voice];
-            if (!voice) {
-                this.empty('Нет озвучки');
-                return;
-            }
-
-            // дефолтный поток со страницы
             if (String(voice.id) === String(pageInfo.def_voice_id) && pageInfo.pageStreamRaw) {
-                var s = bestStream(pageInfo.pageStreamRaw);
-                this.activity.loader(false);
-                if (!s) return this.empty('Нет доступного качества (1080/720/480/360)');
-                this.drawPlayLine(s, currentTitle + ' — ' + voice.name);
-                this.focusFirst();
-                this.activity.toggle();
+                var s0 = bestStream(pageInfo.pageStreamRaw);
+                if (!s0) return Lampa.Noty.show('Нет качества 1080/720/480/360');
+                this.startPlayer(currentTitle + ' — ' + voice.name, s0);
                 return;
             }
 
@@ -440,33 +451,20 @@
                 if (typeof json === 'string') {
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
-                this.activity.loader(false);
-                if (json && json.premium_content) {
-                    return this.empty('Перевод только с Premium');
-                }
+                if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
                 var s = bestStream(json && json.url);
-                if (!s) return this.empty('Нет доступного качества');
-                this.drawPlayLine(s, currentTitle + ' — ' + voice.name);
-                this.focusFirst();
-                this.activity.toggle();
+                if (!s) return Lampa.Noty.show('Нет доступного качества');
+                this.startPlayer(currentTitle + ' — ' + voice.name, s);
             }.bind(this), function () {
-                this.empty('Ошибка загрузки потока');
-            }.bind(this));
-        };
-
-        this.drawPlayLine = function (stream, title) {
-            this.clearList();
-            var el = lineItem('Смотреть', stream.quality, function () {
-                Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality });
-                Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url }]);
+                Lampa.Noty.show('Ошибка потока');
             });
-            scroll.append(el);
         };
 
-        // --- сериал ---
-        this.loadEpisodesForVoice = function (voice) {
-            this.activity.loader(true);
-            this.clearList();
+        // ---------- сериал ----------
+        this.reloadSeries = function () {
+            this.loading(true);
+            var voice = pageInfo.voices[choice.voice];
+            if (!voice) return this.empty('Нет озвучки');
 
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body =
@@ -479,11 +477,8 @@
                 if (typeof json === 'string') {
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
-
                 allEpisodes = parseEpisodesHtml(json && json.episodes, voice.id);
-                if (!allEpisodes.length) {
-                    allEpisodes = parseEpisodesHtml(json && json.seasons, voice.id);
-                }
+                if (!allEpisodes.length) allEpisodes = parseEpisodesHtml(json && json.seasons, voice.id);
                 if (!allEpisodes.length && pageInfo.episodes.length) {
                     allEpisodes = pageInfo.episodes.map(function (e) {
                         return {
@@ -495,20 +490,22 @@
                     });
                 }
 
-                // собрать сезоны
-                var map = {}, seasons = [];
+                var map = {}, seasons = [], season_ids = [];
                 allEpisodes.forEach(function (e) {
                     if (!map[e.season_id]) {
                         map[e.season_id] = true;
-                        seasons.push({ id: e.season_id, name: 'Сезон ' + e.season_id });
+                        seasons.push('Сезон ' + e.season_id);
+                        season_ids.push(e.season_id);
                     }
                 });
-                seasons.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
-                pageInfo.seasons = seasons;
-                if (choice.season >= seasons.length) choice.season = 0;
+                // sort
+                var pairs = seasons.map(function (n, i) { return { n: n, id: season_ids[i] }; });
+                pairs.sort(function (a, b) { return parseInt(a.id, 10) - parseInt(b.id, 10); });
+                filter_items.season = pairs.map(function (p) { return p.n; });
+                filter_items.season_id = pairs.map(function (p) { return p.id; });
+                if (choice.season >= filter_items.season.length) choice.season = 0;
 
-                this.drawFilter();
-                this.drawEpisodes();
+                this.drawEpisodeList();
             }.bind(this), function () {
                 if (pageInfo.episodes.length) {
                     allEpisodes = pageInfo.episodes.map(function (e) {
@@ -519,56 +516,58 @@
                             translator_id: voice.id
                         };
                     });
-                    this.drawFilter();
-                    this.drawEpisodes();
+                    filter_items.season = [];
+                    filter_items.season_id = [];
+                    var map = {};
+                    allEpisodes.forEach(function (e) {
+                        if (!map[e.season_id]) {
+                            map[e.season_id] = true;
+                            filter_items.season.push('Сезон ' + e.season_id);
+                            filter_items.season_id.push(e.season_id);
+                        }
+                    });
+                    this.drawEpisodeList();
                 } else {
-                    this.empty('Не удалось загрузить серии');
+                    this.empty('Серии не найдены');
                 }
             }.bind(this));
         };
 
-        this.drawEpisodes = function () {
-            this.activity.loader(false);
-            this.clearList();
+        this.drawEpisodeList = function () {
+            this.reset();
+            this.buildFilter();
+            this.loading(false);
 
-            var season = pageInfo.seasons[choice.season];
-            var sid = season ? String(season.id) : null;
-
-            viewEpisodes = allEpisodes.filter(function (e) {
-                return !sid || String(e.season_id) === sid;
+            var sid = filter_items.season_id[choice.season];
+            var voice = pageInfo.voices[choice.voice];
+            var list = allEpisodes.filter(function (e) {
+                return !sid || String(e.season_id) === String(sid);
             });
 
-            if (!viewEpisodes.length) {
-                scroll.append($('<div class="empty__text" style="padding:1.5em;">Нет серий в этом сезоне</div>'));
-                this.activity.toggle();
+            if (!list.length) {
+                scroll.append($('<div class="empty__text" style="padding:1.5em">Нет серий</div>'));
+                this.start(true);
                 return;
             }
 
-            var voice = pageInfo.voices[choice.voice];
-
-            viewEpisodes.forEach(function (ep, idx) {
-                var num = ep.episode_id;
-                var title = 'Серия ' + num;
-                var sub = ep.name && ep.name !== title ? ep.name : '';
-                var el = lineItem(title, sub, function () {
+            list.forEach(function (ep) {
+                var element = {
+                    title: 'Серия ' + ep.episode_id + (ep.name ? ' — ' + ep.name : ''),
+                    quality: '360p ~ 1080p',
+                    info: ' / ' + (voice ? voice.name : '')
+                };
+                var item = Lampa.Template.get('hdrezka_ua_item', element);
+                item.on('hover:enter', function () {
                     this.playEpisode(ep, voice);
                 }.bind(this));
-
-                el.on('hover:focus', function () {
-                    last = el;
-                });
-
-                scroll.append(el);
+                this.append(item);
             }.bind(this));
 
-            this.focusFirst();
-            this.activity.toggle();
-            // важно для длинных списков
-            try { scroll.update(last || scroll.body().find('.selector').first()); } catch (e) {}
+            this.start(true);
         };
 
         this.playEpisode = function (ep, voice) {
-            this.activity.loader(true);
+            Lampa.Noty.show('Загрузка…');
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body =
                 'id=' + encodeURIComponent(pageInfo.film_id) +
@@ -579,81 +578,72 @@
                 '&action=get_stream';
 
             reqPost(url, body, function (json) {
-                this.activity.loader(false);
                 if (typeof json === 'string') {
                     try { json = JSON.parse(json); } catch (e) { json = {}; }
                 }
-                if (json && json.premium_content) {
-                    Lampa.Noty.show('Перевод только с Premium');
-                    return;
-                }
+                if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
                 var s = bestStream(json && json.url);
-                if (!s) {
-                    Lampa.Noty.show('Нет доступного качества');
-                    return;
-                }
+                if (!s) return Lampa.Noty.show('Нет доступного качества');
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                Lampa.Player.play({ title: t, url: s.url, quality: s.quality });
-                // плейлист остальных серий сезона
-                var pl = viewEpisodes.map(function (e) {
-                    return {
-                        title: currentTitle + ' S' + e.season_id + 'E' + e.episode_id,
-                        url: '', // подгрузится только текущая; остальные без url — ок для одной серии
-                        media: e
-                    };
-                });
-                Lampa.Player.playlist([{ title: t + ' — ' + s.quality, url: s.url }]);
+                this.startPlayer(t, s);
             }.bind(this), function () {
-                this.activity.loader(false);
-                Lampa.Noty.show('Ошибка загрузки серии');
-            }.bind(this));
+                Lampa.Noty.show('Ошибка серии');
+            });
         };
 
-        this.focusFirst = function () {
-            last = scroll.body().find('.selector').first();
+        this.startPlayer = function (title, stream) {
+            Lampa.Player.play({
+                title: title,
+                url: stream.url,
+                quality: stream.quality
+            });
+            Lampa.Player.playlist([{
+                title: title + ' — ' + stream.quality,
+                url: stream.url
+            }]);
         };
 
-        this.empty = function (msg) {
-            this.activity.loader(false);
-            filter_html.empty();
-            this.clearList();
-            scroll.append($('<div class="empty__text" style="padding:1.5em;white-space:pre-line;">' + msg + '</div>'));
-            this.activity.toggle();
-        };
-
-        this.start = function () {
-            // высота скролла под экран (чтобы серии не уезжали «в никуда»)
-            try {
-                scroll.minus(filter_html);
-            } catch (e) {
-                try { scroll.minus(); } catch (e2) {}
+        // ---------- управление (как online_mod) ----------
+        this.start = function (first_select) {
+            if (first_select) {
+                last = scroll.render().find('.selector').eq(0)[0];
             }
+
+            Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie));
 
             Lampa.Controller.add('content', {
                 toggle: function () {
-                    Lampa.Controller.collectionSet(scroll.render());
+                    Lampa.Controller.collectionSet(scroll.render(), files.render());
                     Lampa.Controller.collectionFocus(last || false, scroll.render());
                 },
-                left: function () {
-                    if (Navigator.canmove('left')) Navigator.move('left');
-                    else Lampa.Controller.toggle('menu');
-                },
-                right: function () { Navigator.move('right'); },
                 up: function () {
                     if (Navigator.canmove('up')) Navigator.move('up');
                     else Lampa.Controller.toggle('head');
                 },
                 down: function () {
-                    if (Navigator.canmove('down')) Navigator.move('down');
+                    Navigator.move('down');
                 },
-                back: function () { Lampa.Activity.backward(); }
+                right: function () {
+                    if (Navigator.canmove('right')) Navigator.move('right');
+                    else filter.show(Lampa.Lang.translate('title_filter') || 'Фильтр', 'filter');
+                },
+                left: function () {
+                    if (Navigator.canmove('left')) Navigator.move('left');
+                    else Lampa.Controller.toggle('menu');
+                },
+                back: function () {
+                    Lampa.Activity.backward();
+                }
             });
+
             Lampa.Controller.toggle('content');
         };
 
         this.pause = function () {};
         this.stop = function () {};
         this.destroy = function () {
+            network.clear();
+            files.destroy();
             scroll.destroy();
         };
     }
@@ -664,14 +654,14 @@
             var render = e.object.activity.render();
             if (render.find('.hdrezka-ua-btn').length) return;
 
-            var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn">' +
+            var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka UA">' +
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
                 '<span>HDrezka UA</span></div>');
 
             btn.on('hover:enter', function () {
                 Lampa.Activity.push({
                     url: '',
-                    title: 'HDrezka UA — ' + (e.data.movie.title || e.data.movie.name),
+                    title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka UA',
                     component: COMPONENT,
                     movie: e.data.movie,
                     page: 1
@@ -687,7 +677,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] UI + filter + auto quality');
+        console.log('[HDrezka UA] Explorer+Filter like online_mod');
     }
 
     if (window.appready) start();
