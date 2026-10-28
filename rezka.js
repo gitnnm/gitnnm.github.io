@@ -6,21 +6,12 @@
 
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
+    var COOKIE_SERVER = 'http://127.0.0.1:9999/anubis'; // Адрес локального сервера
 
-    // Вставьте сюда ваши актуальные куки
-// Вставьте сюда ваши актуальные куки
-var COOKIE =
-    'techaro.lol-anubis-cookie-verification-d82da6a5=01a181fa-f86e-748f-acf6-7ac77d9513b1; ' +
-    'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExODFmYS1mODZlLTc0OGYtYWNmNi03YWM3N2Q5NTEzYjEiLCJleHAiOjE3OTU3NzQwNzAsImlhdCI6MTc5MzE4MjA3MCwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzE4MjAxMCwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6Ijk2NzVjYjI4YmQwMjc2MWFlMDU1Njg2NzliNWUwZTlmM2NiNTVhYjlmOTBiODA1Yzk1MDA0NzAzNWYwMGE0YTIifQ.SL8IEDxqCfmWG0dX73PjGs3km_zxttanbgHVsRssTUnsyc51_WSdL8Pnte_vWmZkE4EXKXeWwHyFVcxdSQGWAg; ' +
-    'PHPSESSID=oplrgdml6pc3r56acc0iokhgo5; ' +
-    'dle_user_taken=1; ' +
-    'dle_user_token=da83801b3340d50db1c6ec9d3648fe81; ';
+    // Больше не хардкодим куки, а загружаем из хранилища Lampa
+    var COOKIE = Lampa.Storage.get('hdrezka_ua_cookie', '');
+    var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-
-    // === ИСПРАВЛЕНИЕ ОБМАНА КАЧЕСТВА ===
-    // HDrezka отдает на шаг выше реального (1080p на деле 720p).
-    // Эта функция сдвигает качество вниз для отображения.
     function fixQualityCheat(q) {
         if (!q) return '360p';
         var num = parseInt(q, 10);
@@ -32,21 +23,14 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
         return q;
     }
 
-    // Инжектим стили для точной копии карточки BWA
     if (!$('#hdrezka_ua_fix_css').length) {
         $('head').append(
             '<style id="hdrezka_ua_fix_css">' +
-            '/* Ограничиваем ширину карточки, чтобы не уезжала за экран */' +
             '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; margin-bottom: 0.5em !important; }' +
-            '/* Флексбокс для выравнивания иконки и текста по центру */' +
             '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; }' +
-            '/* Иконка */' +
             '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2em !important; height: 2em !important; margin-right: 1em !important; }' +
-            '/* Текстовая часть */' +
             '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
-            '/* Название */' +
             '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
-            '/* Подзаголовок (качество/озвучка) */' +
             '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; }' +
             '</style>'
         );
@@ -69,6 +53,36 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
         '</div>'
     );
 
+    // === ФУНКЦИЯ ЗАПРОСА НОВЫХ КУКОВ У ЛОКАЛЬНОГО СЕРВЕРА ===
+    function refreshCookies(callback) {
+        console.log('[HDRezka UA] Запрос новых куков у сервера...');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', COOKIE_SERVER, true);
+        xhr.timeout = 15000;
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.cookie) {
+                        COOKIE = data.cookie;
+                        Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
+                        console.log('[HDRezka UA] Куки успешно обновлены');
+                        Lampa.Noty.show('HDrezka: Куки обновлены');
+                    }
+                } catch (e) {
+                    console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
+                }
+            }
+            callback();
+        };
+        xhr.onerror = function() {
+            console.log('[HDRezka UA] Сервер куков недоступен');
+            Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
+            callback();
+        };
+        xhr.send();
+    }
+
     function headers() {
         return {
             'User-Agent': UA,
@@ -80,17 +94,27 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
         };
     }
 
+    // === ОБЕРТКА GET С АВТООБНОВЛЕНИЕМ КУКОВ ===
     function reqGet(url, ok, err) {
         var n = new Lampa.Reguest();
         n.timeout(25000);
         var m = n.native ? 'native' : 'silent';
         n[m](url, function (html) {
             if (typeof html !== 'string') html = (html && html.body) ? html.body : String(html || '');
-            if (html.indexOf('Проверяем, что вы не бот') !== -1) return err && err('cookie');
+            
+            // Если пришла страница проверки на бота — обновляем куки и пробуем снова
+            if (html.indexOf('Проверяем, что вы не бот') !== -1 || html.indexOf('anubis_challenge') !== -1) {
+                refreshCookies(function() {
+                    // Повторяем запрос с новыми куками
+                    reqGet(url, ok, err);
+                });
+                return;
+            }
             ok && ok(html);
         }, function () { err && err('net'); }, false, { dataType: 'text', headers: headers() });
     }
 
+    // === ОБЕРТКА POST С АВТООБНОВЛЕНИЕМ КУКОВ ===
     function reqPost(url, body, ok, err) {
         var n = new Lampa.Reguest();
         n.timeout(20000);
@@ -98,7 +122,16 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
         h['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         h['X-Requested-With'] = 'XMLHttpRequest';
         var m = n.native ? 'native' : 'silent';
-        n[m](url, function (json) { ok && ok(json); }, function () { err && err('net'); }, body, { headers: h });
+        n[m](url, function (json) { 
+            // Если сервер вернул HTML вместо JSON (значит, выкинул на проверку) — обновляем куки
+            if (typeof json === 'string' && (json.indexOf('anubis_challenge') !== -1 || json.indexOf('Проверяем, что вы не бот') !== -1)) {
+                refreshCookies(function() {
+                    reqPost(url, body, ok, err);
+                });
+                return;
+            }
+            ok && ok(json); 
+        }, function () { err && err('net'); }, body, { headers: h });
     }
 
     function decodeStream(data) {
@@ -124,7 +157,6 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
             var key = num + 'p';
             if (!map[key]) map[key] = m[2].trim(); 
         }
-
         var qualities = ['1080p', '720p', '480p', '360p'];
         for (var i = 0; i < qualities.length; i++) {
             if (map[qualities[i]]) {
@@ -309,7 +341,6 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
             scroll.body().empty();
         };
 
-
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
@@ -381,10 +412,6 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
             items.forEach(function (it) {
                 var element = { title: it.title, quality: '', info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
-
-
-
-
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -430,10 +457,6 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
             pageInfo.voices.forEach(function (voice, idx) {
                 var element = { title: voice.name, quality: 'HD', info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
-
-
-
-
                 item.on('hover:enter', function () {
                     choice.voice = idx;
                     this.playMovie(voice);
@@ -547,12 +570,6 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
                 };
 
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
-
-
-
-
-
-
                 item.on('hover:enter', function () {
                     this.playEpisode(ep, voice);
                 }.bind(this));
@@ -667,7 +684,7 @@ var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] fixed layout, titles and quality shift');
+        console.log('[HDrezka UA] Автообновление куков включено');
     }
 
     if (window.appready) start();
