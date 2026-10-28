@@ -56,7 +56,7 @@
 
     // === ЗАПРОС КУКОВ С СЕРВЕРА ===
     function refreshCookies(callback) {
-        console.log('[HDRezka UA] Запрос новых куков у сервера...');
+        console.log('[HDrezka] Запрос новых куков у сервера...');
         var n = new Lampa.Reguest();
         n.timeout(15000);
         var m = n.native ? 'native' : 'silent';
@@ -67,15 +67,15 @@
                 if (data.cookie) {
                     COOKIE = data.cookie;
                     Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
-                    console.log('[HDRezka UA] Куки успешно обновлены');
+                    console.log('[HDrezka] Куки успешно обновлены');
                     Lampa.Noty.show('HDrezka: Куки обновлены');
                 }
             } catch (e) {
-                console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
+                console.log('[HDrezka] Ошибка парсинга ответа сервера');
             }
             callback();
         }, function() {
-            console.log('[HDRezka UA] Сервер куков недоступен');
+            console.log('[HDrezka] Сервер куков недоступен');
             Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
             callback();
         }, false, { 
@@ -665,14 +665,14 @@
             var render = e.object.activity.render();
             if (render.find('.hdrezka-ua-btn').length) return;
 
-            var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka UA">' +
+            var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka">' +
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
-                '<span>HDrezka UA</span></div>');
+                '<span>HDrezka</span></div>');
 
             btn.on('hover:enter', function () {
                 Lampa.Activity.push({
                     url: '',
-                    title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka UA',
+                    title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka',
                     component: COMPONENT,
                     movie: e.data.movie,
                     page: 1
@@ -680,7 +680,7 @@
             });
 
             var box = render.find('.full-start-new__buttons, .full-start__buttons').first();
-            if (box.length) box.append(btn);
+            if (box.length) box.prepend(btn); // prepend вместо append — ставит первым
             else render.find('.full-start__title').after(btn);
         });
     }
@@ -688,7 +688,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka UA] Автообновление куков включено');
+        console.log('[HDrezka] Автообновление куков включено');
     }
 
     if (window.appready) start();
