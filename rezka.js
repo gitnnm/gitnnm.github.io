@@ -6,9 +6,9 @@
 
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
-    var COOKIE_SERVER = 'http://192.168.100.5:9999/anubis'; // Адрес локального сервера
+    var COOKIE_SERVER = 'http://192.168.100.5:9999/anubis'; // IP вашего бокса
 
-    // Больше не хардкодим куки, а загружаем из хранилища Lampa
+    // Куки берём из хранилища Lampa
     var COOKIE = Lampa.Storage.get('hdrezka_ua_cookie', '');
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
@@ -53,32 +53,35 @@
         '</div>'
     );
 
-    // === ФУНКЦИЯ ЗАПРОСА НОВЫХ КУКОВ У ЛОКАЛЬНОГО СЕРВЕРА ===
-function refreshCookies(callback) {
-    console.log('[HDRezka UA] Запрос новых куков у сервера...');
-    var n = new Lampa.Reguest();
-    n.timeout(15000);
-    var m = n.native ? 'native' : 'silent';
-    
-    n[m](COOKIE_SERVER, function(response) {
-        try {
-            var data = JSON.parse(response);
-            if (data.cookie) {
-                COOKIE = data.cookie;
-                Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
-                console.log('[HDRezka UA] Куки успешно обновлены');
-                Lampa.Noty.show('HDrezka: Куки обновлены');
+    // === ЗАПРОС КУКОВ С СЕРВЕРА ===
+    function refreshCookies(callback) {
+        console.log('[HDRezka UA] Запрос новых куков у сервера...');
+        var n = new Lampa.Reguest();
+        n.timeout(15000);
+        var m = n.native ? 'native' : 'silent';
+        
+        n[m](COOKIE_SERVER, function(response) {
+            try {
+                var data = JSON.parse(response);
+                if (data.cookie) {
+                    COOKIE = data.cookie;
+                    Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
+                    console.log('[HDRezka UA] Куки успешно обновлены');
+                    Lampa.Noty.show('HDrezka: Куки обновлены');
+                }
+            } catch (e) {
+                console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
             }
-        } catch (e) {
-            console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
-        }
-        callback();
-    }, function() {
-        console.log('[HDRezka UA] Сервер куков недоступен');
-        Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
-        callback();
-    }, false, { dataType: 'text' });
-}
+            callback();
+        }, function() {
+            console.log('[HDRezka UA] Сервер куков недоступен');
+            Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
+            callback();
+        }, false, { 
+            dataType: 'text',
+            headers: { 'User-Agent': UA }
+        });
+    }
 
     function headers() {
         return {
@@ -91,7 +94,6 @@ function refreshCookies(callback) {
         };
     }
 
-    // === ОБЕРТКА GET С АВТООБНОВЛЕНИЕМ КУКОВ ===
     function reqGet(url, ok, err) {
         var n = new Lampa.Reguest();
         n.timeout(25000);
@@ -99,10 +101,8 @@ function refreshCookies(callback) {
         n[m](url, function (html) {
             if (typeof html !== 'string') html = (html && html.body) ? html.body : String(html || '');
             
-            // Если пришла страница проверки на бота — обновляем куки и пробуем снова
             if (html.indexOf('Проверяем, что вы не бот') !== -1 || html.indexOf('anubis_challenge') !== -1) {
                 refreshCookies(function() {
-                    // Повторяем запрос с новыми куками
                     reqGet(url, ok, err);
                 });
                 return;
@@ -111,7 +111,6 @@ function refreshCookies(callback) {
         }, function () { err && err('net'); }, false, { dataType: 'text', headers: headers() });
     }
 
-    // === ОБЕРТКА POST С АВТООБНОВЛЕНИЕМ КУКОВ ===
     function reqPost(url, body, ok, err) {
         var n = new Lampa.Reguest();
         n.timeout(20000);
@@ -120,7 +119,6 @@ function refreshCookies(callback) {
         h['X-Requested-With'] = 'XMLHttpRequest';
         var m = n.native ? 'native' : 'silent';
         n[m](url, function (json) { 
-            // Если сервер вернул HTML вместо JSON (значит, выкинул на проверку) — обновляем куки
             if (typeof json === 'string' && (json.indexOf('anubis_challenge') !== -1 || json.indexOf('Проверяем, что вы не бот') !== -1)) {
                 refreshCookies(function() {
                     reqPost(url, body, ok, err);
