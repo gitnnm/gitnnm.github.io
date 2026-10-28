@@ -54,34 +54,31 @@
     );
 
     // === ФУНКЦИЯ ЗАПРОСА НОВЫХ КУКОВ У ЛОКАЛЬНОГО СЕРВЕРА ===
-    function refreshCookies(callback) {
-        console.log('[HDRezka UA] Запрос новых куков у сервера...');
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', COOKIE_SERVER, true);
-        xhr.timeout = 15000;
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                try {
-                    var data = JSON.parse(xhr.responseText);
-                    if (data.cookie) {
-                        COOKIE = data.cookie;
-                        Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
-                        console.log('[HDRezka UA] Куки успешно обновлены');
-                        Lampa.Noty.show('HDrezka: Куки обновлены');
-                    }
-                } catch (e) {
-                    console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
-                }
+function refreshCookies(callback) {
+    console.log('[HDRezka UA] Запрос новых куков у сервера...');
+    var n = new Lampa.Reguest();
+    n.timeout(15000);
+    var m = n.native ? 'native' : 'silent';
+    
+    n[m](COOKIE_SERVER, function(response) {
+        try {
+            var data = JSON.parse(response);
+            if (data.cookie) {
+                COOKIE = data.cookie;
+                Lampa.Storage.set('hdrezka_ua_cookie', COOKIE);
+                console.log('[HDRezka UA] Куки успешно обновлены');
+                Lampa.Noty.show('HDrezka: Куки обновлены');
             }
-            callback();
-        };
-        xhr.onerror = function() {
-            console.log('[HDRezka UA] Сервер куков недоступен');
-            Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
-            callback();
-        };
-        xhr.send();
-    }
+        } catch (e) {
+            console.log('[HDRezka UA] Ошибка парсинга ответа сервера');
+        }
+        callback();
+    }, function() {
+        console.log('[HDRezka UA] Сервер куков недоступен');
+        Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
+        callback();
+    }, false, { dataType: 'text' });
+}
 
     function headers() {
         return {
