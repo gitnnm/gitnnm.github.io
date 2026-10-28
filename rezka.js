@@ -198,18 +198,18 @@
         return q;
     }
 
-    // === СТИЛИ ===
+    // === СТИЛИ (стиль, приближенный к BWA) ===
     if (!$('#hdrezka_ua_fix_css').length) {
         $('head').append(
             '<style id="hdrezka_ua_fix_css">' +
-            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.5em 0 !important; overflow: hidden !important; }' +
-            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; box-sizing: border-box !important; }' +
-            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2.6em !important; height: 2.6em !important; margin-right: 1em !important; overflow: hidden !important; border-radius: 0.3em !important; background: #222 !important; }' +
+            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.6em 0 !important; overflow: hidden !important; background: #1a1a1a !important; border-radius: 0.4em !important; }' +
+            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.7em 1em !important; box-sizing: border-box !important; }' +
+            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 3.2em !important; height: 4.6em !important; margin-right: 1em !important; overflow: hidden !important; border-radius: 0.3em !important; background: #222 !important; }' +
             '.hdrezka-ua-poster { display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }' +
             '.hdrezka-ua-play { width: 100% !important; height: 100% !important; }' +
-            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
-            '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
-            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }' +
+            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; justify-content: center !important; }' +
+            '.hdrezka-ua-title { font-size: 1.05em !important; font-weight: 500 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.3em !important; line-height: 1.3 !important; }' +
+            '.hdrezka-ua-subtext { font-size: 0.8em !important; color: #9a9a9a !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.4 !important; letter-spacing: 0.01em !important; }' +
             '</style>'
         );
     }
@@ -639,7 +639,6 @@
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (epName && epName.toLowerCase().indexOf('серия') === -1) titleText += ' (' + epName + ')';
 
-                // Дата выхода серии — только если она не в будущем
                 if (t && t.date) {
                     var d = new Date(t.date);
                     if (!isNaN(d.getTime()) && d <= now) {
@@ -727,7 +726,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: TMDB через CUB, поиск по imdb_id, будущие даты не выводятся');
+        console.log('[HDrezka] Готово: TMDB через CUB, поиск по imdb_id, стиль приближен к BWA');
     }
 
     if (window.appready) start();
