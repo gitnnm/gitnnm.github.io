@@ -756,4 +756,32 @@
 
             var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka">' +
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
-                '<span>HDrezka</span></
+                '<span>HDrezka</span></div>');
+
+            btn.on('hover:enter', function () {
+                Lampa.Activity.push({
+                    url: '',
+                    title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka',
+                    component: COMPONENT,
+                    movie: e.data.movie,
+                    page: 1
+                });
+            });
+
+            var box = render.find('.full-start-new__buttons, .full-start__buttons').first();
+            if (box.length) box.prepend(btn);
+            else render.find('.full-start__title').after(btn);
+        });
+    }
+
+    function start() {
+        Lampa.Component.add(COMPONENT, Component);
+        addButton();
+        console.log('[HDrezka] Автообновление куков включено');
+    }
+
+    if (window.appready) start();
+    else Lampa.Listener.follow('app', function (e) {
+        if (e.type === 'ready') start();
+    });
+})();
