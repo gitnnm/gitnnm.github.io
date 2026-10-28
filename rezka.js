@@ -53,19 +53,65 @@
         return null;
     }
 
+    function extractImdbId(movie) {
+        if (!movie) return null;
+        var c = [movie.imdb_id, movie.imdbId, movie.ids && movie.ids.imdb];
+        for (var i = 0; i < c.length; i++) {
+            if (c[i] && String(c[i]).match(/^tt\d+$/)) return String(c[i]);
+        }
+        return null;
+    }
+
     function tmdbFindShow(movie, currentTitle, cb) {
         var id = extractTmdbId(movie);
         if (id) return cb(id);
+
+        var imdb = extractImdbId(movie);
+        if (imdb) {
+            var keyImdb = 'findimdb:' + imdb;
+            if (tmdbCache[keyImdb] !== undefined) return cb(tmdbCache[keyImdb]);
+            tmdbGet('/find/' + imdb, { external_source: 'imdb_id' }, function (d) {
+                var found = null;
+                if (d && d.tv_results && d.tv_results.length) {
+                    found = String(d.tv_results[0].id);
+                }
+                tmdbCache[keyImdb] = found;
+                cb(found);
+            });
+            return;
+        }
+
         var title = movie.title || movie.name || currentTitle;
         var year = (movie.release_date || movie.first_air_date || '').substring(0, 4);
         if (!title) return cb(null);
         var key = 'find:' + title.toLowerCase() + ':' + year;
         if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
+
         var params = { query: title };
         if (year) params.first_air_date_year = year;
+
         tmdbGet('/search/tv', params, function (d) {
             var found = null;
-            if (d && d.results && d.results.length) found = String(d.results[0].id);
+            if (d && d.results && d.results.length) {
+                for (var i = 0; i < d.results.length; i++) {
+                    var r = d.results[i];
+                    var rYear = (r.first_air_date || '').substring(0, 4);
+                    var rName = (r.name || '').toLowerCase();
+                    var rOrig = (r.original_name || '').toLowerCase();
+                    var tLower = title.toLowerCase();
+                    if ((rName === tLower || rOrig === tLower) && (!year || rYear === year)) {
+                        found = String(r.id);
+                        break;
+                    }
+                }
+                if (!found) {
+                    for (var j = 0; j < d.results.length; j++) {
+                        var rr = d.results[j];
+                        var rY = (rr.first_air_date || '').substring(0, 4);
+                        if (!year || rY === year) { found = String(rr.id); break; }
+                    }
+                }
+            }
             tmdbCache[key] = found;
             cb(found);
         });
@@ -92,7 +138,7 @@
     }
 
     function tmdbSeason(tvId, seasonNumber, cb) {
-        if (!tvId) return cb(null);
+        if (!tvId || !String(tvId).match(/^\d+$/)) return cb(null);
         var key = 'season:' + tvId + ':' + seasonNumber;
         if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
         tmdbGet('/tv/' + tvId + '/season/' + seasonNumber, {}, function (d) {
@@ -129,7 +175,6 @@
         return parts.join(' • ');
     }
 
-    // Возвращает данные для иконки: основной URL, альтернативный URL, видимость
     function iconData(path, size) {
         var primary = path ? tmdbImage(path, size || 'w185') : '';
         var alt = path ? tmdbImageAlt(path, size || 'w185') : '';
@@ -169,7 +214,7 @@
         );
     }
 
-    // === ШАБЛОН (с fallback-доменом через data-alt) ===
+    // === ШАБЛОН ===
     Lampa.Template.add('hdrezka_ua_item',
         '<div class="online selector hdrezka-ua-item">' +
         '  <div class="online__body hdrezka-ua-inner">' +
@@ -486,6 +531,7 @@
 
                 tmdbFindShow(localObject.movie, currentTitle, function (tvId) {
                     if (tvId) pageInfo.tmdbId = tvId;
+                    console.log('[TMDB] tvId =', pageInfo.tmdbId, 'title =', currentTitle);
                     if (tvId && !pageInfo.tmdb) {
                         tmdbDetails(tvId, function (d) {
                             pageInfo.tmdb = d;
@@ -585,20 +631,27 @@
             if (!list.length) { scroll.append($('<div class="empty__text" style="padding:1.5em">Нет серий</div>')); this.start(true); return; }
 
             var seriesPoster = pageInfo.tmdb && pageInfo.tmdb.poster ? pageInfo.tmdb.poster : null;
+            var now = new Date();
 
             list.forEach(function (ep) {
                 var t = pageInfo.tmdbEpisodes && pageInfo.tmdbEpisodes[parseInt(ep.episode_id, 10)];
                 var epName = (t && t.name) || ep.name;
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (epName && epName.toLowerCase().indexOf('серия') === -1) titleText += ' (' + epName + ')';
-                if (t && t.date) titleText += ' • ' + fmtDate(t.date);
+
+                // Дата выхода серии — только если она не в будущем
+                if (t && t.date) {
+                    var d = new Date(t.date);
+                    if (!isNaN(d.getTime()) && d <= now) {
+                        titleText += ' • ' + fmtDate(t.date);
+                    }
+                }
 
                 var parts = ['360p ~ 1080p'];
                 if (voice) parts.push(voice.name);
                 if (t && t.rating) parts.push('⭐' + Number(t.rating).toFixed(1));
                 if (t && t.runtime) parts.push(t.runtime + 'м');
 
-                // Приоритет: кадр серии → общий постер сериала → иконка Play
                 var posterPath = (t && t.still) ? t.still : seriesPoster;
                 var el = $.extend({ title: titleText, info: parts.join(' • ') }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
@@ -674,7 +727,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: TMDB через CUB, картинки через imagetmdb + fallback image.tmdb.org');
+        console.log('[HDrezka] Готово: TMDB через CUB, поиск по imdb_id, будущие даты не выводятся');
     }
 
     if (window.appready) start();
