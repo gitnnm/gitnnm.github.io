@@ -613,6 +613,14 @@
 
             try { Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie)); } catch (e) {}
 
+            // === ДОБАВЛЯЕМ ОТСТУПЫ ДЛЯ СКРОЛЛА, ЧТОБЫ РАМКА НЕ ОБРЕЗАЛАСЬ ===
+            scroll.render().css({
+                'padding-left': '1em',
+                'padding-right': '1em',
+                'box-sizing': 'border-box',
+                'width': '100%'
+            });
+
             Lampa.Controller.add('content', {
                 toggle: function () {
                     Lampa.Controller.collectionSet(scroll.render(), files.render());
