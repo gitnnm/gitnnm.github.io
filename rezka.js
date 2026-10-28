@@ -6,7 +6,7 @@
 
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
-    var COOKIE_SERVER = 'http://127.0.0.1:9999/anubis'; // Адрес локального сервера
+    var COOKIE_SERVER = 'http://192.168.100.5:9999/anubis'; // Адрес локального сервера
 
     // Больше не хардкодим куки, а загружаем из хранилища Lampa
     var COOKIE = Lampa.Storage.get('hdrezka_ua_cookie', '');
