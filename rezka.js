@@ -492,7 +492,7 @@
                 if (parsed) maxQuality = parsed.quality;
             }
 
-            var hash = Lampa.Utils.hash(currentTitle);
+            var hash = Lampa.Utils.hash(object.movie.original_title || object.movie.title || object.movie.name);
             var view = Lampa.Timeline.view(hash);
 
             pageInfo.voices.forEach(function (voice, idx) {
