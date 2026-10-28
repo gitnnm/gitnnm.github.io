@@ -450,8 +450,15 @@
             this.buildFilter();
             this.loading(false);
 
+            // Определяем максимальное реальное качество для фильма
+            var maxQuality = '360p';
+            if (pageInfo.pageStreamRaw) {
+                var parsed = bestStream(pageInfo.pageStreamRaw);
+                if (parsed) maxQuality = parsed.quality;
+            }
+
             pageInfo.voices.forEach(function (voice, idx) {
-                var element = { title: voice.name, quality: 'HD', info: '' };
+                var element = { title: voice.name, quality: maxQuality, info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
                 item.on('hover:enter', function () {
                     choice.voice = idx;
@@ -566,6 +573,14 @@
                 };
 
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
+                
+                // === ДОБАВЛЯЕМ ШКАЛУ ПРОГРЕССА ===
+                var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, object.movie.original_title].join(''));
+                var view = Lampa.Timeline.view(hash);
+                if (view.percent > 0) {
+                    item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
+                }
+
                 item.on('hover:enter', function () {
                     this.playEpisode(ep, voice);
                 }.bind(this));
@@ -593,7 +608,13 @@
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                this.startPlayer(t, s);
+                
+                // === ПЕРЕДАЕМ ТАЙМЛАЙН В ПЛЕЕР ===
+                var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, object.movie.original_title].join(''));
+                var view = Lampa.Timeline.view(hash);
+                
+                Lampa.Player.play({ title: t, url: s.url, quality: s.quality, timeline: view });
+                Lampa.Player.playlist([{ title: t + ' — ' + s.quality, url: s.url, timeline: view }]);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
             });
@@ -680,7 +701,7 @@
             });
 
             var box = render.find('.full-start-new__buttons, .full-start__buttons').first();
-            if (box.length) box.prepend(btn); // prepend вместо append — ставит первым
+            if (box.length) box.prepend(btn);
             else render.find('.full-start__title').after(btn);
         });
     }
