@@ -281,10 +281,12 @@
         var filter_items = { voice: [], season: [], season_id: [] };
         var mode = 'search';
 
+        // Сохраняем object локально, чтобы он был доступен во всех замыканиях
         var localObject = object;
         var currentSeasonList = [];
         var currentVoice = null;
         var currentEpisodeIndex = 0;
+        var playerListenerAttached = false;
 
         this.create = function () {
             this.activity.loader(true);
@@ -626,13 +628,29 @@
                 
                 var view = Lampa.Timeline.view(hash);
                 
+                // Запускаем плеер
                 Lampa.Player.play({ title: t, url: s.url, quality: s.quality, timeline: view });
                 
-                // === СЛУШАЕМ ОКОНЧАНИЕ ВИДЕО ===
-                Lampa.Player.listener('ended', function() {
-                    Lampa.Player.listener.remove('ended');
-                    this.playNextEpisode();
-                }.bind(this));
+                // === СЛУШАЕМ ОКОНЧАНИЕ ВИДЕО ЧЕРЕЗ СТАНДАРТНЫЙ LISTENER ===
+                if (!playerListenerAttached) {
+                    playerListenerAttached = true;
+                    Lampa.Listener.follow('player', function(e) {
+                        if (e.type === 'close') {
+                            playerListenerAttached = false;
+                            // Ничего не делаем, просто сбрасываем флаг
+                        }
+                    });
+                }
+                
+                // Подписываемся на событие окончания текущего трека
+                var endedHandler = function(e) {
+                    if (e.type === 'ended') {
+                        Lampa.Listener.remove(endedHandler);
+                        this.playNextEpisode();
+                    }
+                }.bind(this);
+                
+                Lampa.Listener.follow('player', endedHandler);
                 
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
