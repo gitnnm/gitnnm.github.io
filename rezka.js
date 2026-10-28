@@ -15,6 +15,7 @@
     var TMDB_BASE = 'https://apitmdb.cub.best/3';
     var TMDB_KEY = '4ef0d7355d9ffb5151e987764708ce96';
     var TMDB_IMG = 'https://imagetmdb.com/t/p';
+    var TMDB_IMG_ALT = 'https://image.tmdb.org/t/p';
     var tmdbCache = {};
 
     function tmdbGet(path, params, cb) {
@@ -36,6 +37,11 @@
     function tmdbImage(path, size) {
         if (!path) return '';
         return TMDB_IMG + '/' + (size || 'w185') + path;
+    }
+
+    function tmdbImageAlt(path, size) {
+        if (!path) return '';
+        return TMDB_IMG_ALT + '/' + (size || 'w185') + path;
     }
 
     function extractTmdbId(movie) {
@@ -123,11 +129,15 @@
         return parts.join(' • ');
     }
 
-    function iconData(poster) {
+    // Возвращает данные для иконки: основной URL, альтернативный URL, видимость
+    function iconData(path, size) {
+        var primary = path ? tmdbImage(path, size || 'w185') : '';
+        var alt = path ? tmdbImageAlt(path, size || 'w185') : '';
         return {
-            poster: poster || '',
-            poster_display: poster ? 'block' : 'none',
-            play_display: poster ? 'none' : 'block'
+            poster: primary,
+            poster_alt: alt,
+            poster_display: primary ? 'block' : 'none',
+            play_display: primary ? 'none' : 'block'
         };
     }
 
@@ -159,12 +169,13 @@
         );
     }
 
-    // === ШАБЛОН ===
+    // === ШАБЛОН (с fallback-доменом через data-alt) ===
     Lampa.Template.add('hdrezka_ua_item',
         '<div class="online selector hdrezka-ua-item">' +
         '  <div class="online__body hdrezka-ua-inner">' +
         '    <div class="hdrezka-ua-icon">' +
-        '      <img class="hdrezka-ua-poster" src="{poster}" style="display:{poster_display}" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+        '      <img class="hdrezka-ua-poster" src="{poster}" data-alt="{poster_alt}" style="display:{poster_display}" ' +
+        '           onerror="if(this.dataset.alt && this.src!==this.dataset.alt){this.src=this.dataset.alt;}else{this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'}">' +
         '      <svg class="hdrezka-ua-play" style="display:{play_display};width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
         '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
         '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
@@ -282,7 +293,7 @@
     }
 
     function parsePage(html) {
-        var info = { film_id: '', favs: '', is_series: false, voices: [], seasons: [], episodes: [], def_voice_id: '', pageStreamRaw: '', tmdbEpisodes: null };
+        var info = { film_id: '', favs: '', is_series: false, voices: [], seasons: [], episodes: [], def_voice_id: '', pageStreamRaw: '', tmdbEpisodes: null, tmdb: null, tmdbId: null };
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
         if (favs) info.favs = favs[1];
 
@@ -440,8 +451,11 @@
                     tmdbDetails(tvId, function (d) {
                         if (!d) return;
                         it.tmdb = d;
+                        it.tmdbId = tvId;
                         if (d.poster) {
-                            img.attr('src', tmdbImage(d.poster, 'w185')).css('display', 'block');
+                            img.attr('src', tmdbImage(d.poster, 'w185'))
+                               .attr('data-alt', tmdbImageAlt(d.poster, 'w185'))
+                               .css('display', 'block');
                             play.css('display', 'none');
                         }
                     });
@@ -465,13 +479,13 @@
                 filter_items.voice = pageInfo.voices.map(function (v) { return v.name; });
                 filter_items.season = []; filter_items.season_id = [];
 
-                var movieForTmdb = item.tmdb ? { tmdb_id: null } : localObject.movie;
-                // Если из поиска уже есть tmdb-инфа, используем её для постера фильма
-                if (item.tmdb) pageInfo.tmdb = item.tmdb;
+                if (item.tmdb) {
+                    pageInfo.tmdb = item.tmdb;
+                    pageInfo.tmdbId = item.tmdbId || null;
+                }
 
-                // Определяем TMDB ID для дальнейшей работы (серии/постер)
                 tmdbFindShow(localObject.movie, currentTitle, function (tvId) {
-                    pageInfo.tmdbId = tvId;
+                    if (tvId) pageInfo.tmdbId = tvId;
                     if (tvId && !pageInfo.tmdb) {
                         tmdbDetails(tvId, function (d) {
                             pageInfo.tmdb = d;
@@ -496,10 +510,10 @@
             var hash = Lampa.Utils.hash(localObject.movie.original_title || localObject.movie.title || localObject.movie.name);
             var view = Lampa.Timeline.view(hash);
             var tmdb = pageInfo.tmdb;
-            var poster = tmdb && tmdb.poster ? tmdbImage(tmdb.poster, 'w185') : '';
+            var posterPath = tmdb && tmdb.poster ? tmdb.poster : null;
 
             pageInfo.voices.forEach(function (voice, idx) {
-                var el = $.extend({ title: voice.name, info: joinInfo(maxQ) }, iconData(poster));
+                var el = $.extend({ title: voice.name, info: joinInfo(maxQ) }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 if (view.percent > 0) item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
                 item.on('hover:enter', function () { choice.voice = idx; this.playMovie(voice, hash); }.bind(this));
@@ -570,6 +584,8 @@
             var list = allEpisodes.filter(function (e) { return !sid || String(e.season_id) === String(sid); });
             if (!list.length) { scroll.append($('<div class="empty__text" style="padding:1.5em">Нет серий</div>')); this.start(true); return; }
 
+            var seriesPoster = pageInfo.tmdb && pageInfo.tmdb.poster ? pageInfo.tmdb.poster : null;
+
             list.forEach(function (ep) {
                 var t = pageInfo.tmdbEpisodes && pageInfo.tmdbEpisodes[parseInt(ep.episode_id, 10)];
                 var epName = (t && t.name) || ep.name;
@@ -582,8 +598,9 @@
                 if (t && t.rating) parts.push('⭐' + Number(t.rating).toFixed(1));
                 if (t && t.runtime) parts.push(t.runtime + 'м');
 
-                var poster = t && t.still ? tmdbImage(t.still, 'w185') : '';
-                var el = $.extend({ title: titleText, info: parts.join(' • ') }, iconData(poster));
+                // Приоритет: кадр серии → общий постер сериала → иконка Play
+                var posterPath = (t && t.still) ? t.still : seriesPoster;
+                var el = $.extend({ title: titleText, info: parts.join(' • ') }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
 
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, localObject.movie.original_title].join(''));
@@ -657,7 +674,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: только TMDB (CUB + imagetmdb), Кинопоиск удалён');
+        console.log('[HDrezka] Готово: TMDB через CUB, картинки через imagetmdb + fallback image.tmdb.org');
     }
 
     if (window.appready) start();
