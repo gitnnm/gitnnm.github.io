@@ -6,24 +6,11 @@
 
     var BASE = 'https://rezka-ua.tv';
     var COMPONENT = 'hdrezka_ua';
-
-    // Вставьте сюда ваши актуальные куки
-    var COOKIE =
-        'PHPSESSID=a5t2q76mr23490t9ihlgu7t5uf; ' +
-        'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExODFiZS0xOTkwLTc2ZTMtODQ0YS00NTc2YjUyYmVmMTgiLCJleHAiOjE3OTU3NzAwODIsImlhdCI6MTc5MzE3ODA4MiwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzE3ODAyMiwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6Ijk2NzVjYjI4YmQwMjc2MWFlMDU1Njg2NzliNWUwZTlmM2NiNTVhYjlmOTBiODA1Yzk1MDA0NzAzNWYwMGE0YTIifQ.CR0OFYjeaZ8jQ_aA9r7mVQwi5VHxhZanXHBZIgJYyc-B0DZLhYLDlMWp83ayplltlDNqlPsW9C4SaykPxbWcBA; ' +
-        'techaro.lol-anubis-cookie-verification-d82da6a5=01a181be-1990-76e3-844a-4576b52bef18; ' +
-        'dle_user_token=6bf57f7fdb61a5463b8de237feee0025; ' +
-        'dle_user_taken=1; ' +
-        'device_rzk_id=eed0c9546b0ad334ffd7d5af8728ac15; ' +
-        '_vc_id=y8EhN9W2istUl896IQBm67LCdE4H1OH5; ' +
-        '_vc_day=2026-10-28; ' +
-        'rzk_last_refresh=1793131345; ' +
-        '_ym_uid=1785609579293811962; ' +
-        '_ym_d=1785609579';
-
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-    // Исправление обмана качества
+    // Куки, которые будут заполнены автоматически (если получится)
+    var CURRENT_COOKIE = '';
+
     function fixQualityCheat(q) {
         if (!q) return '360p';
         var num = parseInt(q, 10);
@@ -35,39 +22,94 @@
         return q;
     }
 
-    // Стили для идеальной геометрии
-    if (!$('#hdrezka_ua_fix_css').length) {
-        $('head').append(
-            '<style id="hdrezka_ua_fix_css">' +
-            '/* Убираем отступы, чтобы рамка облегала контент */' +
-            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; margin: 0 0 0.5em 0 !important; padding: 0 !important; }' +
-            '/* Флекс для контента */' +
-            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; box-sizing: border-box !important; }' +
-            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2.4em !important; height: 2.4em !important; margin-right: 1em !important; }' +
-            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
-            '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
-            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; }' +
-            '</style>'
-        );
+    // ================== РЕШАТЕЛЬ ANUBIS (SHA-256) ==================
+    async function sha256(text) {
+        var msgBuffer = new TextEncoder().encode(text);
+        var hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        var hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
     }
 
-    Lampa.Template.add('hdrezka_ua_item', 
-        '<div class="online selector hdrezka-ua-item">' +
-        '  <div class="online__body hdrezka-ua-inner">' +
-        '    <div class="hdrezka-ua-icon">' +
-        '      <svg style="width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
-        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
-        '      </svg>' +
-        '    </div>' +
-        '    <div class="hdrezka-ua-text">' +
-        '      <div class="hdrezka-ua-title">{title}</div>' +
-        '      <div class="hdrezka-ua-subtext">{quality}{info}</div>' +
-        '    </div>' +
-        '  </div>' +
-        '</div>'
-    );
+    async function solvePoW(challenge, difficulty) {
+        console.log('[HDRezka UA] Решаем Anubis, сложность:', difficulty);
+        var nonce = 0;
+        var prefix = '0'.repeat(difficulty);
+        
+        while (true) {
+            var hash = await sha256(challenge + nonce);
+            if (hash.startsWith(prefix)) {
+                console.log('[HDRezka UA] Anubis решен! Nonce:', nonce);
+                return { nonce: nonce, response: hash };
+            }
+            nonce++;
+            if (nonce % 5000 === 0) {
+                await new Promise(r => setTimeout(r, 0)); // Отдаем поток UI
+            }
+        }
+    }
 
+    // Попытка автоматического получения куки
+    function fetchCookies(callback) {
+        console.log('[HDRezka UA] Запрос главной страницы для проверки Anubis...');
+        
+        // Используем fetch напрямую. Если CORS блокирует - упадем в ошибку.
+        fetch(BASE + '/', {
+            method: 'GET',
+            headers: {
+                'User-Agent': UA,
+                'Accept': 'text/html'
+            }
+        }).then(function(response) {
+            return response.text();
+        }).then(function(html) {
+            if (html.indexOf('anubis_challenge') === -1) {
+                console.log('[HDRezka UA] Anubis не требуется.');
+                return callback(null, '');
+            }
+
+            var challengeMatch = html.match(/<script id="anubis_challenge"[^>]*>([\s\S]*?)<\/script>/);
+            if (!challengeMatch) return callback('Челлендж не найден в HTML');
+
+            try {
+                var data = JSON.parse(challengeMatch[1]);
+                var challenge = data.challenge;
+                var difficulty = data.difficulty || 4;
+
+                solvePoW(challenge, difficulty).then(function(result) {
+                    var body = 'response=' + encodeURIComponent(result.response) +
+                               '&nonce=' + encodeURIComponent(result.nonce) +
+                               '&redir=' + encodeURIComponent('/') +
+                               '&elapsedTime=1000';
+
+                    return fetch(BASE + '/.within.website/x/cmd/anubis/api/pass-challenge', {
+                        method: 'POST',
+                        headers: {
+                            'User-Agent': UA,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Referer': BASE + '/'
+                        },
+                        body: body
+                    });
+                }).then(function() {
+                    // Пытаемся прочитать куки. В браузере это возможно, если домен совпадает.
+                    // В Lampa (WebView) скорее всего вернет пустую строку из-за политики безопасности.
+                    var cookies = document.cookie;
+                    console.log('[HDRezka UA] document.cookie после решения:', cookies);
+                    callback(null, cookies);
+                }).catch(function(e) {
+                    callback('Ошибка решения: ' + e.message);
+                });
+
+            } catch (e) {
+                callback('Ошибка парсинга челленджа');
+            }
+        }).catch(function(e) {
+            // Если fetch упал из-за CORS (что вероятно в Lampa), мы попадем сюда
+            callback('Сетевая ошибка (CORS): ' + e.message);
+        });
+    }
+
+    // ================== ОБЫЧНЫЕ ЗАПРОСЫ ==================
     function headers() {
         return {
             'User-Agent': UA,
@@ -75,7 +117,7 @@
             'Origin': BASE,
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
-            'Cookie': COOKIE
+            'Cookie': CURRENT_COOKIE
         };
     }
 
@@ -85,7 +127,12 @@
         var m = n.native ? 'native' : 'silent';
         n[m](url, function (html) {
             if (typeof html !== 'string') html = (html && html.body) ? html.body : String(html || '');
-            if (html.indexOf('Проверяем, что вы не бот') !== -1) return err && err('cookie');
+            
+            // Если снова пришел челлендж
+            if (html.indexOf('anubis_challenge') !== -1 || html.indexOf('Проверяем, что вы не бот') !== -1) {
+                console.log('[HDRezka UA] Получен челлендж при запросе. Куки не работают.');
+                return err && err('cookie');
+            }
             ok && ok(html);
         }, function () { err && err('net'); }, false, { dataType: 'text', headers: headers() });
     }
@@ -100,6 +147,7 @@
         n[m](url, function (json) { ok && ok(json); }, function () { err && err('net'); }, body, { headers: h });
     }
 
+    // ================== ПАРСИНГ ==================
     function decodeStream(data) {
         if (!data || data.charAt(0) !== '#') return data || '';
         var enc = function (str) { return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (m, p1) { return String.fromCharCode('0x' + p1); })); };
@@ -110,7 +158,6 @@
         try { return dec(x); } catch (e) { return ''; }
     }
 
-    // Возвращает и ссылку, и реальное (исправленное) качество
     function bestStream(str) {
         str = decodeStream(str);
         if (!str) return null;
@@ -126,9 +173,7 @@
         }
         var qualities = ['1080p', '720p', '480p', '360p'];
         for (var i = 0; i < qualities.length; i++) {
-            if (map[qualities[i]]) {
-                return { quality: fixQualityCheat(qualities[i]), url: map[qualities[i]] };
-            }
+            if (map[qualities[i]]) return { quality: fixQualityCheat(qualities[i]), url: map[qualities[i]] };
         }
         return null;
     }
@@ -178,8 +223,7 @@
                 var titleAttr = (attrs.match(/title="([^"]*)"/) || [])[1];
                 if (titleAttr) name = titleAttr.trim();
                 info.voices.push({
-                    id: im[1],
-                    name: name || ('Озвучка ' + im[1]),
+                    id: im[1], name: name || ('Озвучка ' + im[1]),
                     is_camrip: (attrs.match(/data-camrip="([^"]*)"/) || [])[1] || '0',
                     is_ads: (attrs.match(/data-ads="([^"]*)"/) || [])[1] || '0',
                     is_director: (attrs.match(/data-director="([^"]*)"/) || [])[1] || '0'
@@ -221,13 +265,43 @@
         if (!html) return episodes;
         var eRe = /data-season_id="(\d+)"[^>]*data-episode_id="(\d+)"[^>]*>([^<]*)/gi, em;
         while ((em = eRe.exec(html)) !== null) {
-            episodes.push({
-                season_id: em[1], episode_id: em[2], name: (em[3] || '').trim(), translator_id: translator_id
-            });
+            episodes.push({ season_id: em[1], episode_id: em[2], name: (em[3] || '').trim(), translator_id: translator_id });
         }
         return episodes;
     }
 
+    // ================== СТИЛИ И ШАБЛОН ==================
+    if (!$('#hdrezka_ua_fix_css').length) {
+        $('head').append(
+            '<style id="hdrezka_ua_fix_css">' +
+            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; margin: 0 0 0.5em 0 !important; padding: 0 !important; }' +
+            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; box-sizing: border-box !important; }' +
+            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2.4em !important; height: 2.4em !important; margin-right: 1em !important; }' +
+            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
+            '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
+            '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; }' +
+            '</style>'
+        );
+    }
+
+    Lampa.Template.add('hdrezka_ua_item', 
+        '<div class="online selector hdrezka-ua-item">' +
+        '  <div class="online__body hdrezka-ua-inner">' +
+        '    <div class="hdrezka-ua-icon">' +
+        '      <svg style="width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
+        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
+        '      </svg>' +
+        '    </div>' +
+        '    <div class="hdrezka-ua-text">' +
+        '      <div class="hdrezka-ua-title">{title}</div>' +
+        '      <div class="hdrezka-ua-subtext">{quality}{info}</div>' +
+        '    </div>' +
+        '  </div>' +
+        '</div>'
+    );
+
+    // ================== КОМПОНЕНТ ==================
     function Component(object) {
         var network = new Lampa.Reguest();
         var scroll = new Lampa.Scroll({ mask: true, over: true, step: 150 });
@@ -267,7 +341,6 @@
         };
 
         this.render = function () { return files.render(); };
-
         this.loading = function (status) {
             this.activity.loader(status);
             if (!status) { this.activity.toggle(); this.fixScroll(); }
@@ -280,10 +353,7 @@
             } catch (e) {}
         };
 
-        this.reset = function () {
-            last = false; scroll.clear(); scroll.body().empty();
-        };
-
+        this.reset = function () { last = false; scroll.clear(); scroll.body().empty(); };
         this.append = function (item) {
             item.on('hover:focus', function (e) {
                 last = e.target;
@@ -326,7 +396,6 @@
             var title = object.movie.title || object.movie.name || '';
             var year = (object.movie.release_date || object.movie.first_air_date || '').substring(0, 4);
             var url = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(title + (year ? ' ' + year : ''));
-
             reqGet(url, function (html) {
                 var items = parseSearch(html);
                 if (!items.length) return this.empty('Ничего не найдено');
@@ -433,7 +502,6 @@
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) titleText += ' (' + ep.name + ')';
                 
-                // Вычисляем "максимальное правдивое" качество для отображения в карточке
                 var fakeMax = '360p';
                 if (pageInfo.pageStreamRaw) {
                     var parsed = bestStream(pageInfo.pageStreamRaw);
@@ -443,7 +511,6 @@
                 var element = { title: titleText, quality: fakeMax, info: ' / ' + (voice ? voice.name : '') };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
                 
-                // --- ДОБАВЛЯЕМ ПРОГРЕСС ПРОСМОТРА (Timeline) ---
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, object.movie.original_title].join(''));
                 var view = Lampa.Timeline.view(hash);
                 
@@ -474,9 +541,6 @@
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                
-                // --- ДОБАВЛЯЕМ АВТОПЕРЕХОД (Плейлист) ---
-                // Формируем плейлист из всех серий текущего сезона, начиная с выбранной
                 var playlist = [];
                 var startIndex = 0;
                 
@@ -491,7 +555,6 @@
                     playlist.push({
                         title: currentTitle + ' S' + currentEp.season_id + 'E' + currentEp.episode_id,
                         url: function(call) {
-                            // Ленивая загрузка ссылки для следующей серии
                             var b = 'id=' + encodeURIComponent(pageInfo.film_id) + '&translator_id=' + encodeURIComponent(voice.id) +
                                     '&season=' + encodeURIComponent(currentEp.season_id) + '&episode=' + encodeURIComponent(currentEp.episode_id) +
                                     '&favs=' + encodeURIComponent(pageInfo.favs || '') + '&action=get_stream';
@@ -529,46 +592,4 @@
                 up: function () { if (Navigator.canmove('up')) Navigator.move('up'); else Lampa.Controller.toggle('head'); },
                 down: function () { Navigator.move('down'); },
                 right: function () { if (Navigator.canmove('right')) Navigator.move('right'); else filter.show(Lampa.Lang.translate('title_filter') || 'Фильтр', 'filter'); },
-                left: function () { if (Navigator.canmove('left')) Navigator.move('left'); else Lampa.Controller.toggle('menu'); },
-                back: function () { Lampa.Activity.backward(); }
-            });
-            Lampa.Controller.toggle('content');
-            setTimeout(function () { this.fixScroll(); if (last) { try { scroll.update($(last), true); } catch (e) {} } }.bind(this), 100);
-        };
-
-        this.pause = function () {};
-        this.stop = function () {};
-        this.destroy = function () { network.clear(); files.destroy(); scroll.destroy(); };
-    }
-
-    function addButton() {
-        Lampa.Listener.follow('full', function (e) {
-            if (e.type !== 'complite' && e.type !== 'complete') return;
-            var render = e.object.activity.render();
-            if (render.find('.hdrezka-ua-btn').length) return;
-
-            var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka UA">' +
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
-                '<span>HDrezka UA</span></div>');
-
-            btn.on('hover:enter', function () {
-                Lampa.Activity.push({
-                    url: '', title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka UA',
-                    component: COMPONENT, movie: e.data.movie, page: 1
-                });
-            });
-
-            var box = render.find('.full-start-new__buttons, .full-start__buttons').first();
-            if (box.length) box.append(btn); else render.find('.full-start__title').after(btn);
-        });
-    }
-
-    function start() {
-        Lampa.Component.add(COMPONENT, Component);
-        addButton();
-        console.log('[HDrezka UA] Added timeline and playlist support');
-    }
-
-    if (window.appready) start();
-    else Lampa.Listener.follow('app', function (e) { if (e.type === 'ready') start(); });
-})();
+                left:
