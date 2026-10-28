@@ -11,6 +11,122 @@
     var COOKIE = Lampa.Storage.get('hdrezka_ua_cookie', '');
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
+    // === КИНОПОИСК ===
+    var KP_KEY = '2d55adfd-019d-4567-bbf7-67d503f61b5a';
+    var KP_BASE = 'https://kinopoiskapiunofficial.tech';
+    var kpCache = {};
+
+    function kpHeaders() {
+        return {
+            'X-API-KEY': KP_KEY,
+            'Content-Type': 'application/json'
+        };
+    }
+
+    function extractKpId(movie) {
+        if (!movie) return null;
+        var candidates = [
+            movie.kinopoisk_id,
+            movie.kp_id,
+            movie.kinopoiskId,
+            movie.ids && movie.ids.kinopoisk
+        ];
+        for (var i = 0; i < candidates.length; i++) {
+            var v = candidates[i];
+            if (v && String(v).match(/^\d+$/)) return String(v);
+        }
+        return null;
+    }
+
+    function kpDetails(id, cb) {
+        if (!id) return cb(null);
+        if (kpCache['id:' + id] && kpCache['id:' + id].filmLength !== undefined) {
+            return cb(kpCache['id:' + id]);
+        }
+        var url = KP_BASE + '/v2.2/films/' + id;
+        var n = new Lampa.Reguest();
+        n.timeout(10000);
+        var m = n.native ? 'native' : 'silent';
+        n[m](url, function (resp) {
+            var data = null;
+            try { data = typeof resp === 'string' ? JSON.parse(resp) : resp; } catch (e) {}
+            cb(data || null);
+        }, function () { cb(null); }, false, { dataType: 'text', headers: kpHeaders() });
+    }
+
+    function kpSearch(title, year, cb) {
+        if (!title) return cb(null);
+        var key = 'search:' + title.toLowerCase() + ':' + (year || '');
+        if (kpCache[key] !== undefined) return cb(kpCache[key]);
+
+        var url = KP_BASE + '/v2.1/films/search-by-keyword?keyword=' +
+            encodeURIComponent(title) + '&page=1';
+
+        var n = new Lampa.Reguest();
+        n.timeout(10000);
+        var m = n.native ? 'native' : 'silent';
+        n[m](url, function (resp) {
+            var data = null;
+            try { data = typeof resp === 'string' ? JSON.parse(resp) : resp; } catch (e) {}
+            var result = null;
+            if (data && data.films && data.films.length) {
+                var best = data.films[0];
+                if (year) {
+                    for (var i = 0; i < data.films.length; i++) {
+                        var f = data.films[i];
+                        if (String(f.year) === String(year)) { best = f; break; }
+                    }
+                }
+                result = {
+                    id: String(best.filmId),
+                    rating: best.rating || null,
+                    year: best.year || null,
+                    genres: (best.genres || []).map(function (g) { return g.genre; }),
+                    name: best.nameRu || best.nameEn || title
+                };
+                kpDetails(result.id, function (details) {
+                    if (details) {
+                        result.rating = details.ratingKinopoisk || result.rating;
+                        result.year = details.year || result.year;
+                        result.genres = (details.genres || []).map(function (g) { return g.genre; });
+                        result.countries = (details.countries || []).map(function (c) { return c.country; });
+                        result.filmLength = details.filmLength || null;
+                        result.type = details.type || null;
+                    }
+                    kpCache[key] = result;
+                    if (result.id) kpCache['id:' + result.id] = result;
+                    cb(result);
+                });
+            } else {
+                kpCache[key] = null;
+                cb(null);
+            }
+        }, function () {
+            cb(null);
+        }, false, { dataType: 'text', headers: kpHeaders() });
+    }
+
+    function fmtLength(min) {
+        if (!min) return '';
+        min = parseInt(min, 10);
+        if (!min) return '';
+        var h = Math.floor(min / 60), m = min % 60;
+        if (h && m) return h + 'ч ' + m + 'м';
+        if (h) return h + 'ч';
+        return m + 'м';
+    }
+
+    function kpInfoLine(kp) {
+        if (!kp) return '';
+        var parts = [];
+        if (kp.rating) parts.push('⭐' + kp.rating);
+        if (kp.year) parts.push(kp.year);
+        if (kp.genres && kp.genres.length) parts.push(kp.genres[0]);
+        if (kp.filmLength) parts.push(fmtLength(kp.filmLength));
+        return parts.join(' • ');
+    }
+
+    // === РЕЗКА КАЧЕСТВ ===
     function fixQualityCheat(q) {
         if (!q) return '360p';
         var num = parseInt(q, 10);
@@ -37,7 +153,7 @@
     }
 
     // === ШАБЛОН КАРТОЧКИ ===
-    Lampa.Template.add('hdrezka_ua_item', 
+    Lampa.Template.add('hdrezka_ua_item',
         '<div class="online selector hdrezka-ua-item">' +
         '  <div class="online__body hdrezka-ua-inner">' +
         '    <div class="hdrezka-ua-icon">' +
@@ -60,7 +176,7 @@
         var n = new Lampa.Reguest();
         n.timeout(15000);
         var m = n.native ? 'native' : 'silent';
-        
+
         n[m](COOKIE_SERVER, function(response) {
             try {
                 var data = JSON.parse(response);
@@ -78,7 +194,7 @@
             console.log('[HDrezka] Сервер куков недоступен');
             Lampa.Noty.show('HDrezka: Локальный сервер недоступен');
             callback();
-        }, false, { 
+        }, false, {
             dataType: 'text',
             headers: { 'User-Agent': UA }
         });
@@ -101,7 +217,7 @@
         var m = n.native ? 'native' : 'silent';
         n[m](url, function (html) {
             if (typeof html !== 'string') html = (html && html.body) ? html.body : String(html || '');
-            
+
             if (html.indexOf('Проверяем, что вы не бот') !== -1 || html.indexOf('anubis_challenge') !== -1) {
                 refreshCookies(function() {
                     reqGet(url, ok, err);
@@ -119,14 +235,14 @@
         h['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         h['X-Requested-With'] = 'XMLHttpRequest';
         var m = n.native ? 'native' : 'silent';
-        n[m](url, function (json) { 
+        n[m](url, function (json) {
             if (typeof json === 'string' && (json.indexOf('anubis_challenge') !== -1 || json.indexOf('Проверяем, что вы не бот') !== -1)) {
                 refreshCookies(function() {
                     reqPost(url, body, ok, err);
                 });
                 return;
             }
-            ok && ok(json); 
+            ok && ok(json);
         }, function () { err && err('net'); }, body, { headers: h });
     }
 
@@ -151,7 +267,7 @@
             var num = (q.match(/(\d{3,4})/) || [])[1];
             if (!num) continue;
             var key = num + 'p';
-            if (!map[key]) map[key] = m[2].trim(); 
+            if (!map[key]) map[key] = m[2].trim();
         }
         var qualities = ['1080p', '720p', '480p', '360p'];
         for (var i = 0; i < qualities.length; i++) {
@@ -177,7 +293,7 @@
         var info = {
             film_id: '', favs: '', is_series: false,
             voices: [], seasons: [], episodes: [],
-            def_voice_id: '', pageStreamRaw: ''
+            def_voice_id: '', pageStreamRaw: '', kp: null
         };
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
         if (favs) info.favs = favs[1];
@@ -281,12 +397,7 @@
         var filter_items = { voice: [], season: [], season_id: [] };
         var mode = 'search';
 
-        // Сохраняем object локально, чтобы он был доступен во всех замыканиях
         var localObject = object;
-        var currentSeasonList = [];
-        var currentVoice = null;
-        var currentEpisodeIndex = 0;
-        var playerListenerAttached = false;
 
         this.create = function () {
             this.activity.loader(true);
@@ -415,6 +526,19 @@
             items.forEach(function (it) {
                 var element = { title: it.title, quality: '', info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
+                var sub = item.find('.hdrezka-ua-subtext');
+
+                var yearMatch = it.title.match(/\((\d{4})\)/);
+                var year = yearMatch ? yearMatch[1] : '';
+                var cleanTitle = it.title.replace(/\s*\(\d{4}\)\s*$/, '').trim();
+
+                kpSearch(cleanTitle, year, function (kp) {
+                    if (!kp) return;
+                    it.kp = kp;
+                    var line = kpInfoLine(kp);
+                    if (line) sub.text(line);
+                });
+
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -440,16 +564,42 @@
                 filter_items.season = [];
                 filter_items.season_id = [];
 
-                if (pageInfo.is_series) {
-                    mode = 'series';
-                    this.reloadSeries();
+                var kpId = (item.kp && item.kp.id) || extractKpId(localObject.movie);
+                var year = (localObject.movie.release_date || localObject.movie.first_air_date || '').substring(0, 4);
+                var titleForKp = localObject.movie.title || localObject.movie.name || currentTitle;
+
+                if (kpId) {
+                    kpDetails(kpId, function (details) {
+                        if (details) pageInfo.kp = {
+                            id: kpId,
+                            rating: details.ratingKinopoisk,
+                            year: details.year,
+                            genres: (details.genres || []).map(function (g) { return g.genre; }),
+                            countries: (details.countries || []).map(function (c) { return c.country; }),
+                            filmLength: details.filmLength,
+                            type: details.type
+                        };
+                        this.afterKp();
+                    }.bind(this));
                 } else {
-                    mode = 'movie';
-                    this.drawMovieList();
+                    kpSearch(titleForKp, year, function (kp) {
+                        pageInfo.kp = kp;
+                        this.afterKp();
+                    }.bind(this));
                 }
             }.bind(this), function (e) {
                 this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка загрузки');
             }.bind(this));
+        };
+
+        this.afterKp = function () {
+            if (pageInfo.is_series) {
+                mode = 'series';
+                this.reloadSeries();
+            } else {
+                mode = 'movie';
+                this.drawMovieList();
+            }
         };
 
         this.drawMovieList = function () {
@@ -466,8 +616,14 @@
             var hash = Lampa.Utils.hash(localObject.movie.original_title || localObject.movie.title || localObject.movie.name);
             var view = Lampa.Timeline.view(hash);
 
+            var kpLine = kpInfoLine(pageInfo.kp);
+
             pageInfo.voices.forEach(function (voice, idx) {
-                var element = { title: voice.name, quality: maxQuality, info: '' };
+                var element = {
+                    title: voice.name,
+                    quality: maxQuality,
+                    info: kpLine ? ' • ' + kpLine : ''
+                };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
 
                 if (view.percent > 0) {
@@ -564,6 +720,7 @@
 
             var sid = filter_items.season_id[choice.season];
             var voice = pageInfo.voices[choice.voice];
+            var kpLine = kpInfoLine(pageInfo.kp);
             var list = allEpisodes.filter(function (e) {
                 return !sid || String(e.season_id) === String(sid);
             });
@@ -574,23 +731,20 @@
                 return;
             }
 
-            currentSeasonList = list;
-            currentVoice = voice;
-
-            list.forEach(function (ep, index) {
+            list.forEach(function (ep) {
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) {
                     titleText += ' (' + ep.name + ')';
                 }
 
-                var element = { 
-                    title: titleText, 
-                    quality: '360p ~ 1080p', 
-                    info: ' / ' + (voice ? voice.name : '') 
+                var element = {
+                    title: titleText,
+                    quality: '360p ~ 1080p',
+                    info: ' / ' + (voice ? voice.name : '') + (kpLine ? ' • ' + kpLine : '')
                 };
 
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
-                
+
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, localObject.movie.original_title].join(''));
                 var view = Lampa.Timeline.view(hash);
                 if (view.percent > 0) {
@@ -598,7 +752,6 @@
                 }
 
                 item.on('hover:enter', function () {
-                    currentEpisodeIndex = index;
                     this.playEpisode(ep, voice, hash);
                 }.bind(this));
                 this.append(item);
@@ -625,49 +778,12 @@
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                
+
                 var view = Lampa.Timeline.view(hash);
-                
-                // Запускаем плеер
                 Lampa.Player.play({ title: t, url: s.url, quality: s.quality, timeline: view });
-                
-                // === СЛУШАЕМ ОКОНЧАНИЕ ВИДЕО ЧЕРЕЗ СТАНДАРТНЫЙ LISTENER ===
-                if (!playerListenerAttached) {
-                    playerListenerAttached = true;
-                    Lampa.Listener.follow('player', function(e) {
-                        if (e.type === 'close') {
-                            playerListenerAttached = false;
-                            // Ничего не делаем, просто сбрасываем флаг
-                        }
-                    });
-                }
-                
-                // Подписываемся на событие окончания текущего трека
-                var endedHandler = function(e) {
-                    if (e.type === 'ended') {
-                        Lampa.Listener.remove(endedHandler);
-                        this.playNextEpisode();
-                    }
-                }.bind(this);
-                
-                Lampa.Listener.follow('player', endedHandler);
-                
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
             });
-        };
-
-        this.playNextEpisode = function () {
-            if (currentEpisodeIndex + 1 >= currentSeasonList.length) {
-                Lampa.Noty.show('Сезон закончился');
-                return;
-            }
-            
-            currentEpisodeIndex++;
-            var nextEp = currentSeasonList[currentEpisodeIndex];
-            var hash = Lampa.Utils.hash([nextEp.season_id, ':', nextEp.episode_id, localObject.movie.original_title].join(''));
-            
-            this.playEpisode(nextEp, currentVoice, hash);
         };
 
         this.startPlayer = function (title, stream, hash) {
@@ -759,7 +875,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Автообновление куков включено');
+        console.log('[HDrezka] Автообновление куков включено, автоплей отключён, Кинопоиск подключён');
     }
 
     if (window.appready) start();
