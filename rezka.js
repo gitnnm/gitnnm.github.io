@@ -11,7 +11,90 @@
     var COOKIE = Lampa.Storage.get('hdrezka_ua_cookie', '');
     var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-    // === КИНОПОИСК ===
+    // === TMDB через CUB-прокси ===
+    var TMDB_BASE = 'https://apitmdb.cub.best/3';
+    var TMDB_KEY = '4ef0d7355d9ffb5151e987764708ce96';
+    var TMDB_IMG = 'https://image.tmdb.org/t/p';
+    var tmdbCache = {};
+
+    function tmdbGet(path, params, cb) {
+        var q = ['api_key=' + TMDB_KEY, 'language=ru', 'email='];
+        for (var k in (params || {})) {
+            if (params.hasOwnProperty(k)) q.push(k + '=' + encodeURIComponent(params[k]));
+        }
+        var url = TMDB_BASE + path + '?' + q.join('&');
+        var n = new Lampa.Reguest();
+        n.timeout(10000);
+        var m = n.native ? 'native' : 'silent';
+        n[m](url, function (resp) {
+            var d = null;
+            try { d = typeof resp === 'string' ? JSON.parse(resp) : resp; } catch (e) {}
+            cb(d || null);
+        }, function () { cb(null); }, false, { dataType: 'text' });
+    }
+
+    function tmdbImage(path, size) {
+        if (!path) return '';
+        return TMDB_IMG + '/' + (size || 'w185') + path;
+    }
+
+    function extractTmdbId(movie) {
+        if (!movie) return null;
+        var c = [movie.tmdb_id, movie.tmdbId, movie.ids && movie.ids.tmdb];
+        for (var i = 0; i < c.length; i++) {
+            if (c[i] && String(c[i]).match(/^\d+$/)) return String(c[i]);
+        }
+        return null;
+    }
+
+    function tmdbFindShow(movie, currentTitle, cb) {
+        var id = extractTmdbId(movie);
+        if (id) return cb(id);
+        var title = movie.title || movie.name || currentTitle;
+        var year = (movie.release_date || movie.first_air_date || '').substring(0, 4);
+        if (!title) return cb(null);
+        var key = 'find:' + title.toLowerCase() + ':' + year;
+        if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
+        var params = { query: title };
+        if (year) params.first_air_date_year = year;
+        tmdbGet('/search/tv', params, function (d) {
+            var found = null;
+            if (d && d.results && d.results.length) found = String(d.results[0].id);
+            tmdbCache[key] = found;
+            cb(found);
+        });
+    }
+
+    function tmdbSeason(tvId, seasonNumber, cb) {
+        if (!tvId) return cb(null);
+        var key = 'season:' + tvId + ':' + seasonNumber;
+        if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
+        tmdbGet('/tv/' + tvId + '/season/' + seasonNumber, {}, function (d) {
+            var map = {};
+            if (d && d.episodes) {
+                d.episodes.forEach(function (ep) {
+                    map[ep.episode_number] = {
+                        name: ep.name || null,
+                        date: ep.air_date || null,
+                        still: ep.still_path || null,
+                        rating: ep.vote_average || null,
+                        runtime: ep.runtime || null
+                    };
+                });
+            }
+            tmdbCache[key] = map;
+            cb(map);
+        });
+    }
+
+    function fmtDate(s) {
+        if (!s) return '';
+        var m = String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!m) return s;
+        return m[3] + '-' + m[2] + '-' + m[1];
+    }
+
+    // === КИНОПОИСК (fallback) ===
     var KP_KEY = '2d55adfd-019d-4567-bbf7-67d503f61b5a';
     var KP_BASE = 'https://kinopoiskapiunofficial.tech';
     var kpCache = {};
@@ -65,7 +148,6 @@
         return {
             id: String(id),
             imdbId: d.imdbId || null,
-            rating: d.ratingKinopoisk || d.ratingImdb || null,
             year: d.year || null,
             genres: (d.genres || []).map(function (g) { return g.genre; }),
             countries: (d.countries || []).map(function (c) { return c.country; }),
@@ -100,7 +182,7 @@
             var id = String(best.filmId);
             kpDetails(id, function (det) {
                 var kp = det ? packKp(id, det) : {
-                    id: id, imdbId: null, rating: best.rating || null, year: best.year || null,
+                    id: id, imdbId: null, year: best.year || null,
                     genres: (best.genres || []).map(function (g) { return g.genre; }),
                     countries: [], filmLength: null, type: null, poster: null, name: null
                 };
@@ -138,36 +220,6 @@
         function step3() { kpSearch(title, year, done); }
     }
 
-    // Эпизоды из Кинопоиска: { "season:episode": { name, date } }
-    function kpEpisodes(kpId, cb) {
-        if (!kpId) return cb({});
-        var key = 'eps:' + kpId;
-        if (kpCache[key] !== undefined) return cb(kpCache[key]);
-
-        var url = KP_BASE + '/api/v2.2/films/' + kpId + '/seasons';
-        var n = new Lampa.Reguest();
-        n.timeout(10000);
-        var m = n.native ? 'native' : 'silent';
-        n[m](url, function (resp) {
-            var d = null;
-            try { d = typeof resp === 'string' ? JSON.parse(resp) : resp; } catch (e) {}
-            var map = {};
-            if (d && d.items) {
-                d.items.forEach(function (season) {
-                    (season.episodes || []).forEach(function (ep) {
-                        var k = season.number + ':' + ep.episodeNumber;
-                        map[k] = {
-                            name: ep.nameRu || ep.nameEn || null,
-                            date: ep.releaseDate || null
-                        };
-                    });
-                });
-            }
-            kpCache[key] = map;
-            cb(map);
-        }, function () { cb({}); }, false, { dataType: 'text', headers: kpHeaders() });
-    }
-
     function fmtLength(min) {
         if (!min) return '';
         min = parseInt(min, 10);
@@ -178,7 +230,7 @@
         return m + 'м';
     }
 
-    // Без рейтинга
+    // Без рейтинга (общий рейтинг не выводим)
     function kpInfoLine(kp) {
         if (!kp) return '';
         var p = [];
@@ -195,6 +247,14 @@
             if (v && String(v).trim()) parts.push(String(v).trim());
         }
         return parts.join(' • ');
+    }
+
+    function iconData(poster) {
+        return {
+            poster: poster || '',
+            poster_display: poster ? 'block' : 'none',
+            play_display: poster ? 'none' : 'block'
+        };
     }
 
     // === РЕЗКА КАЧЕСТВ ===
@@ -215,8 +275,9 @@
             '<style id="hdrezka_ua_fix_css">' +
             '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.5em 0 !important; overflow: hidden !important; }' +
             '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.8em 1.2em !important; box-sizing: border-box !important; }' +
-            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2.6em !important; height: 3.8em !important; margin-right: 1em !important; overflow: hidden !important; border-radius: 0.3em !important; background: #222 !important; }' +
+            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 2.6em !important; height: 2.6em !important; margin-right: 1em !important; overflow: hidden !important; border-radius: 0.3em !important; background: #222 !important; }' +
             '.hdrezka-ua-poster { display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }' +
+            '.hdrezka-ua-play { width: 100% !important; height: 100% !important; }' +
             '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }' +
             '.hdrezka-ua-title { font-size: 1.1em !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.2em !important; }' +
             '.hdrezka-ua-subtext { font-size: 0.85em !important; color: #888 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }' +
@@ -229,7 +290,11 @@
         '<div class="online selector hdrezka-ua-item">' +
         '  <div class="online__body hdrezka-ua-inner">' +
         '    <div class="hdrezka-ua-icon">' +
-        '      <img class="hdrezka-ua-poster" src="{poster}" onerror="this.style.display=\'none\'">' +
+        '      <img class="hdrezka-ua-poster" src="{poster}" style="display:{poster_display}" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+        '      <svg class="hdrezka-ua-play" style="display:{play_display};width:100%;height:100%;" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
+        '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
+        '      </svg>' +
         '    </div>' +
         '    <div class="hdrezka-ua-text">' +
         '      <div class="hdrezka-ua-title">{title}</div>' +
@@ -343,7 +408,7 @@
     }
 
     function parsePage(html) {
-        var info = { film_id: '', favs: '', is_series: false, voices: [], seasons: [], episodes: [], def_voice_id: '', pageStreamRaw: '', kp: null, kpEpisodes: null };
+        var info = { film_id: '', favs: '', is_series: false, voices: [], seasons: [], episodes: [], def_voice_id: '', pageStreamRaw: '', kp: null, tmdbEpisodes: null };
         var favs = html.match(/id="ctrl_favs"\s+value="([^"]*)"/);
         if (favs) info.favs = favs[1];
 
@@ -491,10 +556,11 @@
             this.reset(); this.loading(false);
             filter.set('filter', []); filter.chosen('filter', []);
             items.forEach(function (it) {
-                var el = { title: it.title, info: '', poster: '' };
+                var el = $.extend({ title: it.title, info: '' }, iconData(null));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 var sub = item.find('.hdrezka-ua-subtext');
                 var img = item.find('.hdrezka-ua-poster');
+                var play = item.find('.hdrezka-ua-play');
                 var ym = it.title.match(/\((\d{4})\)/);
                 var year = ym ? ym[1] : '';
                 var clean = it.title.replace(/\s*\(\d{4}\)\s*$/, '').trim();
@@ -502,7 +568,10 @@
                     if (!kp) return;
                     it.kp = kp;
                     sub.text(joinInfo(kpInfoLine(kp)));
-                    if (kp.poster) img.attr('src', kp.poster);
+                    if (kp.poster) {
+                        img.attr('src', kp.poster).css('display', 'block');
+                        play.css('display', 'none');
+                    }
                 });
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
                 this.append(item);
@@ -547,7 +616,7 @@
             var poster = pageInfo.kp && pageInfo.kp.poster ? pageInfo.kp.poster : '';
 
             pageInfo.voices.forEach(function (voice, idx) {
-                var el = { title: voice.name, info: joinInfo(maxQ, kpLine), poster: poster };
+                var el = $.extend({ title: voice.name, info: joinInfo(maxQ, kpLine) }, iconData(poster));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 if (view.percent > 0) item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
                 item.on('hover:enter', function () { choice.voice = idx; this.playMovie(voice, hash); }.bind(this));
@@ -597,16 +666,19 @@
                 filter_items.season_id = pairs.map(function (p) { return p.id; });
                 if (choice.season >= filter_items.season.length) choice.season = 0;
 
-                var kpId = pageInfo.kp && pageInfo.kp.id;
-                if (kpId) {
-                    kpEpisodes(kpId, function (epMap) {
-                        pageInfo.kpEpisodes = epMap;
+                // TMDB-эпизоды для текущего сезона
+                var sid = filter_items.season_id[choice.season];
+                var seasonNum = sid ? String(sid) : '';
+                tmdbFindShow(localObject.movie, currentTitle, function (tvId) {
+                    if (!tvId) {
+                        pageInfo.tmdbEpisodes = {};
+                        return this.drawEpisodeList();
+                    }
+                    tmdbSeason(tvId, seasonNum, function (epMap) {
+                        pageInfo.tmdbEpisodes = epMap || {};
                         this.drawEpisodeList();
                     }.bind(this));
-                } else {
-                    pageInfo.kpEpisodes = {};
-                    this.drawEpisodeList();
-                }
+                }.bind(this));
             }.bind(this), function () { this.empty('Ошибка загрузки серий'); }.bind(this));
         };
 
@@ -614,19 +686,25 @@
             this.reset(); this.buildFilter(); this.loading(false);
             var sid = filter_items.season_id[choice.season];
             var voice = pageInfo.voices[choice.voice];
-            var poster = pageInfo.kp && pageInfo.kp.poster ? pageInfo.kp.poster : '';
             var list = allEpisodes.filter(function (e) { return !sid || String(e.season_id) === String(sid); });
             if (!list.length) { scroll.append($('<div class="empty__text" style="padding:1.5em">Нет серий</div>')); this.start(true); return; }
 
             list.forEach(function (ep) {
-                var kpEp = pageInfo.kpEpisodes && pageInfo.kpEpisodes[ep.season_id + ':' + ep.episode_id];
-                var epName = (kpEp && kpEp.name) || ep.name;
+                var t = pageInfo.tmdbEpisodes && pageInfo.tmdbEpisodes[parseInt(ep.episode_id, 10)];
+                var epName = (t && t.name) || ep.name;
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (epName && epName.toLowerCase().indexOf('серия') === -1) titleText += ' (' + epName + ')';
-                if (kpEp && kpEp.date) titleText += ' • ' + kpEp.date;
+                if (t && t.date) titleText += ' • ' + fmtDate(t.date);
 
-                var el = { title: titleText, info: joinInfo('360p ~ 1080p', voice ? voice.name : ''), poster: poster };
+                var parts = ['360p ~ 1080p'];
+                if (voice) parts.push(voice.name);
+                if (t && t.rating) parts.push('⭐' + Number(t.rating).toFixed(1));
+                if (t && t.runtime) parts.push(t.runtime + 'м');
+
+                var poster = t && t.still ? tmdbImage(t.still, 'w185') : '';
+                var el = $.extend({ title: titleText, info: parts.join(' • ') }, iconData(poster));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
+
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, localObject.movie.original_title].join(''));
                 var view = Lampa.Timeline.view(hash);
                 if (view.percent > 0) item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
@@ -698,7 +776,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: автоплей отключён, рейтинг не выводится, постеры и эпизоды из КП');
+        console.log('[HDrezka] Готово: TMDB через CUB + fallback КП, автоплей выключен');
     }
 
     if (window.appready) start();
