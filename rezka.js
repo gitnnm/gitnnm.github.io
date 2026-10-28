@@ -267,6 +267,42 @@
         return episodes;
     }
 
+    // === ФУНКЦИЯ СОХРАНЕНИЯ ПРОГРЕССА ===
+    function saveProgress(hash, time, duration) {
+        if (!hash || !duration) return;
+        try {
+            Lampa.Timeline.update(hash, time, duration);
+        } catch (e) {
+            console.log('[HDrezka] Ошибка сохранения прогресса:', e);
+        }
+    }
+
+    // === ОБЕРТКА ПЛЕЕРА ДЛЯ СОХРАНЕНИЯ ПРОГРЕССА ===
+    function playWithProgress(title, stream, hash) {
+        // Получаем текущую позицию из таймлайна
+        var view = Lampa.Timeline.view(hash);
+        var startTime = view.time || 0;
+
+        Lampa.Player.play({
+            title: title,
+            url: stream.url,
+            quality: stream.quality,
+            timeline: view
+        });
+
+        // Слушаем события плеера, чтобы сохранить прогресс при выходе
+        var listener = Lampa.Listener.follow('player', function(e) {
+            if (e.type === 'close' || e.type === 'destroy') {
+                try {
+                    var currentTime = Lampa.Player.playlist().time || startTime;
+                    var duration = Lampa.Player.playlist().duration || 0;
+                    saveProgress(hash, currentTime, duration);
+                } catch (err) {}
+                Lampa.Listener.remove(listener);
+            }
+        });
+    }
+
     function Component(object) {
         var network = new Lampa.Reguest();
         var scroll = new Lampa.Scroll({ mask: true, over: true, step: 150 });
@@ -450,19 +486,26 @@
             this.buildFilter();
             this.loading(false);
 
-            // Определяем максимальное реальное качество для фильма
             var maxQuality = '360p';
             if (pageInfo.pageStreamRaw) {
                 var parsed = bestStream(pageInfo.pageStreamRaw);
                 if (parsed) maxQuality = parsed.quality;
             }
 
+            var hash = Lampa.Utils.hash(currentTitle);
+            var view = Lampa.Timeline.view(hash);
+
             pageInfo.voices.forEach(function (voice, idx) {
                 var element = { title: voice.name, quality: maxQuality, info: '' };
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
+
+                if (view.percent > 0) {
+                    item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
+                }
+
                 item.on('hover:enter', function () {
                     choice.voice = idx;
-                    this.playMovie(voice);
+                    this.playMovie(voice, hash);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -470,13 +513,13 @@
             this.start(true);
         };
 
-        this.playMovie = function (voice) {
+        this.playMovie = function (voice, hash) {
             Lampa.Noty.show('Загрузка…');
 
             if (String(voice.id) === String(pageInfo.def_voice_id) && pageInfo.pageStreamRaw) {
                 var s0 = bestStream(pageInfo.pageStreamRaw);
                 if (!s0) return Lampa.Noty.show('Нет доступного качества');
-                this.startPlayer(currentTitle + ' — ' + voice.name, s0);
+                playWithProgress(currentTitle + ' — ' + voice.name, s0, hash);
                 return;
             }
 
@@ -496,7 +539,7 @@
                 if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
-                this.startPlayer(currentTitle + ' — ' + voice.name, s);
+                playWithProgress(currentTitle + ' — ' + voice.name, s, hash);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка потока');
             });
@@ -574,7 +617,6 @@
 
                 var item = Lampa.Template.get('hdrezka_ua_item', element);
                 
-                // === ДОБАВЛЯЕМ ШКАЛУ ПРОГРЕССА ===
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, object.movie.original_title].join(''));
                 var view = Lampa.Timeline.view(hash);
                 if (view.percent > 0) {
@@ -582,7 +624,7 @@
                 }
 
                 item.on('hover:enter', function () {
-                    this.playEpisode(ep, voice);
+                    this.playEpisode(ep, voice, hash);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -590,7 +632,7 @@
             this.start(true);
         };
 
-        this.playEpisode = function (ep, voice) {
+        this.playEpisode = function (ep, voice, hash) {
             Lampa.Noty.show('Загрузка…');
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
@@ -608,21 +650,10 @@
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                
-                // === ПЕРЕДАЕМ ТАЙМЛАЙН В ПЛЕЕР ===
-                var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, object.movie.original_title].join(''));
-                var view = Lampa.Timeline.view(hash);
-                
-                Lampa.Player.play({ title: t, url: s.url, quality: s.quality, timeline: view });
-                Lampa.Player.playlist([{ title: t + ' — ' + s.quality, url: s.url, timeline: view }]);
+                playWithProgress(t, s, hash);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
             });
-        };
-
-        this.startPlayer = function (title, stream) {
-            Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality });
-            Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url }]);
         };
 
         this.start = function (first_select) {
@@ -634,7 +665,6 @@
 
             try { Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie)); } catch (e) {}
 
-            // === ДОБАВЛЯЕМ ОТСТУПЫ ДЛЯ СКРОЛЛА, ЧТОБЫ РАМКА НЕ ОБРЕЗАЛАСЬ ===
             scroll.render().css({
                 'padding-left': '1em',
                 'padding-right': '1em',
