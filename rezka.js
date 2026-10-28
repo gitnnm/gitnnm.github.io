@@ -281,8 +281,10 @@
         var filter_items = { voice: [], season: [], season_id: [] };
         var mode = 'search';
 
-        // Сохраняем object локально, чтобы он был доступен в замыканиях
         var localObject = object;
+        var currentSeasonList = [];
+        var currentVoice = null;
+        var currentEpisodeIndex = 0;
 
         this.create = function () {
             this.activity.loader(true);
@@ -388,8 +390,8 @@
         this.search = function () {
             mode = 'search';
             this.loading(true);
-            var title = object.movie.title || object.movie.name || '';
-            var year = (object.movie.release_date || object.movie.first_air_date || '').substring(0, 4);
+            var title = localObject.movie.title || localObject.movie.name || '';
+            var year = (localObject.movie.release_date || localObject.movie.first_air_date || '').substring(0, 4);
             var url = BASE + '/search/?do=search&subaction=search&q=' + encodeURIComponent(title + (year ? ' ' + year : ''));
 
             reqGet(url, function (html) {
@@ -459,7 +461,6 @@
                 if (parsed) maxQuality = parsed.quality;
             }
 
-            // Используем хэш, который совпадает с Lampa для фильма
             var hash = Lampa.Utils.hash(localObject.movie.original_title || localObject.movie.title || localObject.movie.name);
             var view = Lampa.Timeline.view(hash);
 
@@ -571,7 +572,10 @@
                 return;
             }
 
-            list.forEach(function (ep) {
+            currentSeasonList = list;
+            currentVoice = voice;
+
+            list.forEach(function (ep, index) {
                 var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
                 if (ep.name && ep.name.toLowerCase().indexOf('серия') === -1) {
                     titleText += ' (' + ep.name + ')';
@@ -592,7 +596,8 @@
                 }
 
                 item.on('hover:enter', function () {
-                    this.playEpisode(ep, voice, hash, list);
+                    currentEpisodeIndex = index;
+                    this.playEpisode(ep, voice, hash);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -600,7 +605,7 @@
             this.start(true);
         };
 
-        this.playEpisode = function (ep, voice, hash, seasonList) {
+        this.playEpisode = function (ep, voice, hash) {
             Lampa.Noty.show('Загрузка…');
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
@@ -623,41 +628,28 @@
                 
                 Lampa.Player.play({ title: t, url: s.url, quality: s.quality, timeline: view });
                 
-                // Формируем плейлист из всех серий сезона для автоперехода
-                var playlist = seasonList.map(function(item) {
-                    return {
-                        title: currentTitle + ' S' + item.season_id + 'E' + item.episode_id,
-                        url: function(call) {
-                            var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
-                            var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
-                                '&translator_id=' + encodeURIComponent(voice.id) +
-                                '&season=' + encodeURIComponent(item.season_id) +
-                                '&episode=' + encodeURIComponent(item.episode_id) +
-                                '&favs=' + encodeURIComponent(pageInfo.favs || '') +
-                                '&action=get_stream';
-                            
-                            reqPost(url, body, function(json) {
-                                if (typeof json === 'string') {
-                                    try { json = JSON.parse(json); } catch (e) { json = {}; }
-                                }
-                                var s = bestStream(json && json.url);
-                                if (s) {
-                                    call(s.url, s.quality);
-                                } else {
-                                    call('');
-                                }
-                            }, function() {
-                                call('');
-                            });
-                        }
-                    };
-                });
-
-                Lampa.Player.playlist(playlist);
+                // === СЛУШАЕМ ОКОНЧАНИЕ ВИДЕО ===
+                Lampa.Player.listener('ended', function() {
+                    Lampa.Player.listener.remove('ended');
+                    this.playNextEpisode();
+                }.bind(this));
                 
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
             });
+        };
+
+        this.playNextEpisode = function () {
+            if (currentEpisodeIndex + 1 >= currentSeasonList.length) {
+                Lampa.Noty.show('Сезон закончился');
+                return;
+            }
+            
+            currentEpisodeIndex++;
+            var nextEp = currentSeasonList[currentEpisodeIndex];
+            var hash = Lampa.Utils.hash([nextEp.season_id, ':', nextEp.episode_id, localObject.movie.original_title].join(''));
+            
+            this.playEpisode(nextEp, currentVoice, hash);
         };
 
         this.startPlayer = function (title, stream, hash) {
@@ -673,7 +665,7 @@
                 last = scroll.render().find('.selector').eq(0)[0];
             }
 
-            try { Lampa.Background.immediately(Lampa.Utils.cardImgBackground(object.movie)); } catch (e) {}
+            try { Lampa.Background.immediately(Lampa.Utils.cardImgBackground(localObject.movie)); } catch (e) {}
 
             scroll.render().css({
                 'padding-left': '1em',
