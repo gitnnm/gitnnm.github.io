@@ -277,30 +277,52 @@
         }
     }
 
-    // === ОБЕРТКА ПЛЕЕРА ДЛЯ СОХРАНЕНИЯ ПРОГРЕССА ===
-    function playWithProgress(title, stream, hash) {
-        // Получаем текущую позицию из таймлайна
+    // === ОБЕРТКА ПЛЕЕРА С ПЛЕЙЛИСТОМ ===
+    function playWithPlaylist(title, currentStream, playlist, hash) {
         var view = Lampa.Timeline.view(hash);
-        var startTime = view.time || 0;
-
+        
         Lampa.Player.play({
             title: title,
-            url: stream.url,
-            quality: stream.quality,
+            url: currentStream.url,
+            quality: currentStream.quality,
             timeline: view
         });
 
-        // Слушаем события плеера, чтобы сохранить прогресс при выходе
-        var listener = Lampa.Listener.follow('player', function(e) {
-            if (e.type === 'close' || e.type === 'destroy') {
-                try {
-                    var currentTime = Lampa.Player.playlist().time || startTime;
-                    var duration = Lampa.Player.playlist().duration || 0;
-                    saveProgress(hash, currentTime, duration);
-                } catch (err) {}
-                Lampa.Listener.remove(listener);
-            }
+        // Формируем плейлист для автоперехода
+        var playerPlaylist = playlist.map(function(item) {
+            var itemHash = Lampa.Utils.hash([item.season_id, ':', item.episode_id, object.movie.original_title].join(''));
+            var itemView = Lampa.Timeline.view(itemHash);
+            return {
+                title: currentTitle + ' S' + item.season_id + 'E' + item.episode_id,
+                url: function(call) {
+                    // Ленивая загрузка ссылки для следующей серии
+                    var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
+                    var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
+                        '&translator_id=' + encodeURIComponent(item.translator_id) +
+                        '&season=' + encodeURIComponent(item.season_id) +
+                        '&episode=' + encodeURIComponent(item.episode_id) +
+                        '&favs=' + encodeURIComponent(pageInfo.favs || '') +
+                        '&action=get_stream';
+                    
+                    reqPost(url, body, function(json) {
+                        if (typeof json === 'string') {
+                            try { json = JSON.parse(json); } catch (e) { json = {}; }
+                        }
+                        var s = bestStream(json && json.url);
+                        if (s) {
+                            call(s.url, s.quality);
+                        } else {
+                            call('');
+                        }
+                    }, function() {
+                        call('');
+                    });
+                },
+                timeline: itemView
+            };
         });
+
+        Lampa.Player.playlist(playerPlaylist);
     }
 
     function Component(object) {
@@ -519,7 +541,7 @@
             if (String(voice.id) === String(pageInfo.def_voice_id) && pageInfo.pageStreamRaw) {
                 var s0 = bestStream(pageInfo.pageStreamRaw);
                 if (!s0) return Lampa.Noty.show('Нет доступного качества');
-                playWithProgress(currentTitle + ' — ' + voice.name, s0, hash);
+                this.startPlayer(currentTitle + ' — ' + voice.name, s0, hash);
                 return;
             }
 
@@ -539,7 +561,7 @@
                 if (json && json.premium_content) return Lampa.Noty.show('Только Premium');
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
-                playWithProgress(currentTitle + ' — ' + voice.name, s, hash);
+                this.startPlayer(currentTitle + ' — ' + voice.name, s, hash);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка потока');
             });
@@ -624,7 +646,7 @@
                 }
 
                 item.on('hover:enter', function () {
-                    this.playEpisode(ep, voice, hash);
+                    this.playEpisode(ep, voice, hash, list);
                 }.bind(this));
                 this.append(item);
             }.bind(this));
@@ -632,7 +654,7 @@
             this.start(true);
         };
 
-        this.playEpisode = function (ep, voice, hash) {
+        this.playEpisode = function (ep, voice, hash, seasonList) {
             Lampa.Noty.show('Загрузка…');
             var url = BASE + '/ajax/get_cdn_series/?t=' + Date.now();
             var body = 'id=' + encodeURIComponent(pageInfo.film_id) +
@@ -650,10 +672,26 @@
                 var s = bestStream(json && json.url);
                 if (!s) return Lampa.Noty.show('Нет доступного качества');
                 var t = currentTitle + ' S' + ep.season_id + 'E' + ep.episode_id + ' — ' + voice.name;
-                playWithProgress(t, s, hash);
+                
+                // Формируем плейлист из оставшихся серий
+                var playlist = seasonList.map(function(item) {
+                    return {
+                        season_id: item.season_id,
+                        episode_id: item.episode_id,
+                        translator_id: voice.id
+                    };
+                });
+
+                playWithPlaylist(t, s, playlist, hash);
             }.bind(this), function () {
                 Lampa.Noty.show('Ошибка серии');
             });
+        };
+
+        this.startPlayer = function (title, stream, hash) {
+            var view = Lampa.Timeline.view(hash);
+            Lampa.Player.play({ title: title, url: stream.url, quality: stream.quality, timeline: view });
+            Lampa.Player.playlist([{ title: title + ' — ' + stream.quality, url: stream.url, timeline: view }]);
         };
 
         this.start = function (first_select) {
@@ -718,32 +756,4 @@
 
             var btn = $('<div class="full-start__button selector view--online hdrezka-ua-btn" data-subtitle="HDrezka">' +
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
-                '<span>HDrezka</span></div>');
-
-            btn.on('hover:enter', function () {
-                Lampa.Activity.push({
-                    url: '',
-                    title: (e.data.movie.title || e.data.movie.name || '') + ' — HDrezka',
-                    component: COMPONENT,
-                    movie: e.data.movie,
-                    page: 1
-                });
-            });
-
-            var box = render.find('.full-start-new__buttons, .full-start__buttons').first();
-            if (box.length) box.prepend(btn);
-            else render.find('.full-start__title').after(btn);
-        });
-    }
-
-    function start() {
-        Lampa.Component.add(COMPONENT, Component);
-        addButton();
-        console.log('[HDrezka] Автообновление куков включено');
-    }
-
-    if (window.appready) start();
-    else Lampa.Listener.follow('app', function (e) {
-        if (e.type === 'ready') start();
-    });
-})();
+                '<span>HDrezka</span></
