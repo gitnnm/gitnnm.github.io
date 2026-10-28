@@ -10,12 +10,13 @@
     // Вставьте сюда ваши актуальные куки
     var COOKIE =
         'PHPSESSID=a5t2q76mr23490t9ihlgu7t5uf; ' +
-        'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExN2VmNC1mMTdiLTdhZWQtOGYzMS05ZGYyN2NkODFlZWEiLCJleHAiOjE3OTU3MjMzNDUsImlhdCI6MTc5MzEzMTM0NSwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzEzMTI4NSwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6ImM5NGI5ZTVhMzA4NDdlMGE2MzNmMmM3MTI0YzVlMTQ5MjI2YjFlMTY2MmQ0YmRjOTk0OTE3NjIzNjBiNjU0NjAifQ.Hp6S_VzCYRRRWxGZBfRnxxDsF-Lu-G6GjXZsJp5GgGHf7WG8Uxi7I-20aG35EzH4Da-6Wl60G_oMmRDiI5CDBw; ' +
+        'techaro.lol-anubis-auth-d82da6a5=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJDSEFMTEVOR0UiLCJjaGFsbGVuZ2UiOiIwMWExODFiZS0xOTkwLTc2ZTMtODQ0YS00NTc2YjUyYmVmMTgiLCJleHAiOjE3OTU3NzAwODIsImlhdCI6MTc5MzE3ODA4MiwibWV0aG9kIjoiZmFzdCIsIm5iZiI6MTc5MzE3ODAyMiwicG9saWN5UnVsZSI6ImFjOTgwZjQ5YzRkMzVmYWIiLCJyZXN0cmljdGlvbiI6Ijk2NzVjYjI4YmQwMjc2MWFlMDU1Njg2NzliNWUwZTlmM2NiNTVhYjlmOTBiODA1Yzk1MDA0NzAzNWYwMGE0YTIifQ.CR0OFYjeaZ8jQ_aA9r7mVQwi5VHxhZanXHBZIgJYyc-B0DZLhYLDlMWp83ayplltlDNqlPsW9C4SaykPxbWcBA; ' +
+        'techaro.lol-anubis-cookie-verification-d82da6a5=01a181be-1990-76e3-844a-4576b52bef18; ' +
         'dle_user_token=6bf57f7fdb61a5463b8de237feee0025; ' +
         'dle_user_taken=1; ' +
         'device_rzk_id=eed0c9546b0ad334ffd7d5af8728ac15; ' +
         '_vc_id=y8EhN9W2istUl896IQBm67LCdE4H1OH5; ' +
-        '_vc_day=2026-10-27; ' +
+        '_vc_day=2026-10-28; ' +
         'rzk_last_refresh=1793131345; ' +
         '_ym_uid=1785609579293811962; ' +
         '_ym_d=1785609579';
