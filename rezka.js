@@ -129,11 +129,100 @@
                     name: d.name || null,
                     year: (d.first_air_date || '').substring(0, 4),
                     genres: (d.genres || []).map(function (g) { return g.name; }),
-                    runtime: (d.episode_run_time && d.episode_run_time[0]) || null
+                    runtime: (d.episode_run_time && d.episode_run_time[0]) || null,
+                    rating: d.vote_average || null
                 };
             }
             tmdbCache[key] = info;
             cb(info);
+        });
+    }
+
+    function tmdbMovieDetails(movieId, cb) {
+        if (!movieId) return cb(null);
+        var key = 'movie:' + movieId;
+        if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
+        tmdbGet('/movie/' + movieId, {}, function (d) {
+            var info = null;
+            if (d) {
+                info = {
+                    poster: d.poster_path || null,
+                    name: d.title || null,
+                    year: (d.release_date || '').substring(0, 4),
+                    genres: (d.genres || []).map(function (g) { return g.name; }),
+                    runtime: d.runtime || null,
+                    rating: d.vote_average || null,
+                    date: d.release_date || null
+                };
+            }
+            tmdbCache[key] = info;
+            cb(info);
+        });
+    }
+
+    function tmdbFindMovie(movie, currentTitle, cb) {
+        var id = extractTmdbId(movie);
+        if (id) return tmdbMovieDetails(id, cb);
+
+        var imdb = extractImdbId(movie);
+        if (imdb) {
+            var keyImdb = 'findmovieimdb:' + imdb;
+            if (tmdbCache[keyImdb] !== undefined) return cb(tmdbCache[keyImdb]);
+            tmdbGet('/find/' + imdb, { external_source: 'imdb_id' }, function (d) {
+                var found = null;
+                if (d && d.movie_results && d.movie_results.length) {
+                    tmdbMovieDetails(String(d.movie_results[0].id), function (info) {
+                        tmdbCache[keyImdb] = info;
+                        cb(info);
+                    });
+                } else {
+                    tmdbCache[keyImdb] = null;
+                    cb(null);
+                }
+            });
+            return;
+        }
+
+        var title = movie.title || movie.name || currentTitle;
+        var year = (movie.release_date || '').substring(0, 4);
+        if (!title) return cb(null);
+        var key = 'findmovie:' + title.toLowerCase() + ':' + year;
+        if (tmdbCache[key] !== undefined) return cb(tmdbCache[key]);
+
+        var params = { query: title };
+        if (year) params.year = year;
+
+        tmdbGet('/search/movie', params, function (d) {
+            var foundId = null;
+            if (d && d.results && d.results.length) {
+                for (var i = 0; i < d.results.length; i++) {
+                    var r = d.results[i];
+                    var rYear = (r.release_date || '').substring(0, 4);
+                    var rName = (r.title || '').toLowerCase();
+                    var rOrig = (r.original_title || '').toLowerCase();
+                    var tLower = title.toLowerCase();
+                    if ((rName === tLower || rOrig === tLower) && (!year || rYear === year)) {
+                        foundId = String(r.id);
+                        break;
+                    }
+                }
+                if (!foundId) {
+                    for (var j = 0; j < d.results.length; j++) {
+                        var rr = d.results[j];
+                        var rY = (rr.release_date || '').substring(0, 4);
+                        if (!year || rY === year) { foundId = String(rr.id); break; }
+                    }
+                }
+            }
+            if (foundId) {
+                tmdbMovieDetails(foundId, function (info) {
+                    tmdbCache[key] = info;
+                    cb(info);
+                });
+            } else {
+                tmdbCache[key] = null;
+                cb(null);
+            }
         });
     }
 
@@ -166,13 +255,18 @@
         return m[3] + '-' + m[2] + '-' + m[1];
     }
 
-    function joinInfo() {
-        var parts = [];
-        for (var i = 0; i < arguments.length; i++) {
-            var v = arguments[i];
-            if (v && String(v).trim()) parts.push(String(v).trim());
-        }
-        return parts.join(' • ');
+    function fmtLength(min) {
+        if (!min) return '';
+        min = parseInt(min, 10);
+        if (!min) return '';
+        var h = Math.floor(min / 60), m = min % 60;
+        if (h && m) return h + 'ч ' + m + 'м';
+        if (h) return h + 'ч';
+        return m + 'м';
+    }
+
+    function pad2(n) {
+        return (n < 10 ? '0' : '') + n;
     }
 
     function iconData(path, size) {
@@ -198,18 +292,28 @@
         return q;
     }
 
-    // === СТИЛИ (стиль, приближенный к BWA) ===
+    // === СТИЛИ (стиль Lampac/BWA) ===
     if (!$('#hdrezka_ua_fix_css').length) {
         $('head').append(
             '<style id="hdrezka_ua_fix_css">' +
-            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.6em 0 !important; overflow: hidden !important; background: #1a1a1a !important; border-radius: 0.4em !important; }' +
-            '.hdrezka-ua-inner { display: flex !important; align-items: center !important; width: 100% !important; padding: 0.7em 1em !important; box-sizing: border-box !important; }' +
-            '.hdrezka-ua-icon { flex-shrink: 0 !important; width: 3.2em !important; height: 4.6em !important; margin-right: 1em !important; overflow: hidden !important; border-radius: 0.3em !important; background: #222 !important; }' +
+            /* карточка */
+            '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.45em 0 !important; overflow: hidden !important; background: #181818 !important; border-radius: 0.45em !important; transition: background 0.2s ease, box-shadow 0.2s ease !important; }' +
+            /* подсветка выбранного — градиент, не рамка */
+            '.hdrezka-ua-item.focus { background: linear-gradient(90deg, rgba(60,120,200,0.35) 0%, rgba(60,120,200,0.12) 40%, #181818 100%) !important; box-shadow: 0 0 0 1px rgba(90,160,255,0.35) inset !important; }' +
+            /* тело: постер вплотную к левому/верхнему/нижнему краю */
+            '.hdrezka-ua-inner { display: flex !important; align-items: stretch !important; width: 100% !important; padding: 0 !important; box-sizing: border-box !important; min-height: 5.2em !important; }' +
+            /* контейнер постера: слева в край, во всю высоту карточки */
+            '.hdrezka-ua-icon { position: relative !important; flex-shrink: 0 !important; width: 6.4em !important; min-height: 5.2em !important; margin: 0 !important; overflow: hidden !important; background: #222 !important; }' +
             '.hdrezka-ua-poster { display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }' +
             '.hdrezka-ua-play { width: 100% !important; height: 100% !important; }' +
-            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; justify-content: center !important; }' +
-            '.hdrezka-ua-title { font-size: 1.05em !important; font-weight: 500 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.3em !important; line-height: 1.3 !important; }' +
-            '.hdrezka-ua-subtext { font-size: 0.8em !important; color: #9a9a9a !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.4 !important; letter-spacing: 0.01em !important; }' +
+            /* номер серии поверх постера, снизу */
+            '.hdrezka-ua-badge { position: absolute !important; left: 0 !important; right: 0 !important; bottom: 0 !important; padding: 0.15em 0.35em !important; font-size: 0.7em !important; font-weight: 600 !important; color: #fff !important; text-align: center !important; letter-spacing: 0.06em !important; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%) !important; text-shadow: 0 1px 2px rgba(0,0,0,0.9) !important; }' +
+            /* правая часть — три строки */
+            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; justify-content: center !important; overflow: hidden !important; padding: 0.5em 0.9em !important; }' +
+            '.hdrezka-ua-title { font-size: 0.98em !important; font-weight: 600 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.15em !important; line-height: 1.25 !important; }' +
+            '.hdrezka-ua-line2 { font-size: 0.8em !important; color: #b8b8b8 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.1em !important; line-height: 1.3 !important; }' +
+            '.hdrezka-ua-line3 { font-size: 0.75em !important; color: #8a8a8a !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.3 !important; }' +
+            '.hdrezka-ua-subtext { display: none !important; }' +
             '</style>'
         );
     }
@@ -225,10 +329,12 @@
         '        <circle cx="64" cy="64" r="56" stroke="#ccc" stroke-width="12"/>' +
         '        <path d="M90.5 64.3827L50 87.7654L50 41L90.5 64.3827Z" fill="#ccc"/>' +
         '      </svg>' +
+        '      <div class="hdrezka-ua-badge" style="display:{badge_display}">{badge}</div>' +
         '    </div>' +
         '    <div class="hdrezka-ua-text">' +
         '      <div class="hdrezka-ua-title">{title}</div>' +
-        '      <div class="hdrezka-ua-subtext">{info}</div>' +
+        '      <div class="hdrezka-ua-line2">{line2}</div>' +
+        '      <div class="hdrezka-ua-line3">{line3}</div>' +
         '    </div>' +
         '  </div>' +
         '</div>'
@@ -436,7 +542,12 @@
         this.reset = function () { last = false; scroll.clear(); scroll.body().empty(); };
 
         this.append = function (item) {
-            item.on('hover:focus', function (e) { last = e.target; try { scroll.update($(e.target), true); } catch (err) {} });
+            item.on('hover:focus', function (e) {
+                last = e.target;
+                scroll.render().find('.hdrezka-ua-item').removeClass('focus');
+                $(e.target).addClass('focus');
+                try { scroll.update($(e.target), true); } catch (err) {}
+            });
             scroll.append(item);
         };
 
@@ -484,7 +595,14 @@
             this.reset(); this.loading(false);
             filter.set('filter', []); filter.chosen('filter', []);
             items.forEach(function (it) {
-                var el = $.extend({ title: it.title, info: '' }, iconData(null));
+                var el = {
+                    title: it.title,
+                    line2: '',
+                    line3: '',
+                    badge: '',
+                    badge_display: 'none'
+                };
+                $.extend(el, iconData(null));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 var img = item.find('.hdrezka-ua-poster');
                 var play = item.find('.hdrezka-ua-play');
@@ -503,6 +621,8 @@
                                .css('display', 'block');
                             play.css('display', 'none');
                         }
+                        item.find('.hdrezka-ua-line2').text([d.year, (d.genres || [])[0]].filter(Boolean).join(' • '));
+                        if (d.rating) item.find('.hdrezka-ua-line3').text('⭐' + Number(d.rating).toFixed(1));
                     });
                 });
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
@@ -529,18 +649,25 @@
                     pageInfo.tmdbId = item.tmdbId || null;
                 }
 
-                tmdbFindShow(localObject.movie, currentTitle, function (tvId) {
-                    if (tvId) pageInfo.tmdbId = tvId;
-                    console.log('[TMDB] tvId =', pageInfo.tmdbId, 'title =', currentTitle);
-                    if (tvId && !pageInfo.tmdb) {
-                        tmdbDetails(tvId, function (d) {
-                            pageInfo.tmdb = d;
+                if (pageInfo.is_series) {
+                    tmdbFindShow(localObject.movie, currentTitle, function (tvId) {
+                        if (tvId) pageInfo.tmdbId = tvId;
+                        console.log('[TMDB] tvId =', pageInfo.tmdbId, 'title =', currentTitle);
+                        if (tvId && !pageInfo.tmdb) {
+                            tmdbDetails(tvId, function (d) {
+                                pageInfo.tmdb = d;
+                                this.afterTmdb();
+                            }.bind(this));
+                        } else {
                             this.afterTmdb();
-                        }.bind(this));
-                    } else {
+                        }
+                    }.bind(this));
+                } else {
+                    tmdbFindMovie(localObject.movie, currentTitle, function (info) {
+                        pageInfo.tmdb = info;
                         this.afterTmdb();
-                    }
-                }.bind(this));
+                    }.bind(this));
+                }
             }.bind(this), function (e) { this.empty(e === 'cookie' ? 'Cookie устарели' : 'Ошибка загрузки'); }.bind(this));
         };
 
@@ -559,7 +686,24 @@
             var posterPath = tmdb && tmdb.poster ? tmdb.poster : null;
 
             pageInfo.voices.forEach(function (voice, idx) {
-                var el = $.extend({ title: voice.name, info: joinInfo(maxQ) }, iconData(posterPath));
+                var line2Parts = [];
+                if (tmdb && tmdb.rating) line2Parts.push('⭐' + Number(tmdb.rating).toFixed(1));
+                if (tmdb && tmdb.year) line2Parts.push(tmdb.year);
+                if (maxQ) line2Parts.push(maxQ);
+
+                var line3Parts = [];
+                if (tmdb && tmdb.genres && tmdb.genres.length) line3Parts.push(tmdb.genres[0]);
+                if (tmdb && tmdb.runtime) line3Parts.push(fmtLength(tmdb.runtime));
+                if (tmdb && tmdb.date) line3Parts.push(fmtDate(tmdb.date));
+                line3Parts.push(voice.name);
+
+                var el = $.extend({
+                    title: currentTitle,
+                    line2: line2Parts.join(' • '),
+                    line3: line3Parts.join(' • '),
+                    badge: '',
+                    badge_display: 'none'
+                }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 if (view.percent > 0) item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
                 item.on('hover:enter', function () { choice.voice = idx; this.playMovie(voice, hash); }.bind(this));
@@ -636,23 +780,32 @@
             list.forEach(function (ep) {
                 var t = pageInfo.tmdbEpisodes && pageInfo.tmdbEpisodes[parseInt(ep.episode_id, 10)];
                 var epName = (t && t.name) || ep.name;
-                var titleText = 'Сезон ' + ep.season_id + ' — Серия ' + ep.episode_id;
-                if (epName && epName.toLowerCase().indexOf('серия') === -1) titleText += ' (' + epName + ')';
+                var epNum = parseInt(ep.episode_id, 10);
+                var badge = isNaN(epNum) ? '' : pad2(epNum);
 
+                var titleText = epName && epName.toLowerCase().indexOf('серия') === -1
+                    ? epName
+                    : ('Серия ' + ep.episode_id);
+
+                var line2Parts = [];
+                if (voice && voice.name) line2Parts.push(voice.name);
+                if (t && t.runtime) line2Parts.push(t.runtime + 'м');
+
+                var line3Parts = [];
+                if (t && t.rating) line3Parts.push('⭐' + Number(t.rating).toFixed(1));
                 if (t && t.date) {
                     var d = new Date(t.date);
-                    if (!isNaN(d.getTime()) && d <= now) {
-                        titleText += ' • ' + fmtDate(t.date);
-                    }
+                    if (!isNaN(d.getTime()) && d <= now) line3Parts.push(fmtDate(t.date));
                 }
 
-                var parts = ['360p ~ 1080p'];
-                if (voice) parts.push(voice.name);
-                if (t && t.rating) parts.push('⭐' + Number(t.rating).toFixed(1));
-                if (t && t.runtime) parts.push(t.runtime + 'м');
-
                 var posterPath = (t && t.still) ? t.still : seriesPoster;
-                var el = $.extend({ title: titleText, info: parts.join(' • ') }, iconData(posterPath));
+                var el = $.extend({
+                    title: titleText,
+                    line2: line2Parts.join(' • '),
+                    line3: line3Parts.join(' • '),
+                    badge: badge,
+                    badge_display: badge ? 'block' : 'none'
+                }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
 
                 var hash = Lampa.Utils.hash([ep.season_id, ':', ep.episode_id, localObject.movie.original_title].join(''));
@@ -726,7 +879,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: TMDB через CUB, поиск по imdb_id, стиль приближен к BWA');
+        console.log('[HDrezka] Готово: стиль Lampac (постер в край, бейдж серии, 3 строки, градиентная подсветка)');
     }
 
     if (window.appready) start();
