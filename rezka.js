@@ -169,7 +169,6 @@
             var keyImdb = 'findmovieimdb:' + imdb;
             if (tmdbCache[keyImdb] !== undefined) return cb(tmdbCache[keyImdb]);
             tmdbGet('/find/' + imdb, { external_source: 'imdb_id' }, function (d) {
-                var found = null;
                 if (d && d.movie_results && d.movie_results.length) {
                     tmdbMovieDetails(String(d.movie_results[0].id), function (info) {
                         tmdbCache[keyImdb] = info;
@@ -292,27 +291,21 @@
         return q;
     }
 
-    // === СТИЛИ (стиль Lampac/BWA) ===
+    // === СТИЛИ ===
     if (!$('#hdrezka_ua_fix_css').length) {
         $('head').append(
             '<style id="hdrezka_ua_fix_css">' +
-            /* карточка */
             '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.45em 0 !important; overflow: hidden !important; background: #181818 !important; border-radius: 0.45em !important; transition: background 0.2s ease, box-shadow 0.2s ease !important; }' +
-            /* подсветка выбранного — градиент, не рамка */
             '.hdrezka-ua-item.focus { background: linear-gradient(90deg, rgba(60,120,200,0.35) 0%, rgba(60,120,200,0.12) 40%, #181818 100%) !important; box-shadow: 0 0 0 1px rgba(90,160,255,0.35) inset !important; }' +
-            /* тело: постер вплотную к левому/верхнему/нижнему краю */
-            '.hdrezka-ua-inner { display: flex !important; align-items: stretch !important; width: 100% !important; padding: 0 !important; box-sizing: border-box !important; min-height: 5.2em !important; }' +
-            /* контейнер постера: слева в край, во всю высоту карточки */
-            '.hdrezka-ua-icon { position: relative !important; flex-shrink: 0 !important; width: 6.4em !important; min-height: 5.2em !important; margin: 0 !important; overflow: hidden !important; background: #222 !important; }' +
+            '.hdrezka-ua-inner { display: flex !important; align-items: stretch !important; width: 100% !important; padding: 0 !important; box-sizing: border-box !important; min-height: 7em !important; }' +
+            '.hdrezka-ua-icon { position: relative !important; flex-shrink: 0 !important; width: 8.6em !important; min-height: 7em !important; margin: 0 !important; overflow: hidden !important; background: #222 !important; }' +
             '.hdrezka-ua-poster { display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }' +
             '.hdrezka-ua-play { width: 100% !important; height: 100% !important; }' +
-            /* номер серии поверх постера, снизу */
-            '.hdrezka-ua-badge { position: absolute !important; left: 0 !important; right: 0 !important; bottom: 0 !important; padding: 0.15em 0.35em !important; font-size: 0.7em !important; font-weight: 600 !important; color: #fff !important; text-align: center !important; letter-spacing: 0.06em !important; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.75) 100%) !important; text-shadow: 0 1px 2px rgba(0,0,0,0.9) !important; }' +
-            /* правая часть — три строки */
-            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; justify-content: center !important; overflow: hidden !important; padding: 0.5em 0.9em !important; }' +
-            '.hdrezka-ua-title { font-size: 0.98em !important; font-weight: 600 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.15em !important; line-height: 1.25 !important; }' +
-            '.hdrezka-ua-line2 { font-size: 0.8em !important; color: #b8b8b8 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.1em !important; line-height: 1.3 !important; }' +
-            '.hdrezka-ua-line3 { font-size: 0.75em !important; color: #8a8a8a !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.3 !important; }' +
+            '.hdrezka-ua-badge { position: absolute !important; inset: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 2.8em !important; font-weight: 700 !important; color: rgba(255,255,255,0.92) !important; letter-spacing: 0.02em !important; text-shadow: 0 2px 8px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6) !important; pointer-events: none !important; }' +
+            '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; justify-content: center !important; overflow: hidden !important; padding: 0.6em 1em !important; }' +
+            '.hdrezka-ua-title { font-size: 1.12em !important; font-weight: 600 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.25em !important; line-height: 1.3 !important; }' +
+            '.hdrezka-ua-line2 { font-size: 0.95em !important; color: #c4c4c4 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.15em !important; line-height: 1.35 !important; }' +
+            '.hdrezka-ua-line3 { font-size: 0.88em !important; color: #8f8f8f !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.35 !important; }' +
             '.hdrezka-ua-subtext { display: none !important; }' +
             '</style>'
         );
@@ -522,8 +515,14 @@
                     if (mode === 'series') this.reloadSeries(); else if (mode === 'movie') this.drawMovieList();
                     return;
                 }
-                if (a.stype === 'voice') { choice.voice = b.index; choice.season = 0; if (mode === 'series') this.reloadSeries(); else this.drawMovieList(); }
-                else if (a.stype === 'season') { choice.season = b.index; this.drawEpisodeList(); }
+                if (a.stype === 'voice') {
+                    choice.voice = b.index;
+                    choice.season = 0;
+                    if (mode === 'series') this.reloadSeries(); else this.drawMovieList();
+                } else if (a.stype === 'season') {
+                    choice.season = b.index;
+                    this.loadSeasonEpisodes();
+                }
             }.bind(this);
             files.appendHead(filter.render());
             files.appendFiles(scroll.render());
@@ -575,6 +574,23 @@
             if (filter_items.voice && filter_items.voice.length > 1) chosen.push((Lampa.Lang.translate('torrent_parser_voice') || 'Озвучка') + ': ' + filter_items.voice[choice.voice]);
             if (filter_items.season && filter_items.season.length > 1) chosen.push((Lampa.Lang.translate('torrent_serial_season') || 'Сезон') + ': ' + filter_items.season[choice.season]);
             filter.chosen('filter', chosen);
+        };
+
+        // Загружает TMDB-эпизоды для выбранного сезона и рисует список
+        this.loadSeasonEpisodes = function () {
+            var sid = filter_items.season_id[choice.season];
+            var seasonNum = sid ? String(sid) : '';
+            if (pageInfo.tmdbId && seasonNum) {
+                this.loading(true);
+                tmdbSeason(pageInfo.tmdbId, seasonNum, function (epMap) {
+                    pageInfo.tmdbEpisodes = epMap || {};
+                    this.loading(false);
+                    this.drawEpisodeList();
+                }.bind(this));
+            } else {
+                pageInfo.tmdbEpisodes = {};
+                this.drawEpisodeList();
+            }
         };
 
         this.search = function () {
@@ -753,17 +769,8 @@
                 filter_items.season_id = pairs.map(function (p) { return p.id; });
                 if (choice.season >= filter_items.season.length) choice.season = 0;
 
-                var sid = filter_items.season_id[choice.season];
-                var seasonNum = sid ? String(sid) : '';
-                if (pageInfo.tmdbId) {
-                    tmdbSeason(pageInfo.tmdbId, seasonNum, function (epMap) {
-                        pageInfo.tmdbEpisodes = epMap || {};
-                        this.drawEpisodeList();
-                    }.bind(this));
-                } else {
-                    pageInfo.tmdbEpisodes = {};
-                    this.drawEpisodeList();
-                }
+                this.loading(false);
+                this.loadSeasonEpisodes();
             }.bind(this), function () { this.empty('Ошибка загрузки серий'); }.bind(this));
         };
 
@@ -804,7 +811,7 @@
                     line2: line2Parts.join(' • '),
                     line3: line3Parts.join(' • '),
                     badge: badge,
-                    badge_display: badge ? 'block' : 'none'
+                    badge_display: badge ? 'flex' : 'none'
                 }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
 
@@ -879,7 +886,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: стиль Lampac (постер в край, бейдж серии, 3 строки, градиентная подсветка)');
+        console.log('[HDrezka] Готово: высота +1/3, бейдж на всю картинку, крупные шрифты, фикс смены сезона');
     }
 
     if (window.appready) start();
