@@ -18,6 +18,9 @@
     var TMDB_IMG_ALT = 'https://image.tmdb.org/t/p';
     var tmdbCache = {};
 
+    // Красивый значок рейтинга (SVG-звезда)
+    var STAR_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" style="vertical-align:-1px;margin-right:2px;fill:#f5c518;filter:drop-shadow(0 0 2px rgba(245,197,24,0.6))"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6L12 2z"/></svg>';
+
     function tmdbGet(path, params, cb) {
         var q = ['api_key=' + TMDB_KEY, 'language=ru', 'email='];
         for (var k in (params || {})) {
@@ -297,15 +300,21 @@
             '<style id="hdrezka_ua_fix_css">' +
             '.hdrezka-ua-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; padding: 0 !important; margin: 0 0 0.45em 0 !important; overflow: hidden !important; background: #181818 !important; border-radius: 0.45em !important; transition: background 0.2s ease, box-shadow 0.2s ease !important; }' +
             '.hdrezka-ua-item.focus { background: linear-gradient(90deg, rgba(60,120,200,0.35) 0%, rgba(60,120,200,0.12) 40%, #181818 100%) !important; box-shadow: 0 0 0 1px rgba(90,160,255,0.35) inset !important; }' +
+            /* базовые пропорции (фильмы) */
             '.hdrezka-ua-inner { display: flex !important; align-items: stretch !important; width: 100% !important; padding: 0 !important; box-sizing: border-box !important; min-height: 7em !important; }' +
             '.hdrezka-ua-icon { position: relative !important; flex-shrink: 0 !important; width: 8.6em !important; min-height: 7em !important; margin: 0 !important; overflow: hidden !important; background: #222 !important; }' +
+            /* серии: выше на треть и постер шире */
+            '.hdrezka-ua-item--ep .hdrezka-ua-inner { min-height: 9.4em !important; }' +
+            '.hdrezka-ua-item--ep .hdrezka-ua-icon { width: 9.4em !important; min-height: 9.4em !important; }' +
             '.hdrezka-ua-poster { display: block !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }' +
             '.hdrezka-ua-play { width: 100% !important; height: 100% !important; }' +
+            /* бейдж на всю картинку */
             '.hdrezka-ua-badge { position: absolute !important; inset: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 2.8em !important; font-weight: 700 !important; color: rgba(255,255,255,0.92) !important; letter-spacing: 0.02em !important; text-shadow: 0 2px 8px rgba(0,0,0,0.85), 0 0 20px rgba(0,0,0,0.6) !important; pointer-events: none !important; }' +
             '.hdrezka-ua-text { flex-grow: 1 !important; display: flex !important; flex-direction: column !important; justify-content: center !important; overflow: hidden !important; padding: 0.6em 1em !important; }' +
             '.hdrezka-ua-title { font-size: 1.12em !important; font-weight: 600 !important; color: #fff !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.25em !important; line-height: 1.3 !important; }' +
-            '.hdrezka-ua-line2 { font-size: 0.95em !important; color: #c4c4c4 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.15em !important; line-height: 1.35 !important; }' +
-            '.hdrezka-ua-line3 { font-size: 0.88em !important; color: #8f8f8f !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.35 !important; }' +
+            '.hdrezka-ua-line2 { font-size: 0.95em !important; color: #c4c4c4 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; margin-bottom: 0.15em !important; line-height: 1.35 !important; display: flex !important; align-items: center !important; }' +
+            '.hdrezka-ua-line3 { font-size: 0.88em !important; color: #8f8f8f !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.35 !important; display: flex !important; align-items: center !important; }' +
+            '.hdrezka-ua-rating { display: inline-flex !important; align-items: center !important; color: #f5c518 !important; font-weight: 600 !important; margin-right: 0.5em !important; }' +
             '.hdrezka-ua-subtext { display: none !important; }' +
             '</style>'
         );
@@ -313,7 +322,7 @@
 
     // === ШАБЛОН ===
     Lampa.Template.add('hdrezka_ua_item',
-        '<div class="online selector hdrezka-ua-item">' +
+        '<div class="online selector hdrezka-ua-item {extra_class}">' +
         '  <div class="online__body hdrezka-ua-inner">' +
         '    <div class="hdrezka-ua-icon">' +
         '      <img class="hdrezka-ua-poster" src="{poster}" data-alt="{poster_alt}" style="display:{poster_display}" ' +
@@ -576,7 +585,6 @@
             filter.chosen('filter', chosen);
         };
 
-        // Загружает TMDB-эпизоды для выбранного сезона и рисует список
         this.loadSeasonEpisodes = function () {
             var sid = filter_items.season_id[choice.season];
             var seasonNum = sid ? String(sid) : '';
@@ -616,7 +624,8 @@
                     line2: '',
                     line3: '',
                     badge: '',
-                    badge_display: 'none'
+                    badge_display: 'none',
+                    extra_class: ''
                 };
                 $.extend(el, iconData(null));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
@@ -638,7 +647,7 @@
                             play.css('display', 'none');
                         }
                         item.find('.hdrezka-ua-line2').text([d.year, (d.genres || [])[0]].filter(Boolean).join(' • '));
-                        if (d.rating) item.find('.hdrezka-ua-line3').text('⭐' + Number(d.rating).toFixed(1));
+                        if (d.rating) item.find('.hdrezka-ua-line3').html('<span class="hdrezka-ua-rating">' + STAR_SVG + Number(d.rating).toFixed(1) + '</span>');
                     });
                 });
                 item.on('hover:enter', function () { this.openTitle(it); }.bind(this));
@@ -703,7 +712,6 @@
 
             pageInfo.voices.forEach(function (voice, idx) {
                 var line2Parts = [];
-                if (tmdb && tmdb.rating) line2Parts.push('⭐' + Number(tmdb.rating).toFixed(1));
                 if (tmdb && tmdb.year) line2Parts.push(tmdb.year);
                 if (maxQ) line2Parts.push(maxQ);
 
@@ -713,12 +721,18 @@
                 if (tmdb && tmdb.date) line3Parts.push(fmtDate(tmdb.date));
                 line3Parts.push(voice.name);
 
+                var line3Html = line3Parts.join(' • ');
+                if (tmdb && tmdb.rating) {
+                    line3Html = '<span class="hdrezka-ua-rating">' + STAR_SVG + Number(tmdb.rating).toFixed(1) + '</span>' + line3Html;
+                }
+
                 var el = $.extend({
                     title: currentTitle,
                     line2: line2Parts.join(' • '),
-                    line3: line3Parts.join(' • '),
+                    line3: line3Html,
                     badge: '',
-                    badge_display: 'none'
+                    badge_display: 'none',
+                    extra_class: ''
                 }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
                 if (view.percent > 0) item.find('.hdrezka-ua-text').append(Lampa.Timeline.render(view));
@@ -799,19 +813,25 @@
                 if (t && t.runtime) line2Parts.push(t.runtime + 'м');
 
                 var line3Parts = [];
-                if (t && t.rating) line3Parts.push('⭐' + Number(t.rating).toFixed(1));
                 if (t && t.date) {
                     var d = new Date(t.date);
                     if (!isNaN(d.getTime()) && d <= now) line3Parts.push(fmtDate(t.date));
+                }
+
+                var line3Html = line3Parts.join(' • ');
+                if (t && t.rating) {
+                    var ratingHtml = '<span class="hdrezka-ua-rating">' + STAR_SVG + Number(t.rating).toFixed(1) + '</span>';
+                    line3Html = line3Html ? ratingHtml + line3Html : ratingHtml;
                 }
 
                 var posterPath = (t && t.still) ? t.still : seriesPoster;
                 var el = $.extend({
                     title: titleText,
                     line2: line2Parts.join(' • '),
-                    line3: line3Parts.join(' • '),
+                    line3: line3Html,
                     badge: badge,
-                    badge_display: badge ? 'flex' : 'none'
+                    badge_display: badge ? 'flex' : 'none',
+                    extra_class: 'hdrezka-ua-item--ep'
                 }, iconData(posterPath));
                 var item = Lampa.Template.get('hdrezka_ua_item', el);
 
@@ -886,7 +906,7 @@
     function start() {
         Lampa.Component.add(COMPONENT, Component);
         addButton();
-        console.log('[HDrezka] Готово: высота +1/3, бейдж на всю картинку, крупные шрифты, фикс смены сезона');
+        console.log('[HDrezka] Готово: серии выше на треть, постеры шире, золотая звезда рейтинга');
     }
 
     if (window.appready) start();
